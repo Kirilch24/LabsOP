@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №1. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html" class="active" aria-current="page">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html" class="active" aria-current="page">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №1</h1><p>Арифметичні вирази та розв'язання математичних задач мовою C++</p></div>
+<main class="content" id="content">
+<p class="info">Варіанти 28 і 3. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умови задач</a></li><li><a href="#analysis">Аналіз задач</a></li><li><a href="#scheme">Блок-схеми алгоритмів</a></li><li><a href="#code">Тексти програм</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити особливості використання вбудованих типів даних: char, int, long, short, float, double,
+unsigned char, unsigned int, unsigned long.</li>
+<li>Вивчити особливості використання функцій введення - виведення.</li>
+<li>Навчитися застосовувати стандартні математичні функції.</li>
+</ul>
+</section>
+<section id="task"><h2>Умови задач</h2>
+<h3>Завдання 1, варіант 28</h3>
+<p>Таблиця 1.7 методички має 28 варіантів, тому номер у списку групи збігається з номером
+варіанта.</p>
+<p>За даними, що введені з клавіатури в оперативну пам'ять, визначити значення виразу, використовуючи
+математичні функції, і вивести результат на екран. Вираз вибрати згідно з варіантом по таблиці 1.7.
+Довільні значення змінних A, B, C, D ввести з клавіатури.</p>
+<div class="formula">X = (A - 4B)<sup>2</sup> / (1 + (1 + sin C)(1 + cos C))</div>
+<h3>Завдання 2, варіант 3</h3>
+<p>Таблиця 1.8 має 25 варіантів, тому для номера 28 у списку групи маємо 28 - 25 = 3.</p>
+<p>Написати програму, що розв'язує задачу з математики та фізики шкільного курсу, відповідно до
+варіантів таблиці 1.8. Знайти довжини всіх медіан і бісектрис трикутника, якщо значення сторін a, b, c
+трикутника введені з клавіатури.</p>
+</section>
+<section id="analysis"><h2>Аналіз задач</h2>
+<h3>Завдання 1, варіант 28</h3>
+<p>Для розв'язання задачі потрібно ввести три дійсні числа A, B, C. Змінної D у виразі цього варіанта
+немає, тому вона не вводиться. Кут C задається в радіанах, бо так працюють функції <code>sin</code> і
+<code>cos</code>.</p>
+<p>Вираз рахується по частинах. Спочатку обчислюється різниця A - 4B, а квадрат отримуємо множенням
+різниці саму на себе. Потім окремо рахується знаменник. Значення (1 + sin C) і (1 + cos C) не
+від'ємні, тому знаменник не менший за 1 і перевірка на нуль не потрібна.</p>
+<p>Числа вводяться одним рядком. Якщо хоча б одне з них введено неправильно, програма виводить
+повідомлення і просить ввести всі три ще раз.</p>
+<p class="tcap">Таблиця 1 - Змінні програми завдання 1</p>
+<div class="table-scroll"><table>
+<tr><th>Змінна</th><th>Тип</th><th>Що зберігає</th></tr>
+<tr><td><code>a</code>, <code>b</code>, <code>c</code></td><td><code>float</code></td><td>числа A, B, C</td></tr>
+<tr><td><code>difference</code></td><td><code>float</code></td><td>значення A - 4B</td></tr>
+<tr><td><code>numerator</code></td><td><code>float</code></td><td>чисельник</td></tr>
+<tr><td><code>denominator</code></td><td><code>float</code></td><td>знаменник</td></tr>
+<tr><td><code>x</code></td><td><code>float</code></td><td>значення виразу X</td></tr>
+</table></div>
+<h3>Завдання 2, варіант 3</h3>
+<p>Вводяться три сторони. Вони мають бути додатними, інакше програма просить ввести їх ще раз. Також
+програма перевіряє, чи існує трикутник: сума будь-яких двох сторін має бути більшою за третю. Якщо
+трикутника немає, виводиться повідомлення.</p>
+<p>Медіани і бісектриси рахуються за сторонами. Формули для сторони a такі, для b і c вони
+записуються так само:</p>
+<div class="formula">m<sub>a</sub> = √(2b<sup>2</sup> + 2c<sup>2</sup> - a<sup>2</sup>) / 2</div>
+<div class="formula">l<sub>a</sub> = √(bc · p · (b + c - a)) / (b + c), де p = a + b + c</div>
+<p class="tcap">Таблиця 2 - Змінні програми завдання 2</p>
+<div class="table-scroll"><table>
+<tr><th>Змінна</th><th>Тип</th><th>Що зберігає</th></tr>
+<tr><td><code>a</code>, <code>b</code>, <code>c</code></td><td><code>float</code></td><td>сторони трикутника</td></tr>
+<tr><td><code>perimeter</code></td><td><code>float</code></td><td>периметр p</td></tr>
+<tr><td><code>medianA</code>, <code>medianB</code>, <code>medianC</code></td><td><code>float</code></td><td>медіани до сторін a, b, c</td></tr>
+<tr><td><code>bisectorA</code>, <code>bisectorB</code>, <code>bisectorC</code></td><td><code>float</code></td><td>бісектриси до сторін a, b, c</td></tr>
+</table></div>
+<p>В обох програмах увесь код записано у функції <code>main</code>.</p>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025.</p>
+</section>
+<section id="scheme"><h2>Блок-схеми алгоритмів</h2>
+<h3>Завдання 1, варіант 28</h3>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>main</code> (обчислення виразу X)</figcaption></figure>
+<h3>Завдання 2, варіант 3</h3>
+<figure class="fc"><a href="img/task2-fc-main.svg"><img src="img/task2-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>main</code> (обчислення медіан і бісектрис трикутника)</figcaption></figure>
+</section>
+<section id="code"><h2>Тексти програм</h2>
+<h3>Завдання 1, варіант 28</h3>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №1, завдання 1, варіант 28. Обчислити значення</span>
+<span class="cm">/// арифметичного виразу за числами, введеними з клавіатури.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cmath&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> a = <span class="nm">0</span>;           <span class="cm">// число A</span>
+<span class="kw">float</span> b = <span class="nm">0</span>;           <span class="cm">// число B</span>
+<span class="kw">float</span> c = <span class="nm">0</span>;           <span class="cm">// кут C у радіанах</span>
+<span class="kw">float</span> difference = <span class="nm">0</span>;  <span class="cm">// значення виразу A - 4B</span>
+<span class="kw">float</span> numerator = <span class="nm">0</span>;   <span class="cm">// чисельник</span>
+<span class="kw">float</span> denominator = <span class="nm">0</span>; <span class="cm">// знаменник</span>
+<span class="kw">float</span> x = <span class="nm">0</span>;           <span class="cm">// значення виразу X</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить числа, обчислює вираз і виводить результат</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0&lt;/returns&gt;</span>
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 1. Task 1. Variant 28.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Calculate the value of the expression for A, B, C entered&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;from the keyboard:&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;X = (A - 4B)^2 / (1 + (1 + sin C)(1 + cos C))&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Angle C is in radians.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter A, B, C: &quot;</span>;
+    cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter three numbers A, B, C: &quot;</span>;
+        cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    }
+
+    difference = a - <span class="nm">4</span> * b;
+    numerator = difference * difference;
+    denominator = <span class="nm">1</span> + (<span class="nm">1</span> + sin(c)) * (<span class="nm">1</span> + cos(c));
+    x = numerator / denominator;
+
+    cout &lt;&lt; <span class="st">&quot;Numerator = &quot;</span> &lt;&lt; numerator &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Denominator = &quot;</span> &lt;&lt; denominator &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;X = &quot;</span> &lt;&lt; x &lt;&lt; endl;
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+<h3>Завдання 2, варіант 3</h3>
+<p class="file">Файл <a href="task2.cpp" download>task2.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №1, завдання 2, варіант 3. Знайти довжини медіан і</span>
+<span class="cm">/// бісектрис трикутника за його сторонами.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task2.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cmath&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> a = <span class="nm">0</span>;         <span class="cm">// сторона a</span>
+<span class="kw">float</span> b = <span class="nm">0</span>;         <span class="cm">// сторона b</span>
+<span class="kw">float</span> c = <span class="nm">0</span>;         <span class="cm">// сторона c</span>
+<span class="kw">float</span> perimeter = <span class="nm">0</span>; <span class="cm">// периметр трикутника</span>
+<span class="kw">float</span> medianA = <span class="nm">0</span>;   <span class="cm">// медіана до сторони a</span>
+<span class="kw">float</span> medianB = <span class="nm">0</span>;   <span class="cm">// медіана до сторони b</span>
+<span class="kw">float</span> medianC = <span class="nm">0</span>;   <span class="cm">// медіана до сторони c</span>
+<span class="kw">float</span> bisectorA = <span class="nm">0</span>; <span class="cm">// бісектриса до сторони a</span>
+<span class="kw">float</span> bisectorB = <span class="nm">0</span>; <span class="cm">// бісектриса до сторони b</span>
+<span class="kw">float</span> bisectorC = <span class="nm">0</span>; <span class="cm">// бісектриса до сторони c</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить сторони, перевіряє, чи існує трикутник, і виводить довжини медіан і</span>
+<span class="cm">/// бісектрис</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0&lt;/returns&gt;</span>
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 1. Task 2. Variant 3.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Find the lengths of all medians and bisectors of a&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;triangle with the sides a, b, c entered from the&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;keyboard.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter sides a, b, c: &quot;</span>;
+    cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    <span class="kw">while</span> (cin.fail() || a &lt;= <span class="nm">0</span> || b &lt;= <span class="nm">0</span> || c &lt;= <span class="nm">0</span>)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter three positive numbers a, b, c: &quot;</span>;
+        cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    }
+
+    <span class="kw">if</span> (a + b &gt; c &amp;&amp; a + c &gt; b &amp;&amp; b + c &gt; a)
+    {
+        perimeter = a + b + c;
+
+        medianA = sqrt(<span class="nm">2</span> * b * b + <span class="nm">2</span> * c * c - a * a) / <span class="nm">2</span>;
+        medianB = sqrt(<span class="nm">2</span> * a * a + <span class="nm">2</span> * c * c - b * b) / <span class="nm">2</span>;
+        medianC = sqrt(<span class="nm">2</span> * a * a + <span class="nm">2</span> * b * b - c * c) / <span class="nm">2</span>;
+
+        bisectorA = sqrt(b * c * perimeter * (b + c - a)) / (b + c);
+        bisectorB = sqrt(a * c * perimeter * (a + c - b)) / (a + c);
+        bisectorC = sqrt(a * b * perimeter * (a + b - c)) / (a + b);
+
+        cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="nm">4</span>);
+        cout &lt;&lt; <span class="st">&quot;Medians:   &quot;</span> &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; medianA &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; medianB
+             &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; medianC &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;Bisectors: &quot;</span> &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; bisectorA &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; bisectorB
+             &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; bisectorC &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        cout &lt;&lt; <span class="st">&quot;A triangle with these sides does not exist.&quot;</span> &lt;&lt; endl;
+    }
+
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<h3>Завдання 1, варіант 28</h3>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 3 - Обчислення для A = 7, B = 1, C = 0.5</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 4 - Від'ємні числа, A = -3.5, B = 2.25, C = -1.2</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 5 - Некоректне введення букв, потім C = -1.5708, коли sin C близький до -1</figcaption></figure>
+<h3>Завдання 2, варіант 3</h3>
+<figure class="shot"><a href="img/task2-run-1.png"><img src="img/task2-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 6 - Прямокутний трикутник зі сторонами 3, 4, 5</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-2.png"><img src="img/task2-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 7 - Рівносторонній трикутник зі стороною 2</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-3.png"><img src="img/task2-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 8 - Некоректне введення, потім трикутник зі сторонами 5.5, 7.2, 8.4</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-4.png"><img src="img/task2-run-4.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 9 - Сторони 1, 2, 5, трикутник не існує</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Перевірка в Excel</h3>
+<p>Файл <a href="check.xlsx" download>check.xlsx</a> містить обидва завдання. Вираз X там пораховано
+функціями <code>POWER</code>, <code>SIN</code> і <code>COS</code>. Для трикутників використано інші
+формули, ніж у програмі: медіана рахується за теоремою косинусів, а бісектриса через косинус половини
+кута. Поруч стоять значення, які вивела програма.</p>
+<figure class="shot"><a href="img/excel-check.png"><img src="img/excel-check.png" alt="" width="568" loading="lazy"></a><figcaption>Рисунок 10 - Порівняння значень в Excel</figcaption></figure>
+<p>Для виразу X найбільша відносна різниця дорівнює 1.9 · 10<sup>-6</sup>, бо програма друкує шість
+значущих цифр. Для трикутників найбільша різниця 4.9 · 10<sup>-5</sup>, бо довжини виводяться з
+чотирма знаками після коми.</p>
+<h3>Ручна перевірка</h3>
+<p class="tcap">Таблиця 3 - Приклади, пораховані вручну</p>
+<div class="table-scroll"><table>
+<tr><th>Дані</th><th>Розрахунок</th><th>Очікується</th><th>Програма</th></tr>
+<tr><td>A = 12, B = 1, C = -1.5708</td><td>sin C майже -1, тому знаменник майже 1, X = 8 · 8 / 1</td><td>64</td><td>64</td></tr>
+<tr><td>сторони 3, 4, 5, медіана до c</td><td>трикутник прямокутний, медіана дорівнює половині гіпотенузи</td><td>2.5</td><td>2.5000</td></tr>
+<tr><td>сторони 3, 4, 5, бісектриса до c</td><td>√(3 · 4 · 12 · 2) / 7 = √288 / 7</td><td>2.4244</td><td>2.4244</td></tr>
+<tr><td>сторони 2, 2, 2</td><td>медіани й бісектриси збігаються з висотою 2 · √3 / 2</td><td>1.7321</td><td>1.7321</td></tr>
+<tr><td>сторони 1, 2, 5</td><td>1 + 2 менше за 5</td><td>трикутник не існує</td><td>повідомлення</td></tr>
+</table></div>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Я написав дві програми, де весь код стоїть у <code>main</code>: одна обчислює вираз із синусом і
+косинусом, друга знаходить медіани і бісектриси трикутника. Бісектриси в
+Excel пораховано іншим способом, через кути. Значення збіглися з
+виводом програми з точністю до округлення. Також перевірено введення букв, недодатних сторін і
+сторін, з яких трикутник не складається.</p>
+</section>
+<p class="pager"><a href="../lab02/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>

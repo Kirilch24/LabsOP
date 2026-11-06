@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №2. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html" class="active" aria-current="page">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html" class="active" aria-current="page">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №2</h1><p>Розгалужені обчислювальні процеси та логічні оператори</p></div>
+<main class="content" id="content">
+<p class="info">Варіанти 4 і 8. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умови задач</a></li><li><a href="#analysis">Аналіз задач</a></li><li><a href="#scheme">Блок-схеми алгоритмів</a></li><li><a href="#code">Тексти програм</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити особливості розгалужених обчислювальних процесів.</li>
+<li>Опанувати технологію використання логічних операторів.</li>
+</ul>
+</section>
+<section id="task"><h2>Умови задач</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Таблиця 2.1 методички має 24 варіанти, тому для номера 28 у списку групи маємо 28 - 24 = 4.</p>
+<p>Визначити значення функції в залежності від значення її аргументу, яке вводиться з клавіатури:</p>
+<div class="formula">f(x) = 5√x при x &gt; 5</div>
+<div class="formula">f(x) = 1 / x при 1 &lt; x &lt; 5</div>
+<div class="formula">f(x) = x<sup>2</sup> при -5 ≤ x ≤ 1</div>
+<div class="formula">f(x) = 10x при x &lt; -5</div>
+<h3>Завдання 2, варіант 8</h3>
+<p>Таблиця 2.2 має 20 варіантів, тому для номера 28 у списку групи маємо 28 - 20 = 8.</p>
+<p>Ввести з клавіатури три дійсних числа. Визначити кількість різних серед них чисел; однакових серед
+них чисел.</p>
+</section>
+<section id="analysis"><h2>Аналіз задач</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Програма вводить дійсне число x і перевіряє умови в тому самому порядку, що й у формулі. Для цього
+використано ланцюжок <code>if ... else if</code>, а подвійні нерівності записано через операцію
+<code>&amp;&amp;</code>.</p>
+<p>Значення x = 5 не входить у жодну гілку, тому в цій точці функція не визначена. Програма
+запам'ятовує це в логічній змінній <code>isDefined</code> і замість значення виводить
+повідомлення.</p>
+<p>Якщо замість числа введено щось інше, програма виводить повідомлення і просить ввести x ще раз.
+Увесь код записано у функції <code>main</code>.</p>
+<h3>Завдання 2, варіант 8</h3>
+<p>Умова не каже, як рахувати однакові числа. Я рахую, скільки чисел мають собі пару, і тоді можливі
+три випадки:</p>
+<p class="tcap">Таблиця 1 - Кількість різних і однакових чисел</p>
+<div class="table-scroll"><table>
+<tr><th>Випадок</th><th>Умова</th><th>Різних</th><th>Однакових</th></tr>
+<tr><td>усі рівні</td><td>a = b і b = c</td><td>1</td><td>3</td></tr>
+<tr><td>два рівні</td><td>a = b, або a = c, або b = c</td><td>2</td><td>2</td></tr>
+<tr><td>усі різні</td><td>інакше</td><td>3</td><td>0</td></tr>
+</table></div>
+<p>Числа беруться прямо з клавіатури і нічого не обчислюється, тому вони порівнюються операцією
+<code>==</code>. Введення перевіряється так само, як у першому завданні, а весь код теж у
+<code>main</code>.</p>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025.</p>
+</section>
+<section id="scheme"><h2>Блок-схеми алгоритмів</h2>
+<h3>Завдання 1, варіант 4</h3>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>main</code> (обчислення кусково заданої функції)</figcaption></figure>
+<h3>Завдання 2, варіант 8</h3>
+<figure class="fc"><a href="img/task2-fc-main.svg"><img src="img/task2-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>main</code> (кількість різних і однакових чисел)</figcaption></figure>
+</section>
+<section id="code"><h2>Тексти програм</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №2, завдання 1, варіант 4. Обчислити значення кусково</span>
+<span class="cm">/// заданої функції для аргументу, введеного з клавіатури.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cmath&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> x = <span class="nm">0</span>;           <span class="cm">// аргумент функції</span>
+<span class="kw">float</span> y = <span class="nm">0</span>;           <span class="cm">// значення функції</span>
+<span class="kw">bool</span> isDefined = <span class="kw">true</span>; <span class="cm">// ознака того, що функція визначена в точці x</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить аргумент, вибирає гілку функції і виводить результат</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0&lt;/returns&gt;</span>
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 2. Task 1. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Calculate the function f(x) for x entered from the&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;keyboard:&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;f(x) = 5 * sqrt(x),  x &gt; 5&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;f(x) = 1 / x,        1 &lt; x &lt; 5&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;f(x) = x^2,          -5 &lt;= x &lt;= 1&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;f(x) = 10 * x,       x &lt; -5&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter x: &quot;</span>;
+    cin &gt;&gt; x;
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter x as a number: &quot;</span>;
+        cin &gt;&gt; x;
+    }
+
+    <span class="kw">if</span> (x &gt; <span class="nm">5</span>)
+    {
+        y = <span class="nm">5</span> * sqrt(x);
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (x &gt; <span class="nm">1</span> &amp;&amp; x &lt; <span class="nm">5</span>)
+    {
+        y = <span class="nm">1</span> / x;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (x &gt;= -<span class="nm">5</span> &amp;&amp; x &lt;= <span class="nm">1</span>)
+    {
+        y = x * x;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (x &lt; -<span class="nm">5</span>)
+    {
+        y = <span class="nm">10</span> * x;
+    }
+    <span class="kw">else</span>
+    {
+        isDefined = <span class="kw">false</span>;
+    }
+
+    <span class="kw">if</span> (isDefined)
+    {
+        cout &lt;&lt; <span class="st">&quot;f(x) = &quot;</span> &lt;&lt; y &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        cout &lt;&lt; <span class="st">&quot;The function is not defined for x = &quot;</span> &lt;&lt; x &lt;&lt; endl;
+    }
+
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+<h3>Завдання 2, варіант 8</h3>
+<p class="file">Файл <a href="task2.cpp" download>task2.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №2, завдання 2, варіант 8. Визначити кількість різних і</span>
+<span class="cm">/// кількість однакових чисел серед трьох введених.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task2.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> a = <span class="nm">0</span>;            <span class="cm">// перше число</span>
+<span class="kw">float</span> b = <span class="nm">0</span>;            <span class="cm">// друге число</span>
+<span class="kw">float</span> c = <span class="nm">0</span>;            <span class="cm">// третє число</span>
+<span class="kw">int</span> differentCount = <span class="nm">0</span>; <span class="cm">// кількість різних чисел</span>
+<span class="kw">int</span> equalCount = <span class="nm">0</span>;     <span class="cm">// кількість однакових чисел</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить три числа, порівнює їх і виводить обидві кількості</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0&lt;/returns&gt;</span>
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 2. Task 2. Variant 8.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter three real numbers. Find how many different numbers&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;there are among them and how many equal ones.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter three real numbers: &quot;</span>;
+    cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter three real numbers: &quot;</span>;
+        cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    }
+
+    <span class="kw">if</span> (a == b &amp;&amp; b == c)
+    {
+        differentCount = <span class="nm">1</span>;
+        equalCount = <span class="nm">3</span>;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (a == b || a == c || b == c)
+    {
+        differentCount = <span class="nm">2</span>;
+        equalCount = <span class="nm">2</span>;
+    }
+    <span class="kw">else</span>
+    {
+        differentCount = <span class="nm">3</span>;
+        equalCount = <span class="nm">0</span>;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Different numbers: &quot;</span> &lt;&lt; differentCount &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Equal numbers: &quot;</span> &lt;&lt; equalCount &lt;&lt; endl;
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Програма рахує одне значення за запуск, тому для кожної гілки і межі є окремий рисунок.</p>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 3 - Гілка для x більших за 5, x = 9, перед цим введено abc</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 4 - Гілка для x від 1 до 5, x = 2</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 5 - Межа x = 1</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-4.png"><img src="img/task1-run-4.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 6 - Точка x = 5, де функція не визначена</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-5.png"><img src="img/task1-run-5.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 7 - Межа x = -5</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-6.png"><img src="img/task1-run-6.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 8 - Гілка для x менших за -5, x = -6</figcaption></figure>
+<h3>Завдання 2, варіант 8</h3>
+<figure class="shot"><a href="img/task2-run-1.png"><img src="img/task2-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 9 - Усі числа різні, перед цим введено некоректний рядок</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-2.png"><img src="img/task2-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 10 - Рівні перше і друге числа</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-3.png"><img src="img/task2-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 11 - Рівні перше і третє числа</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-4.png"><img src="img/task2-run-4.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 12 - Рівні друге і третє числа</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-5.png"><img src="img/task2-run-5.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 13 - Усі числа рівні</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<p>Я порахував тести вручну, щоб пройти всі гілки обох програм, і порівняв результат із виводом.</p>
+<h3>Завдання 1, варіант 4</h3>
+<p class="tcap">Таблиця 2 - Ручні тести функції f(x)</p>
+<div class="table-scroll"><table>
+<tr><th>x</th><th>Гілка</th><th>Розрахунок</th><th>Очікується</th><th>Програма</th></tr>
+<tr><td>9</td><td>x &gt; 5</td><td>5 · √9 = 5 · 3</td><td>15</td><td>15</td></tr>
+<tr><td>5</td><td>немає</td><td>жодна умова не виконується</td><td>повідомлення</td><td>The function is not defined for x = 5</td></tr>
+<tr><td>2</td><td>1 &lt; x &lt; 5</td><td>1 / 2</td><td>0.5</td><td>0.5</td></tr>
+<tr><td>1</td><td>-5 ≤ x ≤ 1</td><td>1 · 1</td><td>1</td><td>1</td></tr>
+<tr><td>-5</td><td>-5 ≤ x ≤ 1</td><td>(-5) · (-5)</td><td>25</td><td>25</td></tr>
+<tr><td>-6</td><td>x &lt; -5</td><td>10 · (-6)</td><td>-60</td><td>-60</td></tr>
+</table></div>
+<p>У точці x = 1 формула 1 / x дала б те саме значення, тому цей тест не відрізняє сусідні гілки. На
+межі -5 різницю видно: формула 10x дала б -50, а програма вивела 25.</p>
+<h3>Завдання 2, варіант 8</h3>
+<p class="tcap">Таблиця 3 - Ручні тести для трьох чисел</p>
+<div class="table-scroll"><table>
+<tr><th>Числа</th><th>Випадок</th><th>Очікується: різних, однакових</th><th>Програма</th></tr>
+<tr><td>1.5, 2.5, -3</td><td>усі різні</td><td>3, 0</td><td>3, 0</td></tr>
+<tr><td>2, 2, 5</td><td>рівні перше і друге</td><td>2, 2</td><td>2, 2</td></tr>
+<tr><td>7.5, 1, 7.5</td><td>рівні перше і третє</td><td>2, 2</td><td>2, 2</td></tr>
+<tr><td>-4, 0, 0</td><td>рівні друге і третє</td><td>2, 2</td><td>2, 2</td></tr>
+<tr><td>3.2, 3.2, 3.2</td><td>усі рівні</td><td>1, 3</td><td>1, 3</td></tr>
+</table></div>
+<p>Некоректні рядки <code>abc</code> і <code>1 abc 3</code> програми відхилили і попросили ввести дані
+ще раз.</p>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>В умові першого завдання є пропуск: при x = 5 не підходить жодна гілка. Тому в програмі з'явилась
+логічна змінна, і для цього x виводиться повідомлення. У другому завданні довелося самому вирішити,
+що вважати кількістю однакових чисел, а потім розібрати три випадки. Ручні тести пройшли всі гілки
+й межі 1, 5 і -5, програма дала ті самі значення.</p>
+</section>
+<p class="pager"><a href="../lab01/index.html">Попередня робота</a><a href="../lab03/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>

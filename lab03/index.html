@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №3. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html" class="active" aria-current="page">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html" class="active" aria-current="page">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №3</h1><p>Циклічні обчислювальні процеси</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 6. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умова задачі</a></li><li><a href="#analysis">Аналіз задачі</a></li><li><a href="#scheme">Блок-схема алгоритму</a></li><li><a href="#code">Текст програми</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити особливості циклічних обчислювальних процесів.</li>
+<li>Опанувати технологію використання операторів циклів.</li>
+<li>Навчитися розробляти алгоритми та програми циклічних процесів.</li>
+</ul>
+</section>
+<section id="task"><h2>Умова задачі</h2>
+<p>Варіант 6. У таблиці методички 22 варіанти, тому для номера 28 у списку групи маємо
+28 - 22 = 6.</p>
+<p>Обчислити подвійну суму:</p>
+<div class="formula">S = ∑<sub>x=1</sub><sup>5</sup> ∑<sub>k=0</sub><sup>∞</sup>
+(-1)<sup>k</sup> x<sup>2k</sup> / (k<sup>x</sup>(k + 1)(k + 2))</div>
+<p>Зовнішню суму від 1 до 5 рахувати циклом <code>for</code>, внутрішню циклом <code>while</code>
+або <code>do ... while</code>. Нескінченність визначається точністю, яку задає користувач:
+підсумовування припиняється, коли її досягнуто. Кількість доданків внутрішньої суми для кожного
+x має бути різною. Степінь і факторіал рахувати за рекурентними співвідношеннями. Щоб не було
+переповнення, вийти з внутрішнього циклу, коли доданок досягає 10<sup>-38</sup> або
+10<sup>+38</sup>. Результат подати таблицею з колонками: параметри обох сум, доданок і накопичена
+сума.</p>
+</section>
+<section id="analysis"><h2>Аналіз задачі</h2>
+<p>При k = 0 у знаменнику стоїть 0<sup>x</sup>, тобто нуль, і доданок не існує. Тому внутрішня сума
+в програмі починається з k = 1. Перший доданок для кожного x дорівнює -x<sup>2</sup> / 6.</p>
+<p>Щоб не підносити числа до степеня, наступний доданок отримуємо з поточного:</p>
+<div class="formula">a<sub>k+1</sub> = -a<sub>k</sub> · x<sup>2</sup> · (k / (k + 1))<sup>x</sup>
+· (k + 1) / (k + 3)</div>
+<p>Множник (k / (k + 1))<sup>x</sup> рахується окремим циклом із x множень у функції
+<code>calculateNextTerm</code>.</p>
+<p>При x = 1 доданки зменшуються, і цикл зупиняється, коли модуль доданка стає меншим за
+точність. При x ≥ 2 чисельник росте швидше за знаменник, ряд розбігається, тому для цих x цикл
+зупиняється на межі 10<sup>38</sup>, а S є лише частковою сумою. Програма пише про це в кінці.
+Доданок, менший за точність, до суми не входить.</p>
+<p>Точність вводиться від 10<sup>-6</sup> до 1. Якщо введено не число або число поза межами,
+програма виводить повідомлення і просить ввести ще раз.</p>
+<p class="tcap">Таблиця 1 - Функції програми</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputAccuracy</code></td><td>вводить точність із перевіркою</td></tr>
+<tr><td><code>calculateNextTerm</code></td><td>обчислює наступний доданок через поточний</td></tr>
+<tr><td><code>calculateSum</code></td><td>рахує суму у двох циклах і виводить таблицю</td></tr>
+<tr><td><code>printResult</code></td><td>виводить суму S</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025.</p>
+</section>
+<section id="scheme"><h2>Блок-схема алгоритму</h2>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputAccuracy.svg"><img src="img/task1-fc-inputAccuracy.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputAccuracy</code> (введення точності з перевіркою)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateNextTerm.svg"><img src="img/task1-fc-calculateNextTerm.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>calculateNextTerm</code> (обчислення наступного доданка через поточний)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateSum.svg"><img src="img/task1-fc-calculateSum.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>calculateSum</code> (обчислення суми й виведення таблиці)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printResult.svg"><img src="img/task1-fc-printResult.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>printResult</code> (виведення підсумку)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Текст програми</h2>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №3, варіант 6. Обчислити подвійну суму із заданою</span>
+<span class="cm">/// точністю і подати обчислення таблицею.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cmath&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">float</span> MIN_ACCURACY = <span class="nm">0</span>.000001f; <span class="cm">// нижня межа точності</span>
+<span class="kw">const</span> <span class="kw">float</span> MAX_ACCURACY = <span class="nm">1</span>;         <span class="cm">// верхня межа точності</span>
+<span class="kw">const</span> <span class="kw">float</span> SMALL_LIMIT = 1e-38f;     <span class="cm">// межі модуля доданка з умови</span>
+<span class="kw">const</span> <span class="kw">float</span> BIG_LIMIT = 1e38f;
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> accuracy = <span class="nm">0</span>; <span class="cm">// задана точність</span>
+<span class="kw">float</span> term = <span class="nm">0</span>;     <span class="cm">// поточний доданок</span>
+<span class="kw">float</span> total = <span class="nm">0</span>;    <span class="cm">// накопичена сума</span>
+<span class="kw">int</span> x = <span class="nm">0</span>;          <span class="cm">// параметр зовнішньої суми</span>
+<span class="kw">int</span> k = <span class="nm">0</span>;          <span class="cm">// параметр внутрішньої суми</span>
+<span class="kw">int</span> termCount = <span class="nm">0</span>;  <span class="cm">// кількість доданків при поточному x</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи, автора і формулу суми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 3. Variant 6.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Calculate the double sum with the accuracy entered from&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;the keyboard. Print a table: x, k, the term and the&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;accumulated sum.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;      5    inf       (-1)^k * x^(2k)&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;S =  sum   sum   ------------------------&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;     x=1   k=1   k^x * (k + 1) * (k + 2)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить точність. Поки введено не число або число поза межами, введення</span>
+<span class="cm">/// повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputAccuracy()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter accuracy (from 0.000001 to 1): &quot;</span>;
+    cin &gt;&gt; accuracy;
+    <span class="kw">while</span> (cin.fail() || accuracy &lt; MIN_ACCURACY || accuracy &gt; MAX_ACCURACY)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter accuracy from 0.000001 to 1: &quot;</span>;
+        cin &gt;&gt; accuracy;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Отримує наступний доданок із поточного: множить його на -x^2 * (k + 1) / (k</span>
+<span class="cm">/// + 3) і x разів на k / (k + 1)</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateNextTerm()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// лічильник множень</span>
+
+    <span class="kw">for</span> (i = <span class="nm">1</span>; i &lt;= x; i++)
+    {
+        term = term * k / (k + <span class="nm">1</span>);
+    }
+    term = -term * (k + <span class="nm">1</span>) / (k + <span class="nm">3</span>) * x * x;
+    k++;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Рахує суму і виводить таблицю. Внутрішній цикл працює, поки модуль доданка</span>
+<span class="cm">/// не менший за точність і лежить між межами умови</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateSum()
+{
+    cout &lt;&lt; endl &lt;&lt; scientific &lt;&lt; setprecision(<span class="nm">6</span>);
+    cout &lt;&lt; setw(<span class="nm">3</span>) &lt;&lt; <span class="st">&quot;x&quot;</span> &lt;&lt; setw(<span class="nm">5</span>) &lt;&lt; <span class="st">&quot;k&quot;</span> &lt;&lt; setw(<span class="nm">16</span>) &lt;&lt; <span class="st">&quot;term&quot;</span> &lt;&lt; setw(<span class="nm">16</span>)
+         &lt;&lt; <span class="st">&quot;sum&quot;</span> &lt;&lt; endl;
+
+    <span class="kw">for</span> (x = <span class="nm">1</span>; x &lt;= <span class="nm">5</span>; x++)
+    {
+        k = <span class="nm">1</span>;
+        termCount = <span class="nm">0</span>;
+        term = -(<span class="kw">float</span>)(x * x) / <span class="nm">6</span>; <span class="cm">// перший доданок, коли k = 1</span>
+
+        <span class="kw">while</span> (fabs(term) &gt;= accuracy &amp;&amp; fabs(term) &gt; SMALL_LIMIT
+               &amp;&amp; fabs(term) &lt; BIG_LIMIT)
+        {
+            total = total + term;
+            termCount++;
+            cout &lt;&lt; setw(<span class="nm">3</span>) &lt;&lt; x &lt;&lt; setw(<span class="nm">5</span>) &lt;&lt; k &lt;&lt; setw(<span class="nm">16</span>) &lt;&lt; term &lt;&lt; setw(<span class="nm">16</span>)
+                 &lt;&lt; total &lt;&lt; endl;
+            calculateNextTerm();
+        }
+
+        cout &lt;&lt; <span class="st">&quot;number of terms for x = &quot;</span> &lt;&lt; x &lt;&lt; <span class="st">&quot;: &quot;</span> &lt;&lt; termCount &lt;&lt; endl;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить підсумок</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printResult()
+{
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;S = &quot;</span> &lt;&lt; total &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;For x &gt;= 2 the terms grow, so S is only a partial sum.&quot;</span> &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputAccuracy();
+    calculateSum();
+    printResult();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<p>Таблиці довгі, бо при x ≥ 2 цикл доходить до межі 10<sup>38</sup>. Рисунок можна відкрити
+окремо.</p>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 7 - Обчислення з точністю 0.001 (перед цим введено некоректні значення abc і 5)</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 8 - Обчислення з точністю 1</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Перевірка в Excel</h3>
+<p>У файлі <a href="check.xlsx" download>check.xlsx</a> доданки обчислено прямо за формулою умови
+через <code>POWER</code>, без рекурентної формули. Поруч стоять значення, які вивела програма при
+точності 0.001. Значення дуже великі, тому порівнюється відносна різниця.</p>
+<figure class="shot"><a href="img/excel-check.png"><img src="img/excel-check.png" alt="" width="580" loading="lazy"></a><figcaption>Рисунок 9 - Порівняння в Excel (початок аркуша)</figcaption></figure>
+<p>Найбільша відносна різниця доданків 9.6 · 10<sup>-7</sup>, сум 1.9 · 10<sup>-6</sup>. Це похибка
+типу <code>float</code>, який зберігає близько 7 значущих цифр.</p>
+<h3>Ручна перевірка</h3>
+<p class="tcap">Таблиця 2 - Доданки, обчислені вручну</p>
+<div class="table-scroll"><table>
+<tr><th>x</th><th>k</th><th>За формулою</th><th>Значення</th><th>Програма</th></tr>
+<tr><td>1</td><td>1</td><td>-1 / (1 · 2 · 3)</td><td>-0.166667</td><td>-1.666667e-01</td></tr>
+<tr><td>1</td><td>2</td><td>1 / (2 · 3 · 4)</td><td>0.041667</td><td>4.166667e-02</td></tr>
+<tr><td>2</td><td>2</td><td>16 / (4 · 3 · 4)</td><td>0.333333</td><td>3.333333e-01</td></tr>
+<tr><td>3</td><td>1</td><td>-9 / (1 · 2 · 3)</td><td>-1.5</td><td>-1.500000e+00</td></tr>
+</table></div>
+<p>При точності 1 для x = 1 і x = 2 перший доданок менший за 1, тому програма не додає жодного. Для
+x = 3 додається лише -1.5, бо наступний доданок дорівнює 0.84375. Програма вивела кількість доданків
+0, 0 і 1, що збігається з цим розрахунком.</p>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Написано програму з двома вкладеними циклами, яка рахує суму за рекурентною формулою і виводить
+таблицю. Формула умови не працює при k = 0, тому сума починається з k = 1. Ряд сходиться лише при
+x = 1, а для більших x сума часткова і обмежена межею 10<sup>38</sup>. Значення в Excel, пораховані
+напряму, збіглися з виводом програми в межах точності <code>float</code>.</p>
+</section>
+<p class="pager"><a href="../lab02/index.html">Попередня робота</a><a href="../lab04/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>

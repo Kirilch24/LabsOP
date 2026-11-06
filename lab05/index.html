@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №5. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html" class="active" aria-current="page">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html" class="active" aria-current="page">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №5</h1><p>Рекурсивні функції</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 8. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умови задач</a></li><li><a href="#analysis">Аналіз задач</a></li><li><a href="#scheme">Блок-схеми алгоритмів</a></li><li><a href="#code">Тексти програм</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити особливості рекурсивних процесів.</li>
+<li>Опанувати технологію рекурсивних обчислень.</li>
+<li>Навчитися розробляти алгоритми та програми із застосуванням рекурсивних функцій.</li>
+</ul>
+</section>
+<section id="task"><h2>Умови задач</h2>
+<p>Лабораторна робота передбачає два завдання з використанням рекурсивних функцій. Обидві таблиці
+варіантів методички мають по 20 варіантів, тому для номера 28 у списку групи маємо 28 - 20 = 8.</p>
+
+<h3>Завдання 1, варіант 8</h3>
+<p>Обчислити значення рекурсивної функції, заданої рекурентним співвідношенням. Визначити глибину
+рекурсії. Здійснити аналіз ефективності рекурсивного розв'язку задачі. Програма повинна реалізовувати
+два способи розв'язання: з використанням рекурсії та з використанням ітерації (циклу). В процесі
+ітераційної реалізації слід підсумувати кількість ітерацій.</p>
+<p>Увести з клавіатури два цілих додатних числа a та b. Обчислити добуток двох цілих додатних чисел
+за рекурентним співвідношенням:</p>
+<div class="formula">p = a × b =<br>
+a, якщо b = 1;<br>
+b, якщо a = 1;<br>
+0, якщо a = 0 або b = 0;<br>
+a + p(a, b - 1) в інших випадках</div>
+<p>Реалізувати ітеративний варіант функції, використовуючи оператор циклу. Порівняти ефективність
+рекурсивної та ітеративної реалізацій, визначивши глибину рекурсії та кількість ітерацій циклу.</p>
+
+<h3>Завдання 2, варіант 8</h3>
+<p>Рекурсивна обробка послідовностей. Забороняється використовувати масиви і рядки. Використання
+рекурсії обов'язкове.</p>
+<p>Увести з клавіатури два натуральних числа k та s. Визначити кількість k-значних натуральних
+чисел, сума цифр яких дорівнює s. Запис натурального числа не може починатися з цифри 0. В цьому
+завданні можна використовувати цикл для перебору всіх цифр, що стоять на будь-якій позиції.
+Контрольний тест: введені числа 3 15, отриманий результат: 69.</p>
+</section>
+<section id="analysis"><h2>Аналіз задач</h2>
+<h3>Завдання 1, варіант 8</h3>
+<p>Рекурсивна функція <code>multiplyRecursive</code> повторює формулу: гілки стоять у тому самому
+порядку. Поки b не дійде до 1, функція додає a до значення p(a, b - 1).</p>
+<p>В умові сказано про додатні числа, але у формулі є окремий випадок для нуля. Щоб ця гілка
+працювала, програма приймає числа від 0. Верхня межа 10000, бо добуток 10000 · 10000 вміщається в
+<code>int</code>. Якщо введено не число або число поза межами, програма виводить повідомлення і
+просить ввести ще раз.</p>
+<p>Глибину рекурсії рахують дві змінні. <code>currentDepth</code> збільшується на вході у функцію і
+зменшується на виході, а <code>maxDepth</code> запам'ятовує її найбільше значення.</p>
+<p>Циклічний варіант перевіряє ті самі умови. В останній гілці добуток спочатку дорівнює a, а цикл
+додає a ще b - 1 разів. Лічильник ітерацій збільшується лише в цьому циклі, тому в перших трьох
+гілках він дорівнює 0.</p>
+<p>Коли a і b більші за 1, рекурсія має глибину b, а цикл робить b - 1 ітерацій. Додавань в обох
+способах однаково. Різниця в пам'яті: кожен незавершений виклик тримає в стеку свої параметри, а
+циклу потрібні лише кілька змінних. Для цієї задачі цикл ефективніший.</p>
+<p class="tcap">Таблиця 1 - Функції програми завдання 1</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число з перевіркою</td></tr>
+<tr><td><code>inputNumbers</code></td><td>вводить множники a і b</td></tr>
+<tr><td><code>multiplyRecursive</code></td><td>рахує добуток рекурсією і визначає глибину</td></tr>
+<tr><td><code>multiplyIterative</code></td><td>рахує добуток циклом і кількість ітерацій</td></tr>
+<tr><td><code>printResults</code></td><td>виводить результати обох способів</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+
+<h3>Завдання 2, варіант 8</h3>
+<p>Програма будує число зліва направо, по одній цифрі. Перша цифра береться від 1 до 9, бо запис
+числа не починається з нуля. Цей перебір робить функція <code>countNumbers</code>.</p>
+<p>Решту позицій заповнює рекурсивна функція <code>countEndings</code>. Вона пробує цифри від 0 до 9
+і для кожної викликає себе, коли вільних позицій на одну менше, а сума менша на цю цифру. Коли
+вільних позицій не лишилось, закінчення підходить лише за нульового залишку суми. Цифра, більша за
+залишок суми, не перебирається.</p>
+<p>Масивів і рядків у програмі немає. k вводиться від 1 до 7, щоб програма рахувала швидко. s
+вводиться від 1 до 63, бо 63 є найбільшою сумою цифр семизначного числа. Якщо сума завелика для
+заданого k, таких чисел немає, і програма виводить 0.</p>
+<p class="tcap">Таблиця 2 - Функції програми завдання 2</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число з перевіркою</td></tr>
+<tr><td><code>inputData</code></td><td>вводить k і s</td></tr>
+<tr><td><code>countEndings</code></td><td>рекурсивно рахує закінчення числа із заданою сумою</td></tr>
+<tr><td><code>countNumbers</code></td><td>перебирає першу цифру і підсумовує закінчення</td></tr>
+<tr><td><code>printResult</code></td><td>виводить кількість чисел</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025.</p>
+</section>
+<section id="scheme"><h2>Блок-схеми алгоритмів</h2>
+<h3>Завдання 1, варіант 8</h3>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputNumber.svg"><img src="img/task1-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputNumber</code> (введення цілого числа з перевіркою)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputNumbers.svg"><img src="img/task1-fc-inputNumbers.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>inputNumbers</code> (введення двох множників)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-multiplyRecursive.svg"><img src="img/task1-fc-multiplyRecursive.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>multiplyRecursive</code> (рекурсивне обчислення добутку)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-multiplyIterative.svg"><img src="img/task1-fc-multiplyIterative.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>multiplyIterative</code> (обчислення добутку циклом)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printResults.svg"><img src="img/task1-fc-printResults.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>printResults</code> (виведення результатів обох способів)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 7 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+<h3>Завдання 2, варіант 8</h3>
+<figure class="fc"><a href="img/task2-fc-printTitle.svg"><img src="img/task2-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 8 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputNumber.svg"><img src="img/task2-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 9 - Блок-схема функції <code>inputNumber</code> (введення цілого числа з перевіркою)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputData.svg"><img src="img/task2-fc-inputData.svg" alt="" loading="lazy"></a><figcaption>Рисунок 10 - Блок-схема функції <code>inputData</code> (введення k і s)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-countEndings.svg"><img src="img/task2-fc-countEndings.svg" alt="" loading="lazy"></a><figcaption>Рисунок 11 - Блок-схема функції <code>countEndings</code> (рекурсивний підрахунок закінчень числа)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-countNumbers.svg"><img src="img/task2-fc-countNumbers.svg" alt="" loading="lazy"></a><figcaption>Рисунок 12 - Блок-схема функції <code>countNumbers</code> (перебір першої цифри числа)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-printResult.svg"><img src="img/task2-fc-printResult.svg" alt="" loading="lazy"></a><figcaption>Рисунок 13 - Блок-схема функції <code>printResult</code> (виведення результату)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-main.svg"><img src="img/task2-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 14 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Тексти програм</h2>
+<h3>Завдання 1, варіант 8</h3>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №5, завдання 1, варіант 8. Обчислити добуток двох чисел</span>
+<span class="cm">/// за рекурентним співвідношенням рекурсією і циклом, знайти глибину рекурсії і</span>
+<span class="cm">/// кількість ітерацій.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MIN_NUMBER = <span class="nm">0</span>;     <span class="cm">// найменше допустиме число</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_NUMBER = <span class="nm">10000</span>; <span class="cm">// найбільше число, добуток вміщається в int</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">int</span> firstNumber = <span class="nm">0</span>;      <span class="cm">// перший множник a</span>
+<span class="kw">int</span> secondNumber = <span class="nm">0</span>;     <span class="cm">// другий множник b</span>
+<span class="kw">int</span> recursiveProduct = <span class="nm">0</span>; <span class="cm">// добуток, знайдений рекурсією</span>
+<span class="kw">int</span> iterativeProduct = <span class="nm">0</span>; <span class="cm">// добуток, знайдений циклом</span>
+<span class="kw">int</span> currentDepth = <span class="nm">0</span>;     <span class="cm">// кількість незавершених викликів зараз</span>
+<span class="kw">int</span> maxDepth = <span class="nm">0</span>;         <span class="cm">// глибина рекурсії</span>
+<span class="kw">int</span> iterationCount = <span class="nm">0</span>;   <span class="cm">// кількість ітерацій циклу</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи, автора і рекурентне співвідношення</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 5. Task 1. Variant 8.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter two integers a, b and calculate their product by&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;the recurrence relation, with recursion and with a loop.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Compare the recursion depth and the number of iterations.&quot;</span> &lt;&lt; endl
+         &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;           a,                if b = 1&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;p(a, b) =  b,                if a = 1&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;           0,                if a = 0 or b = 0&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;           a + p(a, b - 1),  otherwise&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число. Поки введено не число або число поза межами, введення</span>
+<span class="cm">/// повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;найменше значення&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;найбільше&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>; <span class="cm">// введене число</span>
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить два множники</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputNumbers()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter a (from 0 to 10000): &quot;</span>;
+    firstNumber = inputNumber(MIN_NUMBER, MAX_NUMBER);
+
+    cout &lt;&lt; <span class="st">&quot;Enter b (from 0 to 10000): &quot;</span>;
+    secondNumber = inputNumber(MIN_NUMBER, MAX_NUMBER);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Обчислює добуток за рекурентним співвідношенням і запам&#x27;ятовує найбільшу</span>
+<span class="cm">/// кількість незавершених викликів</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;first&quot;&gt;множник a&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;second&quot;&gt;множник b&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;добуток a і b&lt;/returns&gt;</span>
+<span class="kw">int</span> multiplyRecursive(<span class="kw">int</span> first, <span class="kw">int</span> second)
+{
+    <span class="kw">int</span> result = <span class="nm">0</span>; <span class="cm">// значення p(a, b)</span>
+
+    currentDepth++;
+    <span class="kw">if</span> (currentDepth &gt; maxDepth)
+    {
+        maxDepth = currentDepth;
+    }
+
+    <span class="kw">if</span> (second == <span class="nm">1</span>)
+    {
+        result = first;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (first == <span class="nm">1</span>)
+    {
+        result = second;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (first == <span class="nm">0</span> || second == <span class="nm">0</span>)
+    {
+        result = <span class="nm">0</span>;
+    }
+    <span class="kw">else</span>
+    {
+        result = first + multiplyRecursive(first, second - <span class="nm">1</span>);
+    }
+
+    currentDepth--;
+    <span class="kw">return</span> result;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Обчислює добуток циклом. Умови ті самі, що в рекурентному співвідношенні, а</span>
+<span class="cm">/// додавання виконуються в циклі</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> multiplyIterative()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// лічильник додавань</span>
+
+    <span class="kw">if</span> (secondNumber == <span class="nm">1</span>)
+    {
+        iterativeProduct = firstNumber;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (firstNumber == <span class="nm">1</span>)
+    {
+        iterativeProduct = secondNumber;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (firstNumber == <span class="nm">0</span> || secondNumber == <span class="nm">0</span>)
+    {
+        iterativeProduct = <span class="nm">0</span>;
+    }
+    <span class="kw">else</span>
+    {
+        iterativeProduct = firstNumber;
+        <span class="kw">for</span> (i = <span class="nm">2</span>; i &lt;= secondNumber; i++)
+        {
+            iterativeProduct = iterativeProduct + firstNumber;
+            iterationCount++;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить результати обох способів</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printResults()
+{
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Recursion:&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;p(&quot;</span> &lt;&lt; firstNumber &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; secondNumber
+         &lt;&lt; <span class="st">&quot;) = &quot;</span> &lt;&lt; recursiveProduct &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;recursion depth: &quot;</span> &lt;&lt; maxDepth &lt;&lt; endl;
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Loop:&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;p(&quot;</span> &lt;&lt; firstNumber &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; secondNumber
+         &lt;&lt; <span class="st">&quot;) = &quot;</span> &lt;&lt; iterativeProduct &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;number of iterations: &quot;</span> &lt;&lt; iterationCount &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputNumbers();
+    recursiveProduct = multiplyRecursive(firstNumber, secondNumber);
+    multiplyIterative();
+    printResults();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+<h3>Завдання 2, варіант 8</h3>
+<p class="file">Файл <a href="task2.cpp" download>task2.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №5, завдання 2, варіант 8. Рекурсивно знайти кількість</span>
+<span class="cm">/// k-значних натуральних чисел із сумою цифр s.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task2.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MIN_DIGITS = <span class="nm">1</span>; <span class="cm">// найменша кількість цифр</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_DIGITS = <span class="nm">7</span>; <span class="cm">// найбільша кількість цифр</span>
+<span class="kw">const</span> <span class="kw">int</span> MIN_SUM = <span class="nm">1</span>;    <span class="cm">// найменша сума цифр</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_SUM = <span class="nm">63</span>;   <span class="cm">// найбільша сума цифр семизначного числа</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">int</span> digitCount = <span class="nm">0</span>;  <span class="cm">// кількість цифр k</span>
+<span class="kw">int</span> digitSum = <span class="nm">0</span>;    <span class="cm">// сума цифр s</span>
+<span class="kw">int</span> numberCount = <span class="nm">0</span>; <span class="cm">// кількість знайдених чисел</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи, автора і завдання</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 5. Task 2. Variant 8.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter natural numbers k and s. Count the k-digit natural&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;numbers with the sum of digits s. The first digit is not&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;0.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число. Поки введено не число або число поза межами, введення</span>
+<span class="cm">/// повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;найменше значення&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;найбільше&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>; <span class="cm">// введене число</span>
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить кількість цифр k і суму цифр s</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputData()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter k (from 1 to 7): &quot;</span>;
+    digitCount = inputNumber(MIN_DIGITS, MAX_DIGITS);
+
+    cout &lt;&lt; <span class="st">&quot;Enter s (from 1 to 63): &quot;</span>;
+    digitSum = inputNumber(MIN_SUM, MAX_SUM);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Рахує, скількома способами можна записати задану кількість цифр від 0 до 9</span>
+<span class="cm">/// із заданою сумою. Для кожної цифри викликає себе для решти позицій</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;digitsLeft&quot;&gt;кількість вільних позицій&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;sumLeft&quot;&gt;сума, яку ще треба набрати&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;кількість способів&lt;/returns&gt;</span>
+<span class="kw">int</span> countEndings(<span class="kw">int</span> digitsLeft, <span class="kw">int</span> sumLeft)
+{
+    <span class="kw">int</span> total = <span class="nm">0</span>; <span class="cm">// кількість способів</span>
+    <span class="kw">int</span> digit = <span class="nm">0</span>; <span class="cm">// цифра на поточній позиції</span>
+
+    <span class="kw">if</span> (digitsLeft == <span class="nm">0</span>)
+    {
+        <span class="kw">if</span> (sumLeft == <span class="nm">0</span>)
+        {
+            total = <span class="nm">1</span>;
+        }
+    }
+    <span class="kw">else</span>
+    {
+        <span class="kw">for</span> (digit = <span class="nm">0</span>; digit &lt;= <span class="nm">9</span> &amp;&amp; digit &lt;= sumLeft; digit++)
+        {
+            total = total + countEndings(digitsLeft - <span class="nm">1</span>, sumLeft - digit);
+        }
+    }
+
+    <span class="kw">return</span> total;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Перебирає першу цифру числа від 1 до 9 і додає кількість закінчень для</span>
+<span class="cm">/// кожної з них</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> countNumbers()
+{
+    <span class="kw">int</span> digit = <span class="nm">0</span>; <span class="cm">// перша цифра числа</span>
+
+    <span class="kw">for</span> (digit = <span class="nm">1</span>; digit &lt;= <span class="nm">9</span> &amp;&amp; digit &lt;= digitSum; digit++)
+    {
+        numberCount =
+            numberCount + countEndings(digitCount - <span class="nm">1</span>, digitSum - digit);
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить результат</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printResult()
+{
+    cout &lt;&lt; endl
+         &lt;&lt; <span class="st">&quot;Numbers with &quot;</span> &lt;&lt; digitCount &lt;&lt; <span class="st">&quot; digits and digit sum &quot;</span>
+         &lt;&lt; digitSum &lt;&lt; <span class="st">&quot;: &quot;</span> &lt;&lt; numberCount &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputData();
+    countNumbers();
+    printResult();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<h3>Завдання 1, варіант 8</h3>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 15 - Добуток 5 · 3 (перед цим введено некоректні значення abc, -1 і 30001)</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 16 - Випадок a = 1, рекурсія закінчується на першому виклику</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 17 - Випадок a = 0</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-4.png"><img src="img/task1-run-4.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 18 - Найбільші допустимі числа</figcaption></figure>
+<h3>Завдання 2, варіант 8</h3>
+<figure class="shot"><a href="img/task2-run-1.png"><img src="img/task2-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 19 - Контрольний тест методички: k = 3, s = 15</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-2.png"><img src="img/task2-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 20 - Двозначні числа із сумою 9 (перед цим введено некоректні значення x, 0, 8 і 64)</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-3.png"><img src="img/task2-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 21 - Сума більша за можливу для двозначного числа</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-4.png"><img src="img/task2-run-4.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 22 - Найбільші допустимі k і s</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Завдання 1, варіант 8</h3>
+<p>Для a = 5, b = 3 розписую виклики вручну: p(5, 3) = 5 + p(5, 2) = 5 + 5 + p(5, 1) = 5 + 5 + 5 = 15.
+Незавершених викликів три, тому глибина 3. У циклі до початкового значення 5 додається ще двічі,
+тому ітерацій 2. Решта рядків таблиці порахована так само.</p>
+<p class="tcap">Таблиця 3 - Ручний розрахунок і результати програми</p>
+<div class="table-scroll"><table>
+<tr><th>a</th><th>b</th><th>Гілка формули</th><th>Добуток вручну</th><th>Глибина вручну</th>
+<th>Ітерацій вручну</th><th>Програма: рекурсія</th><th>Програма: цикл</th></tr>
+<tr><td>5</td><td>3</td><td>a + p(a, b - 1)</td><td>15</td><td>3</td><td>2</td>
+<td>15, глибина 3</td><td>15, ітерацій 2</td></tr>
+<tr><td>1</td><td>9</td><td>a = 1</td><td>9</td><td>1</td><td>0</td>
+<td>9, глибина 1</td><td>9, ітерацій 0</td></tr>
+<tr><td>0</td><td>7</td><td>a = 0</td><td>0</td><td>1</td><td>0</td>
+<td>0, глибина 1</td><td>0, ітерацій 0</td></tr>
+<tr><td>10000</td><td>10000</td><td>a + p(a, b - 1)</td><td>100000000</td><td>10000</td><td>9999</td>
+<td>100000000, глибина 10000</td><td>100000000, ітерацій 9999</td></tr>
+</table></div>
+
+<h3>Завдання 2, варіант 8</h3>
+<p>Контрольний тест перевірено вручну. Для кожної першої цифри лишається сума t для двох цифр. Пар
+цифр із сумою t є t + 1, якщо t ≤ 9, і 19 - t, якщо t ≥ 10.</p>
+<p class="tcap">Таблиця 4 - Ручний підрахунок для k = 3, s = 15</p>
+<div class="table-scroll"><table>
+<tr><th>Перша цифра</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+<tr><td>t</td><td>14</td><td>13</td><td>12</td><td>11</td><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td></tr>
+<tr><td>Пар цифр</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>9</td><td>8</td><td>7</td></tr>
+</table></div>
+<p>Сума другого рядка 5 + 6 + 7 + 8 + 9 + 10 + 9 + 8 + 7 = 69, як у методичці й у програми.</p>
+<p class="tcap">Таблиця 5 - Контрольні приклади</p>
+<div class="table-scroll"><table>
+<tr><th>k</th><th>s</th><th>Міркування</th><th>Очікувано</th><th>Програма</th></tr>
+<tr><td>3</td><td>15</td><td>контрольний тест методички</td><td>69</td><td>69</td></tr>
+<tr><td>2</td><td>9</td><td>18, 27, 36, 45, 54, 63, 72, 81, 90</td><td>9</td><td>9</td></tr>
+<tr><td>2</td><td>30</td><td>найбільша сума двох цифр 18</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>63</td><td>лише число 9999999</td><td>1</td><td>1</td></tr>
+</table></div>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Рекурсія і цикл дали однакові добутки в усіх чотирьох запусках, але пам'ять витрачають по-різному.
+При a = 10000 і b = 10000 рекурсія пішла на глибину 10000, а цикл зробив 9999 ітерацій в одному
+виклику функції. Випадки a = 1 і a = 0 закінчуються відразу, тому глибина там дорівнює 1.</p>
+<p>У другому завданні перша цифра не може бути нулем, тому для неї окремий цикл у <code>countNumbers</code>, а решту позицій
+перебирає рекурсія. Контрольний тест методички дав 69, а ручний підрахунок за першою цифрою дав те
+саме число.</p>
+</section>
+<p class="pager"><a href="../lab04/index.html">Попередня робота</a><a href="../lab06/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>

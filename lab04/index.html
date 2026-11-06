@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №4. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html" class="active" aria-current="page">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html" class="active" aria-current="page">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №4</h1><p>Рекурентні співвідношення. Степеневі ряди. Ланцюгові дроби</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 4. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умови задач</a></li><li><a href="#analysis">Аналіз задач</a></li><li><a href="#scheme">Блок-схеми алгоритмів</a></li><li><a href="#code">Тексти програм</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити особливості циклічних обчислювальних процесів з розгалуженнями.</li>
+<li>Опанувати технологію рекурентних обчислень.</li>
+<li>Навчитися розробляти алгоритми та програми розвинення функцій у ряди.</li>
+</ul>
+</section>
+<section id="task"><h2>Умови задач</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Таблиця 4.2 методички має 24 варіанти, тому для номера 28 у списку групи маємо 28 - 24 = 4.</p>
+<p>Обчислити значення функції y, розвинувши функцію arcsin(x) у ряд Тейлора. Визначити похибку.</p>
+<div class="formula">y = arcsin(x / 2) / arcsin(2x) при -2 ≤ x &lt; 0</div>
+<div class="formula">y = arcsin(x + 5) + arcsin(x<sup>2</sup>) при 0 ≤ x ≤ 2</div>
+<p>Вимоги до всіх варіантів цього завдання:</p>
+<ul>
+<li>параметр функції змінюється від заданого з клавіатури мінімального значення до заданого максимального
+із певним кроком;</li>
+<li>точність вводиться з клавіатури як дробове число від 10<sup>-2</sup> до 10<sup>-6</sup>;</li>
+<li>суму ряду рахує власна функція за рекурентним співвідношенням, функції для факторіала і степеня
+не використовуються;</li>
+<li>стандартне значення рахується бібліотечними математичними функціями, також визначається похибка;</li>
+<li>результат виводиться таблицею з колонками: значення аргумента x, значення функції y, стандартне
+значення функції, похибка;</li>
+<li>якщо для вибраного значення аргумента функція не визначена, друкується повідомлення "function is
+not defined".</li>
+</ul>
+<h3>Завдання 2, варіант 4</h3>
+<p>Таблиця 4.3 теж має 24 варіанти, тому 28 - 24 = 4.</p>
+<p>Обчислити нескінченний ланцюговий дріб, задавши точність обчислення (10<sup>-5</sup>) з клавіатури.
+Ланцюговий дріб виражає число π.</p>
+<div class="formula">π = 4 / (1 + 1<sup>2</sup> / (3 + 2<sup>2</sup> / (5 + 3<sup>2</sup> /
+(7 + 4<sup>2</sup> / (9 + ...)))))</div>
+</section>
+<section id="analysis"><h2>Аналіз задач</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Ряд взято з таблиці 4.1:</p>
+<div class="formula">arcsin t = t + t<sup>3</sup> / (2 · 3) + 1 · 3 · t<sup>5</sup> / (2 · 4 · 5) +
+1 · 3 · 5 · t<sup>7</sup> / (2 · 4 · 6 · 7) + ...</div>
+<p>У таблиці методички в четвертому доданку пропущено множник 7, а тут він є. Якщо поділити наступний
+член ряду на поточний, отримаємо рекурентне співвідношення:</p>
+<div class="formula">a<sub>0</sub> = t, a<sub>n+1</sub> = a<sub>n</sub> · t<sup>2</sup> ·
+(2n + 1)<sup>2</sup> / ((2n + 2)(2n + 3))</div>
+<p>Цикл у функції <code>calculateArcsin</code> працює, поки модуль члена ряду не менший за точність.
+Похибка є модулем різниці між y і стандартним значенням, як у зразковій програмі.</p>
+<p>Функція arcsin визначена лише для аргументу від -1 до 1. У першій гілці arcsin(2x) вимагає
+x ≥ -0.5, тому на проміжку від -2 до -0.5 функції немає. У другій гілці x + 5 лежить від 5 до 7, тому
+ця гілка не визначена ніде. Програма перевіряє модуль кожного аргументу і для таких x друкує "function
+is not defined". Отже, реальні значення y є лише при -0.5 ≤ x &lt; 0.</p>
+<p>Кількість кроків рахується наперед, а x рахується як мінімальне значення плюс i кроків. Якщо
+додавати крок у циклі, останнє x може загубитись через похибку <code>float</code>.</p>
+<p>Найбільше значення не може бути меншим за найменше, крок має бути додатним і давати не більше 1000
+кроків, а точність лежить від 10<sup>-6</sup> до 10<sup>-2</sup>. Якщо введено не число або значення
+поза цими межами, програма виводить повідомлення і просить ввести ще раз.</p>
+<p class="tcap">Таблиця 1 - Функції програми завдання 1</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputRange</code></td><td>вводить межі аргументу і крок із перевіркою</td></tr>
+<tr><td><code>inputAccuracy</code></td><td>вводить точність із перевіркою</td></tr>
+<tr><td><code>calculateArcsin</code></td><td>рахує суму ряду для заданого аргументу</td></tr>
+<tr><td><code>calculateFunction</code></td><td>вибирає гілку, рахує y і стандартне значення</td></tr>
+<tr><td><code>printTable</code></td><td>перебирає x, рахує похибку і виводить таблицю</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<h3>Завдання 2, варіант 4</h3>
+<p>Знаменники дробу є непарними числами, а чисельники дорівнюють квадратам номера рівня. Дріб глибини n
+рахується знизу вгору: спершу знаменник дорівнює 2n + 1, а потім для i від n до 1 виконується дія</p>
+<div class="formula">знаменник = (2i - 1) + i<sup>2</sup> / знаменник</div>
+<p>Результат дорівнює 4 / знаменник. Глибина збільшується на 1, поки два сусідні значення не будуть
+відрізнятися менше ніж на точність. Після цього програма порівнює значення зі стандартним π, яке
+записано константою. Точність вводиться так само, як у першому завданні.</p>
+<p class="tcap">Таблиця 2 - Функції програми завдання 2</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputAccuracy</code></td><td>вводить точність із перевіркою</td></tr>
+<tr><td><code>calculateFraction</code></td><td>рахує дріб заданої глибини</td></tr>
+<tr><td><code>calculatePi</code></td><td>збільшує глибину і виводить таблицю значень</td></tr>
+<tr><td><code>printResult</code></td><td>виводить результат, стандартне π і похибку</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025.</p>
+</section>
+<section id="scheme"><h2>Блок-схеми алгоритмів</h2>
+<h3>Завдання 1, варіант 4</h3>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputRange.svg"><img src="img/task1-fc-inputRange.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputRange</code> (введення меж аргументу і кроку з перевіркою)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputAccuracy.svg"><img src="img/task1-fc-inputAccuracy.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>inputAccuracy</code> (введення точності з перевіркою)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateArcsin.svg"><img src="img/task1-fc-calculateArcsin.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>calculateArcsin</code> (сума ряду для arcsin із заданою точністю)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateFunction.svg"><img src="img/task1-fc-calculateFunction.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>calculateFunction</code> (обчислення y і стандартного значення для одного x)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printTable.svg"><img src="img/task1-fc-printTable.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>printTable</code> (обчислення і виведення таблиці)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 7 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+<h3>Завдання 2, варіант 4</h3>
+<figure class="fc"><a href="img/task2-fc-printTitle.svg"><img src="img/task2-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 8 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputAccuracy.svg"><img src="img/task2-fc-inputAccuracy.svg" alt="" loading="lazy"></a><figcaption>Рисунок 9 - Блок-схема функції <code>inputAccuracy</code> (введення точності з перевіркою)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-calculateFraction.svg"><img src="img/task2-fc-calculateFraction.svg" alt="" loading="lazy"></a><figcaption>Рисунок 10 - Блок-схема функції <code>calculateFraction</code> (обчислення дробу заданої глибини знизу вгору)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-calculatePi.svg"><img src="img/task2-fc-calculatePi.svg" alt="" loading="lazy"></a><figcaption>Рисунок 11 - Блок-схема функції <code>calculatePi</code> (пошук потрібної глибини і виведення таблиці)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-printResult.svg"><img src="img/task2-fc-printResult.svg" alt="" loading="lazy"></a><figcaption>Рисунок 12 - Блок-схема функції <code>printResult</code> (виведення підсумку)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-main.svg"><img src="img/task2-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 13 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Тексти програм</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №4, завдання 1, варіант 4. Обчислити кусково задану</span>
+<span class="cm">/// функцію через ряд для arcsin(x) і подати результати таблицею.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cmath&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">float</span> MIN_ACCURACY = <span class="nm">0</span>.000001f; <span class="cm">// нижня межа точності</span>
+<span class="kw">const</span> <span class="kw">float</span> MAX_ACCURACY = <span class="nm">0</span>.01f;     <span class="cm">// верхня межа точності</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_STEPS = <span class="nm">1000</span>;           <span class="cm">// найбільша кількість кроків</span>
+<span class="kw">const</span> <span class="kw">float</span> STEP_RESERVE = <span class="nm">0</span>.001f;    <span class="cm">// запас на похибку float</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> minX = <span class="nm">0</span>;         <span class="cm">// найменше значення аргументу</span>
+<span class="kw">float</span> maxX = <span class="nm">0</span>;         <span class="cm">// найбільше значення аргументу</span>
+<span class="kw">float</span> step = <span class="nm">0</span>;         <span class="cm">// крок зміни аргументу</span>
+<span class="kw">float</span> accuracy = <span class="nm">0</span>;     <span class="cm">// задана точність</span>
+<span class="kw">float</span> x = <span class="nm">0</span>;            <span class="cm">// поточне значення аргументу</span>
+<span class="kw">float</span> y = <span class="nm">0</span>;            <span class="cm">// значення функції через ряд</span>
+<span class="kw">float</span> standardY = <span class="nm">0</span>;    <span class="cm">// значення через бібліотечну функцію</span>
+<span class="kw">float</span> error = <span class="nm">0</span>;        <span class="cm">// похибка</span>
+<span class="kw">bool</span> isDefined = <span class="kw">false</span>; <span class="cm">// ознака того, що функція визначена в точці x</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи, автора, функцію y і ряд для arcsin</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 4. Task 1. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Calculate y for x from min to max with a given step,&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;expanding arcsin into a Taylor series with the accuracy&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;entered from the keyboard. Print x, y, the standard value&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;and the error.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;y = arcsin(x / 2) / arcsin(2x),  -2 &lt;= x &lt; 0&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;y = arcsin(x + 5) + arcsin(x^2),  0 &lt;= x &lt;= 2&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;arcsin(t) = t + t^3 / (2 * 3) + 1 * 3 * t^5 / (2 * 4 * 5) + ...&quot;</span>
+         &lt;&lt; endl
+         &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить межі аргументу і крок із перевіркою</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputRange()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter minimum x: &quot;</span>;
+    cin &gt;&gt; minX;
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter minimum x as a number: &quot;</span>;
+        cin &gt;&gt; minX;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Enter maximum x (not less than minimum): &quot;</span>;
+    cin &gt;&gt; maxX;
+    <span class="kw">while</span> (cin.fail() || maxX &lt; minX)
+    {
+        cin.clear();
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>);
+        cout &lt;&lt; <span class="st">&quot;Error! Enter maximum x not less than minimum: &quot;</span>;
+        cin &gt;&gt; maxX;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Enter step (greater than 0, at most 1000 steps): &quot;</span>;
+    cin &gt;&gt; step;
+    <span class="kw">while</span> (cin.fail() || step &lt;= <span class="nm">0</span> || (maxX - minX) / step &gt; MAX_STEPS)
+    {
+        cin.clear();
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>);
+        cout &lt;&lt; <span class="st">&quot;Error! Enter step greater than 0, at most 1000 steps: &quot;</span>;
+        cin &gt;&gt; step;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить точність. Поки введено не число або число поза межами, введення</span>
+<span class="cm">/// повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputAccuracy()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter accuracy (from 0.000001 to 0.01): &quot;</span>;
+    cin &gt;&gt; accuracy;
+    <span class="kw">while</span> (cin.fail() || accuracy &lt; MIN_ACCURACY || accuracy &gt; MAX_ACCURACY)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter accuracy from 0.000001 to 0.01: &quot;</span>;
+        cin &gt;&gt; accuracy;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Рахує суму ряду для arcsin. Наступний член ряду отримується з поточного,</span>
+<span class="cm">/// цикл працює, поки член ряду не менший за точність</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;argument&quot;&gt;аргумент від -1 до 1&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;сума ряду&lt;/returns&gt;</span>
+<span class="kw">float</span> calculateArcsin(<span class="kw">float</span> argument)
+{
+    <span class="kw">float</span> member = argument; <span class="cm">// поточний член ряду</span>
+    <span class="kw">float</span> sum = argument;    <span class="cm">// сума ряду</span>
+    <span class="kw">int</span> n = <span class="nm">0</span>;               <span class="cm">// номер члена ряду</span>
+
+    <span class="kw">while</span> (fabs(member) &gt;= accuracy)
+    {
+        member = member * argument * argument * (<span class="nm">2</span> * n + <span class="nm">1</span>) * (<span class="nm">2</span> * n + <span class="nm">1</span>)
+                 / ((<span class="nm">2</span> * n + <span class="nm">2</span>) * (<span class="nm">2</span> * n + <span class="nm">3</span>));
+        sum = sum + member;
+        n++;
+    }
+
+    <span class="kw">return</span> sum;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Обчислює y і стандартне значення для поточного x. Якщо x поза межами або</span>
+<span class="cm">/// аргумент arcsin за модулем більший за 1, функція не визначена</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateFunction()
+{
+    isDefined = <span class="kw">false</span>;
+
+    <span class="kw">if</span> (x &gt;= -<span class="nm">2</span> &amp;&amp; x &lt; <span class="nm">0</span>)
+    {
+        <span class="kw">if</span> (fabs(x / <span class="nm">2</span>) &lt;= <span class="nm">1</span> &amp;&amp; fabs(<span class="nm">2</span> * x) &lt;= <span class="nm">1</span>)
+        {
+            y = calculateArcsin(x / <span class="nm">2</span>) / calculateArcsin(<span class="nm">2</span> * x);
+            standardY = asin(x / <span class="nm">2</span>) / asin(<span class="nm">2</span> * x);
+            isDefined = <span class="kw">true</span>;
+        }
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (x &gt;= <span class="nm">0</span> &amp;&amp; x &lt;= <span class="nm">2</span>)
+    {
+        <span class="kw">if</span> (fabs(x + <span class="nm">5</span>) &lt;= <span class="nm">1</span> &amp;&amp; fabs(x * x) &lt;= <span class="nm">1</span>)
+        {
+            y = calculateArcsin(x + <span class="nm">5</span>) + calculateArcsin(x * x);
+            standardY = asin(x + <span class="nm">5</span>) + asin(x * x);
+            isDefined = <span class="kw">true</span>;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить таблицю. Кількість кроків рахується наперед, щоб останнє значення x</span>
+<span class="cm">/// не втратилось через похибку float</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTable()
+{
+    <span class="kw">int</span> stepCount = <span class="nm">0</span>; <span class="cm">// кількість кроків</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;         <span class="cm">// номер кроку</span>
+
+    cout &lt;&lt; endl
+         &lt;&lt; setw(<span class="nm">9</span>) &lt;&lt; <span class="st">&quot;x&quot;</span> &lt;&lt; setw(<span class="nm">13</span>) &lt;&lt; <span class="st">&quot;y&quot;</span> &lt;&lt; setw(<span class="nm">13</span>) &lt;&lt; <span class="st">&quot;standard&quot;</span>
+         &lt;&lt; setw(<span class="nm">13</span>) &lt;&lt; <span class="st">&quot;error&quot;</span> &lt;&lt; endl;
+
+    stepCount = (<span class="kw">int</span>)((maxX - minX) / step + STEP_RESERVE);
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt;= stepCount; i++)
+    {
+        x = minX + i * step;
+        calculateFunction();
+
+        cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="nm">4</span>) &lt;&lt; setw(<span class="nm">9</span>) &lt;&lt; x;
+        <span class="kw">if</span> (isDefined)
+        {
+            error = fabs(y - standardY);
+            cout &lt;&lt; setprecision(<span class="nm">6</span>) &lt;&lt; setw(<span class="nm">13</span>) &lt;&lt; y &lt;&lt; setw(<span class="nm">13</span>) &lt;&lt; standardY
+                 &lt;&lt; scientific &lt;&lt; setprecision(<span class="nm">3</span>) &lt;&lt; setw(<span class="nm">13</span>) &lt;&lt; error &lt;&lt; endl;
+        }
+        <span class="kw">else</span>
+        {
+            cout &lt;&lt; <span class="st">&quot;   function is not defined&quot;</span> &lt;&lt; endl;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputRange();
+    inputAccuracy();
+    printTable();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+<h3>Завдання 2, варіант 4</h3>
+<p class="file">Файл <a href="task2.cpp" download>task2.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №4, завдання 2, варіант 4. Обчислити нескінченний</span>
+<span class="cm">/// ланцюговий дріб для числа pi із заданою точністю.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task2.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cmath&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">float</span> MIN_ACCURACY = <span class="nm">0</span>.000001f; <span class="cm">// нижня межа точності</span>
+<span class="kw">const</span> <span class="kw">float</span> MAX_ACCURACY = <span class="nm">0</span>.01f;     <span class="cm">// верхня межа точності</span>
+<span class="kw">const</span> <span class="kw">float</span> PI = <span class="nm">3</span>.1415927f;          <span class="cm">// стандартне значення pi</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> accuracy = <span class="nm">0</span>;      <span class="cm">// задана точність</span>
+<span class="kw">float</span> currentValue = <span class="nm">0</span>;  <span class="cm">// значення дробу при поточній глибині</span>
+<span class="kw">float</span> previousValue = <span class="nm">0</span>; <span class="cm">// значення дробу при попередній глибині</span>
+<span class="kw">float</span> difference = <span class="nm">0</span>;    <span class="cm">// різниця двох сусідніх значень</span>
+<span class="kw">int</span> depth = <span class="nm">0</span>;           <span class="cm">// поточна глибина дробу</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи, автора і ланцюговий дріб</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 4. Task 2. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Calculate the infinite continued fraction for pi with the&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;accuracy entered from the keyboard.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;pi = 4 / (1 + 1^2 / (3 + 2^2 / (5 + 3^2 / (7 + 4^2 / (9 + ...)))))&quot;</span>
+         &lt;&lt; endl
+         &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить точність. Поки введено не число або число поза межами, введення</span>
+<span class="cm">/// повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputAccuracy()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter accuracy (from 0.000001 to 0.01): &quot;</span>;
+    cin &gt;&gt; accuracy;
+    <span class="kw">while</span> (cin.fail() || accuracy &lt; MIN_ACCURACY || accuracy &gt; MAX_ACCURACY)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter accuracy from 0.000001 to 0.01: &quot;</span>;
+        cin &gt;&gt; accuracy;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Рахує дріб заданої глибини знизу вгору, від останнього знаменника до першого</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;fractionDepth&quot;&gt;кількість вкладених дробів&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;наближене значення pi&lt;/returns&gt;</span>
+<span class="kw">float</span> calculateFraction(<span class="kw">int</span> fractionDepth)
+{
+    <span class="kw">float</span> denominator = <span class="nm">2</span> * fractionDepth + <span class="nm">1</span>; <span class="cm">// поточний знаменник</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;                                 <span class="cm">// номер рівня дробу</span>
+
+    <span class="kw">for</span> (i = fractionDepth; i &gt;= <span class="nm">1</span>; i--)
+    {
+        denominator = (<span class="nm">2</span> * i - <span class="nm">1</span>) + i * i / denominator;
+    }
+
+    <span class="kw">return</span> <span class="nm">4</span> / denominator;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Збільшує глибину дробу, поки два сусідні значення не відрізнятимуться менше</span>
+<span class="cm">/// ніж на точність, і виводить таблицю</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculatePi()
+{
+    currentValue = calculateFraction(depth);
+
+    cout &lt;&lt; endl &lt;&lt; fixed &lt;&lt; setprecision(<span class="nm">7</span>);
+    cout &lt;&lt; setw(<span class="nm">6</span>) &lt;&lt; <span class="st">&quot;depth&quot;</span> &lt;&lt; setw(<span class="nm">14</span>) &lt;&lt; <span class="st">&quot;value&quot;</span> &lt;&lt; setw(<span class="nm">14</span>)
+         &lt;&lt; <span class="st">&quot;difference&quot;</span> &lt;&lt; endl;
+
+    <span class="kw">do</span>
+    {
+        previousValue = currentValue;
+        depth++;
+        currentValue = calculateFraction(depth);
+        difference = fabs(currentValue - previousValue);
+        cout &lt;&lt; setw(<span class="nm">6</span>) &lt;&lt; depth &lt;&lt; setw(<span class="nm">14</span>) &lt;&lt; currentValue &lt;&lt; setw(<span class="nm">14</span>)
+             &lt;&lt; difference &lt;&lt; endl;
+    } <span class="kw">while</span> (difference &gt;= accuracy);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить підсумок і порівнює його зі стандартним pi</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printResult()
+{
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Fraction depth = &quot;</span> &lt;&lt; depth &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;pi from the fraction = &quot;</span> &lt;&lt; currentValue &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;standard pi = &quot;</span> &lt;&lt; PI &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;error = &quot;</span> &lt;&lt; fabs(currentValue - PI) &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputAccuracy();
+    calculatePi();
+    printResult();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>На проміжку від -2 до 2 з кроком 0.25 значення є лише для x = -0.5 і x = -0.25, решта рядків містить
+повідомлення. Тому далі той самий розрахунок показано докладніше, від -0.5 до -0.05.</p>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="596" loading="lazy"></a><figcaption>Рисунок 14 - Увесь проміжок від -2 до 2 з кроком 0.25, точність 0.001</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="596" loading="lazy"></a><figcaption>Рисунок 15 - Проміжок від -0.5 до -0.05 з кроком 0.05, точність 0.000001</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="596" loading="lazy"></a><figcaption>Рисунок 16 - Той самий проміжок, точність 0.01</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-4.png"><img src="img/task1-run-4.png" alt="" width="596" loading="lazy"></a><figcaption>Рисунок 17 - Некоректне введення меж, кроку і точності</figcaption></figure>
+<h3>Завдання 2, варіант 4</h3>
+<figure class="shot"><a href="img/task2-run-1.png"><img src="img/task2-run-1.png" alt="" width="624" loading="lazy"></a><figcaption>Рисунок 18 - Точність 0.00001, перед цим введено некоректні значення</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-2.png"><img src="img/task2-run-2.png" alt="" width="624" loading="lazy"></a><figcaption>Рисунок 19 - Точність 0.01</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-3.png"><img src="img/task2-run-3.png" alt="" width="624" loading="lazy"></a><figcaption>Рисунок 20 - Точність 0.000001</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Перевірка в Excel</h3>
+<p>Файл <a href="check.xlsx" download>check.xlsx</a> має три таблиці. У першій Excel рахує стандартне
+значення функцією <code>ASIN</code> і порівнює його з колонкою програми. У другій для x = -0.25 і
+точності 0.001 члени ряду пораховано за загальною формулою через <code>FACT</code> і
+<code>POWER</code>, без рекурентного співвідношення. У третій ланцюговий дріб пораховано зверху вниз
+через чисельники й знаменники проміжних дробів, а програма рахує його знизу вгору.</p>
+<figure class="shot"><a href="img/excel-check.png"><img src="img/excel-check.png" alt="" width="570" loading="lazy"></a><figcaption>Рисунок 21 - Порівняння значень в Excel</figcaption></figure>
+<p>Найбільша різниця стандартних значень дорівнює 4.7 · 10<sup>-7</sup>, бо програма друкує шість
+знаків після коми. Для x = -0.25 Excel отримав y = 0.239387, як і програма. Для ланцюгового дробу
+найбільша різниця 1.9 · 10<sup>-7</sup>, вона пояснюється точністю типу <code>float</code>.</p>
+<h3>Похибка і точність</h3>
+<p>Значення взято з рисунків розділу результатів.</p>
+<p class="tcap">Таблиця 3 - Похибка при різній точності</p>
+<div class="table-scroll"><table>
+<tr><th>Точність</th><th>Похибка при x = -0.5</th><th>Похибка при x = -0.25</th></tr>
+<tr><td>0.01</td><td>2.065e-02</td><td>1.885e-04</td></tr>
+<tr><td>0.001</td><td>9.216e-03</td><td>2.894e-05</td></tr>
+<tr><td>0.000001</td><td>8.856e-04</td><td>4.470e-08</td></tr>
+</table></div>
+<p>При x = -0.5 рахується arcsin(-1), і ряд збігається дуже повільно. Тому там похибка набагато більша,
+ніж в інших точках, і більша за задану точність. У решті рядків таблиці з точністю 0.000001 похибка не
+перевищує 5.662e-07.</p>
+<h3>Ручна перевірка</h3>
+<p class="tcap">Таблиця 4 - Значення, пораховані вручну</p>
+<div class="table-scroll"><table>
+<tr><th>Що рахується</th><th>Розрахунок</th><th>Очікується</th><th>Програма</th></tr>
+<tr><td>дріб глибини 1</td><td>4 / (1 + 1 / 3)</td><td>3</td><td>3.0000000</td></tr>
+<tr><td>дріб глибини 2</td><td>4 / (1 + 1 / (3 + 4 / 5))</td><td>3.1666667</td><td>3.1666667</td></tr>
+<tr><td>x = 1</td><td>x + 5 = 6, що більше за 1</td><td>не визначена</td><td>function is not defined</td></tr>
+<tr><td>x = -1</td><td>|2x| = 2, що більше за 1</td><td>не визначена</td><td>function is not defined</td></tr>
+</table></div>
+<p>При точності 0.00001 програма зупинилась на глибині 8 зі значенням 3.1415935. Це відрізняється від
+стандартного π на 0.0000007.</p>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Головний результат першого завдання вийшов не таким, як у постановці: функція має значення лише
+при -0.5 ≤ x &lt; 0, а друга гілка не визначена в жодній точці. Програма перевіряє аргументи arcsin і
+пише про це в таблиці. Рекурентну формулу довелося виводити самому, бо в таблиці методички є лише ряд, до
+того ж із пропущеним множником. На межі x = -0.5 похибка лишається великою навіть при найменшій
+точності, а в інших точках вона зменшується разом із точністю.</p>
+<p>Ланцюговий дріб збігається швидко. Для точності 0.00001 вистачило глибини 8. Значення обох програм
+збіглися з Excel, де вони пораховані іншими формулами.</p>
+</section>
+<p class="pager"><a href="../lab03/index.html">Попередня робота</a><a href="../lab05/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>
