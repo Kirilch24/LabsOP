@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №7. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html" class="active" aria-current="page">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html" class="active" aria-current="page">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №7</h1><p>Багатовимірні масиви</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 4. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умови задач</a></li><li><a href="#analysis">Аналіз задач</a></li><li><a href="#scheme">Блок-схеми алгоритмів</a></li><li><a href="#code">Тексти програм</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити особливості оголошення багатовимірних масивів і доступу до їхніх елементів.</li>
+<li>Опанувати базові операції обробки матриць.</li>
+<li>Навчитися розробляти алгоритми та програми обробки двовимірних масивів.</li>
+</ul>
+</section>
+<section id="task"><h2>Умови задач</h2>
+<p>Варіант 4. У таблиці методички 24 варіанти, тому для номера 28 у списку групи маємо
+28 - 24 = 4.</p>
+<p>Для обох завдань методичка вимагає вибір способу створення: введення з клавіатури або заповнення
+псевдовипадковими числами. Бібліотеку STL, покажчики, динамічні масиви, оператори
+<code>new</code> і <code>delete</code> застосовувати не можна.</p>
+<h3>Завдання 1, варіант 4</h3>
+<p>У лівому верхньому кутку дошки розміром n · m розташований шаховий король. За один хід він може
+зробити хід вправо, вниз або на одну клітину по діагоналі вправо-вниз. Порахувати кількість
+маршрутів, що ведуть з лівого верхнього кута шахової дошки в правий нижній кут. Розміри дошки
+(числа n, m) ввести з клавіатури. На екран вивести кількість шуканих маршрутів і матрицю, в якій
+елементи, що є маршрутом шахового короля, позначені значенням 1, а елементи, які не входять до
+шуканих маршрутів, позначені значенням 0.</p>
+<h3>Завдання 2, варіант 4</h3>
+<p>Виконати елементарні перетворення матриць:</p>
+<ul>
+<li>перестановку місцями будь-яких двох рядків або стовпців матриці;</li>
+<li>множення на ненульову константу будь-якого рядка або стовпця матриці;</li>
+<li>додавання до будь-якого рядка або стовпця матриці іншого рядка або стовпця, помноженого на
+ненульову константу.</li>
+</ul>
+<p>Для вибору способу створення матриці використовувати меню: введення значень елементів з клавіатури
+або генерація псевдовипадкових чисел у заданому з клавіатури діапазоні значень. Індекси рядків і
+стовпців та число для множення задавати з клавіатури. Вивести на екран вхідну матрицю та всі її
+перетворення з відповідними повідомленнями. Передбачити вибір режиму виведення: тільки кінцевий
+результат або проміжні результати.</p>
+</section>
+<section id="analysis"><h2>Аналіз задач</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Король потрапляє в клітинку лише з трьох сусідніх: зверху, зліва і зліва згори. Тому кількість
+маршрутів до клітинки дорівнює сумі маршрутів до цих трьох клітинок:</p>
+<div class="formula">r<sub>i,j</sub> = r<sub>i-1,j</sub> + r<sub>i,j-1</sub> + r<sub>i-1,j-1</sub></div>
+<p>У першому рядку і першому стовпці король може йти лише прямо, тому там стоїть 1. Програма заповнює
+матрицю рядок за рядком, а відповіддю є її останній елемент.</p>
+<p>В умові є проблема з матрицею маршрутів. До будь-якої клітинки можна дійти з лівого верхнього кута,
+і від неї можна дійти до правого нижнього, тому кожна клітинка лежить на якомусь маршруті. Матриця
+всіх маршрутів складалася б із самих одиниць. Тому програма виводить матрицю одного найкоротшого
+маршруту: король іде діагоналлю, поки можна, а потім прямо. Окремо виводиться таблиця кількості
+маршрутів до кожної клітинки.</p>
+<p>Умова каже вводити розміри з клавіатури, а загальна вимога просить вибір способу створення. Тому
+в меню є два пункти: ввести розміри або отримати їх випадково. Розміри лежать від 1 до 10. Для найбільшої
+дошки маршрутів 1462563, і таке число вміщається в <code>int</code>. Якщо введено не число або число поза
+межами, програма виводить повідомлення і просить ввести ще раз.</p>
+<p class="tcap">Таблиця 1 - Функції програми завдання 1</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число із заданих меж</td></tr>
+<tr><td><code>inputBoardSize</code></td><td>вводить розміри дошки</td></tr>
+<tr><td><code>generateBoardSize</code></td><td>дає розмірам випадкові значення</td></tr>
+<tr><td><code>chooseBoardSize</code></td><td>виводить меню способу створення дошки</td></tr>
+<tr><td><code>calculateRoutes</code></td><td>рахує маршрути до кожної клітинки</td></tr>
+<tr><td><code>markShortestRoute</code></td><td>позначає клітинки найкоротшого маршруту</td></tr>
+<tr><td><code>printMatrix</code></td><td>виводить матрицю із заданою шириною стовпця</td></tr>
+<tr><td><code>printResult</code></td><td>виводить кількість маршрутів і дві матриці</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<h3>Завдання 2, варіант 4</h3>
+<p>Елементи матриці мають тип <code>float</code>, бо константа може бути дробовою. З клавіатури можна
+ввести будь-які числа, а генератор дає цілі значення із заданого діапазону. Матриця має від 2 до 10
+рядків і стовпців, бо для перетворень потрібні два різні рядки або стовпці.</p>
+<p>Для кожного з шести перетворень є окрема функція. Рядки і стовпці користувач нумерує з 1, а в коді
+від номера віднімається 1. Перестановка робиться через тимчасову змінну. Перетворення вибираються в
+меню, поки користувач не введе 0.</p>
+<p>Режим виведення вибирається перед меню. У першому режимі після кожного перетворення виводиться лише
+повідомлення, а в другому ще й матриця. Кінцева матриця виводиться завжди.</p>
+<p>Неправильний номер, однакові номери, нульова константа або літери замість числа дають
+повідомлення і повторне введення.</p>
+<p class="tcap">Таблиця 2 - Функції програми завдання 2</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число із заданих меж</td></tr>
+<tr><td><code>inputConstant</code></td><td>вводить ненульову константу</td></tr>
+<tr><td><code>inputTwoIndexes</code></td><td>вводить два різні номери</td></tr>
+<tr><td><code>inputMatrix</code></td><td>вводить матрицю з клавіатури</td></tr>
+<tr><td><code>generateMatrix</code></td><td>вводить діапазон і заповнює матрицю випадковими числами</td></tr>
+<tr><td><code>printMatrix</code></td><td>виводить матрицю</td></tr>
+<tr><td><code>createMatrix</code></td><td>вводить розміри, виводить меню створення і вхідну матрицю</td></tr>
+<tr><td><code>swapRows</code>, <code>swapColumns</code></td><td>міняють місцями два рядки або стовпці</td></tr>
+<tr><td><code>multiplyRow</code>, <code>multiplyColumn</code></td><td>множать рядок або стовпець на константу</td></tr>
+<tr><td><code>addRow</code>, <code>addColumn</code></td><td>додають інший рядок або стовпець, помножений на константу</td></tr>
+<tr><td><code>runMenu</code></td><td>вибирає режим, виконує меню, виводить кінцеву матрицю</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025; Deitel P., Deitel H. C++ How to Program.</p>
+</section>
+<section id="scheme"><h2>Блок-схеми алгоритмів</h2>
+<h3>Завдання 1, варіант 4</h3>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputNumber.svg"><img src="img/task1-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputNumber</code> (введення цілого числа із заданих меж)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputBoardSize.svg"><img src="img/task1-fc-inputBoardSize.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>inputBoardSize</code> (введення розмірів дошки з клавіатури)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-generateBoardSize.svg"><img src="img/task1-fc-generateBoardSize.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>generateBoardSize</code> (псевдовипадкові розміри дошки)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-chooseBoardSize.svg"><img src="img/task1-fc-chooseBoardSize.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>chooseBoardSize</code> (меню способу створення дошки)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateRoutes.svg"><img src="img/task1-fc-calculateRoutes.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>calculateRoutes</code> (кількість маршрутів до кожної клітинки)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-markShortestRoute.svg"><img src="img/task1-fc-markShortestRoute.svg" alt="" loading="lazy"></a><figcaption>Рисунок 7 - Блок-схема функції <code>markShortestRoute</code> (позначення клітинок найкоротшого маршруту)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printMatrix.svg"><img src="img/task1-fc-printMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 8 - Блок-схема функції <code>printMatrix</code> (виведення матриці рядками і стовпцями)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printResult.svg"><img src="img/task1-fc-printResult.svg" alt="" loading="lazy"></a><figcaption>Рисунок 9 - Блок-схема функції <code>printResult</code> (виведення кількості маршрутів і двох матриць)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 10 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+<h3>Завдання 2, варіант 4</h3>
+<figure class="fc"><a href="img/task2-fc-printTitle.svg"><img src="img/task2-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 11 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputNumber.svg"><img src="img/task2-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 12 - Блок-схема функції <code>inputNumber</code> (введення цілого числа із заданих меж)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputConstant.svg"><img src="img/task2-fc-inputConstant.svg" alt="" loading="lazy"></a><figcaption>Рисунок 13 - Блок-схема функції <code>inputConstant</code> (введення ненульової константи)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputTwoIndexes.svg"><img src="img/task2-fc-inputTwoIndexes.svg" alt="" loading="lazy"></a><figcaption>Рисунок 14 - Блок-схема функції <code>inputTwoIndexes</code> (введення двох різних номерів)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputMatrix.svg"><img src="img/task2-fc-inputMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 15 - Блок-схема функції <code>inputMatrix</code> (введення елементів матриці з клавіатури)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-generateMatrix.svg"><img src="img/task2-fc-generateMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 16 - Блок-схема функції <code>generateMatrix</code> (заповнення матриці псевдовипадковими числами)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-printMatrix.svg"><img src="img/task2-fc-printMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 17 - Блок-схема функції <code>printMatrix</code> (виведення матриці рядками і стовпцями)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-createMatrix.svg"><img src="img/task2-fc-createMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 18 - Блок-схема функції <code>createMatrix</code> (введення розмірів і створення вхідної матриці)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-swapRows.svg"><img src="img/task2-fc-swapRows.svg" alt="" loading="lazy"></a><figcaption>Рисунок 19 - Блок-схема функції <code>swapRows</code> (перестановка двох рядків)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-swapColumns.svg"><img src="img/task2-fc-swapColumns.svg" alt="" loading="lazy"></a><figcaption>Рисунок 20 - Блок-схема функції <code>swapColumns</code> (перестановка двох стовпців)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-multiplyRow.svg"><img src="img/task2-fc-multiplyRow.svg" alt="" loading="lazy"></a><figcaption>Рисунок 21 - Блок-схема функції <code>multiplyRow</code> (множення рядка на константу)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-multiplyColumn.svg"><img src="img/task2-fc-multiplyColumn.svg" alt="" loading="lazy"></a><figcaption>Рисунок 22 - Блок-схема функції <code>multiplyColumn</code> (множення стовпця на константу)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-addRow.svg"><img src="img/task2-fc-addRow.svg" alt="" loading="lazy"></a><figcaption>Рисунок 23 - Блок-схема функції <code>addRow</code> (додавання до рядка іншого рядка, помноженого на константу)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-addColumn.svg"><img src="img/task2-fc-addColumn.svg" alt="" loading="lazy"></a><figcaption>Рисунок 24 - Блок-схема функції <code>addColumn</code> (додавання до стовпця іншого стовпця, помноженого на константу)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-runMenu.svg"><img src="img/task2-fc-runMenu.svg" alt="" loading="lazy"></a><figcaption>Рисунок 25 - Блок-схема функції <code>runMenu</code> (вибір режиму виведення і меню перетворень)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-main.svg"><img src="img/task2-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 26 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Тексти програм</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №7, завдання 1, варіант 4. Порахувати маршрути шахового</span>
+<span class="cm">/// короля на дошці n * m і вивести матрицю найкоротшого маршруту.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cstdlib&gt;</span>
+<span class="pp">#include &lt;ctime&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_SIZE = <span class="nm">10</span>; <span class="cm">// найбільший розмір дошки</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">int</span> routeCounts[MAX_SIZE][MAX_SIZE] = {{<span class="nm">0</span>}}; <span class="cm">// кількість маршрутів до клітинки</span>
+<span class="kw">int</span> routeCells[MAX_SIZE][MAX_SIZE] = {{<span class="nm">0</span>}};  <span class="cm">// 1 - клітинка маршруту, 0 - інша</span>
+<span class="kw">int</span> rowCount = <span class="nm">0</span>;                            <span class="cm">// кількість рядків n</span>
+<span class="kw">int</span> columnCount = <span class="nm">0</span>;                         <span class="cm">// кількість стовпців m</span>
+<span class="kw">int</span> choice = <span class="nm">0</span>;                              <span class="cm">// вибраний пункт меню</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи, автора і короткий зміст задачі</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 7. Task 1. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;A chess king starts in the top left corner of an n x m&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;board. It moves right, down or right-down along the&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;diagonal. Count its routes to the bottom right corner.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Print the number of routes and a matrix where route cells&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;are 1 and the others are 0.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число із заданих меж. Поки введено не число або число поза</span>
+<span class="cm">/// межами, введення повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;нижня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;верхня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>; <span class="cm">// введене число</span>
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить розміри дошки з клавіатури</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputBoardSize()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter n (from 1 to &quot;</span> &lt;&lt; MAX_SIZE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    rowCount = inputNumber(<span class="nm">1</span>, MAX_SIZE);
+    cout &lt;&lt; <span class="st">&quot;Enter m (from 1 to &quot;</span> &lt;&lt; MAX_SIZE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    columnCount = inputNumber(<span class="nm">1</span>, MAX_SIZE);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Дає розмірам дошки псевдовипадкові значення від 1 до 10</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> generateBoardSize()
+{
+    rowCount = rand() % MAX_SIZE + <span class="nm">1</span>;
+    columnCount = rand() % MAX_SIZE + <span class="nm">1</span>;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить меню способу створення дошки і виконує вибраний пункт</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> chooseBoardSize()
+{
+    srand(time(NULL));
+
+    cout &lt;&lt; <span class="st">&quot;1 - enter the board size&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;2 - generate the board size at random&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Your choice: &quot;</span>;
+    choice = inputNumber(<span class="nm">1</span>, <span class="nm">2</span>);
+
+    <span class="kw">switch</span> (choice)
+    {
+        <span class="kw">case</span> <span class="nm">1</span> : inputBoardSize(); <span class="kw">break</span>;
+        <span class="kw">default</span> : generateBoardSize(); <span class="kw">break</span>; <span class="cm">// пункт 2</span>
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Рахує кількість маршрутів до кожної клітинки. До клітинки першого рядка чи</span>
+<span class="cm">/// стовпця веде один маршрут, а до решти стільки, скільки сумарно до лівої,</span>
+<span class="cm">/// верхньої і лівої верхньої сусідніх</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateRoutes()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+        {
+            <span class="kw">if</span> (i == <span class="nm">0</span> || j == <span class="nm">0</span>)
+            {
+                routeCounts[i][j] = <span class="nm">1</span>;
+            }
+            <span class="kw">else</span>
+            {
+                routeCounts[i][j] = routeCounts[i - <span class="nm">1</span>][j]
+                                    + routeCounts[i][j - <span class="nm">1</span>]
+                                    + routeCounts[i - <span class="nm">1</span>][j - <span class="nm">1</span>];
+            }
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Позначає клітинки найкоротшого маршруту: король іде діагоналлю, поки можна,</span>
+<span class="cm">/// а потім прямо</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> markShortestRoute()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// поточний рядок короля</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// поточний стовпець короля</span>
+
+    routeCells[<span class="nm">0</span>][<span class="nm">0</span>] = <span class="nm">1</span>;
+    <span class="kw">while</span> (i &lt; rowCount - <span class="nm">1</span> || j &lt; columnCount - <span class="nm">1</span>)
+    {
+        <span class="kw">if</span> (i &lt; rowCount - <span class="nm">1</span>)
+        {
+            i++;
+        }
+        <span class="kw">if</span> (j &lt; columnCount - <span class="nm">1</span>)
+        {
+            j++;
+        }
+        routeCells[i][j] = <span class="nm">1</span>;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить матрицю рядками і стовпцями</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;matrix&quot;&gt;матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;width&quot;&gt;ширина стовпця&lt;/param&gt;</span>
+<span class="kw">void</span> printMatrix(<span class="kw">int</span> matrix[MAX_SIZE][MAX_SIZE], <span class="kw">int</span> width)
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+        {
+            cout &lt;&lt; setw(width) &lt;&lt; matrix[i][j];
+        }
+        cout &lt;&lt; endl;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить розміри дошки, кількість маршрутів і дві матриці</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printResult()
+{
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Board size: &quot;</span> &lt;&lt; rowCount &lt;&lt; <span class="st">&quot; x &quot;</span> &lt;&lt; columnCount &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Number of routes: &quot;</span> &lt;&lt; routeCounts[rowCount - <span class="nm">1</span>][columnCount - <span class="nm">1</span>]
+         &lt;&lt; endl;
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Number of routes to each cell:&quot;</span> &lt;&lt; endl;
+    printMatrix(routeCounts, <span class="nm">8</span>);
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;One shortest route (1 - on the route, 0 - not):&quot;</span> &lt;&lt; endl;
+    printMatrix(routeCells, <span class="nm">3</span>);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    chooseBoardSize();
+    calculateRoutes();
+    markShortestRoute();
+    printResult();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+<h3>Завдання 2, варіант 4</h3>
+<p class="file">Файл <a href="task2.cpp" download>task2.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №7, завдання 2, варіант 4. Виконати елементарні</span>
+<span class="cm">/// перетворення матриці, які користувач вибирає в меню.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task2.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cstdlib&gt;</span>
+<span class="pp">#include &lt;ctime&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MIN_SIZE = <span class="nm">2</span>;     <span class="cm">// найменша кількість рядків і стовпців</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_SIZE = <span class="nm">10</span>;    <span class="cm">// найбільша кількість рядків і стовпців</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_LIMIT = <span class="nm">1000</span>; <span class="cm">// найбільший модуль меж діапазону</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">float</span> matrix[MAX_SIZE][MAX_SIZE] = {{<span class="nm">0</span>}}; <span class="cm">// матриця</span>
+<span class="kw">int</span> rowCount = <span class="nm">0</span>;                         <span class="cm">// кількість рядків</span>
+<span class="kw">int</span> columnCount = <span class="nm">0</span>;                      <span class="cm">// кількість стовпців</span>
+<span class="kw">int</span> firstIndex = <span class="nm">0</span>;  <span class="cm">// номер першого рядка чи стовпця, від 1</span>
+<span class="kw">int</span> secondIndex = <span class="nm">0</span>; <span class="cm">// номер другого рядка чи стовпця, від 1</span>
+<span class="kw">float</span> constant = <span class="nm">0</span>;  <span class="cm">// ненульове число для множення</span>
+<span class="kw">int</span> outputMode = <span class="nm">0</span>;  <span class="cm">// 1 - лише кінцева матриця, 2 - після кожного кроку</span>
+<span class="kw">int</span> choice = <span class="nm">0</span>;      <span class="cm">// вибраний пункт меню</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи й автора</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 7. Task 2. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Elementary transformations of a matrix:&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;- swap two rows or two columns;&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;- multiply a row or a column by a non-zero constant;&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;- add to a row or a column another one multiplied&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;  by a non-zero constant.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;The matrix is entered from the keyboard or generated in a&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;given range.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число із заданих меж. Поки введено не число або число поза</span>
+<span class="cm">/// межами, введення повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;нижня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;верхня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>; <span class="cm">// введене число</span>
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить константу для множення. Поки введено не число або нуль, введення</span>
+<span class="cm">/// повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputConstant()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter a non-zero constant: &quot;</span>;
+    cin &gt;&gt; constant;
+    <span class="kw">while</span> (cin.fail() || constant == <span class="nm">0</span>)
+    {
+        cin.clear();
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>);
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a non-zero constant: &quot;</span>;
+        cin &gt;&gt; constant;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить два різні номери рядків або стовпців</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxIndex&quot;&gt;найбільший номер&lt;/param&gt;</span>
+<span class="kw">void</span> inputTwoIndexes(<span class="kw">int</span> maxIndex)
+{
+    cout &lt;&lt; <span class="st">&quot;Enter the first index (from 1 to &quot;</span> &lt;&lt; maxIndex &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    firstIndex = inputNumber(<span class="nm">1</span>, maxIndex);
+    cout &lt;&lt; <span class="st">&quot;Enter the second index (from 1 to &quot;</span> &lt;&lt; maxIndex &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    secondIndex = inputNumber(<span class="nm">1</span>, maxIndex);
+
+    <span class="kw">while</span> (secondIndex == firstIndex)
+    {
+        cout &lt;&lt; <span class="st">&quot;Error! The second index must differ from the first: &quot;</span>;
+        secondIndex = inputNumber(<span class="nm">1</span>, maxIndex);
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить елементи матриці з клавіатури</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputMatrix()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        cout &lt;&lt; <span class="st">&quot;Enter row &quot;</span> &lt;&lt; i + <span class="nm">1</span> &lt;&lt; <span class="st">&quot; (&quot;</span> &lt;&lt; columnCount &lt;&lt; <span class="st">&quot; numbers): &quot;</span>;
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+        {
+            cin &gt;&gt; matrix[i][j];
+            <span class="kw">while</span> (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>);
+                cout &lt;&lt; <span class="st">&quot;Error! Enter a number: &quot;</span>;
+                cin &gt;&gt; matrix[i][j];
+            }
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить діапазон і заповнює матрицю псевдовипадковими цілими числами з нього</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> generateMatrix()
+{
+    <span class="kw">int</span> lowerLimit = <span class="nm">0</span>; <span class="cm">// нижня межа діапазону</span>
+    <span class="kw">int</span> upperLimit = <span class="nm">0</span>; <span class="cm">// верхня межа діапазону</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;          <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>;          <span class="cm">// номер стовпця</span>
+
+    cout &lt;&lt; <span class="st">&quot;Enter the lower limit (from &quot;</span> &lt;&lt; -MAX_LIMIT &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; MAX_LIMIT
+         &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    lowerLimit = inputNumber(-MAX_LIMIT, MAX_LIMIT);
+    cout &lt;&lt; <span class="st">&quot;Enter the upper limit (from &quot;</span> &lt;&lt; lowerLimit &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; MAX_LIMIT
+         &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    upperLimit = inputNumber(lowerLimit, MAX_LIMIT);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+        {
+            matrix[i][j] = rand() % (upperLimit - lowerLimit + <span class="nm">1</span>) + lowerLimit;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить матрицю рядками і стовпцями</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printMatrix()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="nm">2</span>);
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+        {
+            cout &lt;&lt; setw(<span class="nm">10</span>) &lt;&lt; matrix[i][j];
+        }
+        cout &lt;&lt; endl;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить розміри, виводить меню способу створення матриці, виконує вибраний</span>
+<span class="cm">/// пункт і виводить вхідну матрицю</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> createMatrix()
+{
+    srand(time(NULL));
+
+    cout &lt;&lt; <span class="st">&quot;Enter the number of rows (from &quot;</span> &lt;&lt; MIN_SIZE &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; MAX_SIZE
+         &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    rowCount = inputNumber(MIN_SIZE, MAX_SIZE);
+    cout &lt;&lt; <span class="st">&quot;Enter the number of columns (from &quot;</span> &lt;&lt; MIN_SIZE &lt;&lt; <span class="st">&quot; to &quot;</span>
+         &lt;&lt; MAX_SIZE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    columnCount = inputNumber(MIN_SIZE, MAX_SIZE);
+
+    cout &lt;&lt; <span class="st">&quot;1 - enter the matrix from the keyboard&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;2 - fill the matrix with pseudorandom numbers&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Your choice: &quot;</span>;
+    choice = inputNumber(<span class="nm">1</span>, <span class="nm">2</span>);
+
+    <span class="kw">switch</span> (choice)
+    {
+        <span class="kw">case</span> <span class="nm">1</span> : inputMatrix(); <span class="kw">break</span>;
+        <span class="kw">default</span> : generateMatrix(); <span class="kw">break</span>; <span class="cm">// пункт 2</span>
+    }
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Input matrix:&quot;</span> &lt;&lt; endl;
+    printMatrix();
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Міняє місцями два рядки</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> swapRows()
+{
+    <span class="kw">float</span> temporary = <span class="nm">0</span>; <span class="cm">// значення для обміну</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>;           <span class="cm">// номер стовпця</span>
+
+    inputTwoIndexes(rowCount);
+    <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+    {
+        temporary = matrix[firstIndex - <span class="nm">1</span>][j];
+        matrix[firstIndex - <span class="nm">1</span>][j] = matrix[secondIndex - <span class="nm">1</span>][j];
+        matrix[secondIndex - <span class="nm">1</span>][j] = temporary;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Rows &quot;</span> &lt;&lt; firstIndex &lt;&lt; <span class="st">&quot; and &quot;</span> &lt;&lt; secondIndex &lt;&lt; <span class="st">&quot; are swapped.&quot;</span>
+         &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Міняє місцями два стовпці</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> swapColumns()
+{
+    <span class="kw">float</span> temporary = <span class="nm">0</span>; <span class="cm">// значення для обміну</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;           <span class="cm">// номер рядка</span>
+
+    inputTwoIndexes(columnCount);
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        temporary = matrix[i][firstIndex - <span class="nm">1</span>];
+        matrix[i][firstIndex - <span class="nm">1</span>] = matrix[i][secondIndex - <span class="nm">1</span>];
+        matrix[i][secondIndex - <span class="nm">1</span>] = temporary;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Columns &quot;</span> &lt;&lt; firstIndex &lt;&lt; <span class="st">&quot; and &quot;</span> &lt;&lt; secondIndex
+         &lt;&lt; <span class="st">&quot; are swapped.&quot;</span> &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Множить рядок на ненульову константу</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> multiplyRow()
+{
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    cout &lt;&lt; <span class="st">&quot;Enter the row index (from 1 to &quot;</span> &lt;&lt; rowCount &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    firstIndex = inputNumber(<span class="nm">1</span>, rowCount);
+    inputConstant();
+    <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+    {
+        matrix[firstIndex - <span class="nm">1</span>][j] = matrix[firstIndex - <span class="nm">1</span>][j] * constant;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Row &quot;</span> &lt;&lt; firstIndex &lt;&lt; <span class="st">&quot; is multiplied by &quot;</span> &lt;&lt; constant &lt;&lt; <span class="st">&quot;.&quot;</span>
+         &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Множить стовпець на ненульову константу</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> multiplyColumn()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+
+    cout &lt;&lt; <span class="st">&quot;Enter the column index (from 1 to &quot;</span> &lt;&lt; columnCount &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    firstIndex = inputNumber(<span class="nm">1</span>, columnCount);
+    inputConstant();
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        matrix[i][firstIndex - <span class="nm">1</span>] = matrix[i][firstIndex - <span class="nm">1</span>] * constant;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Column &quot;</span> &lt;&lt; firstIndex &lt;&lt; <span class="st">&quot; is multiplied by &quot;</span> &lt;&lt; constant &lt;&lt; <span class="st">&quot;.&quot;</span>
+         &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Додає до першого рядка другий, помножений на константу</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> addRow()
+{
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    inputTwoIndexes(rowCount);
+    inputConstant();
+    <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+    {
+        matrix[firstIndex - <span class="nm">1</span>][j] =
+            matrix[firstIndex - <span class="nm">1</span>][j] + matrix[secondIndex - <span class="nm">1</span>][j] * constant;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Row &quot;</span> &lt;&lt; secondIndex &lt;&lt; <span class="st">&quot; multiplied by &quot;</span> &lt;&lt; constant
+         &lt;&lt; <span class="st">&quot; is added to row &quot;</span> &lt;&lt; firstIndex &lt;&lt; <span class="st">&quot;.&quot;</span> &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Додає до першого стовпця другий, помножений на константу</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> addColumn()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+
+    inputTwoIndexes(columnCount);
+    inputConstant();
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        matrix[i][firstIndex - <span class="nm">1</span>] =
+            matrix[i][firstIndex - <span class="nm">1</span>] + matrix[i][secondIndex - <span class="nm">1</span>] * constant;
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Column &quot;</span> &lt;&lt; secondIndex &lt;&lt; <span class="st">&quot; multiplied by &quot;</span> &lt;&lt; constant
+         &lt;&lt; <span class="st">&quot; is added to column &quot;</span> &lt;&lt; firstIndex &lt;&lt; <span class="st">&quot;.&quot;</span> &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить режим виведення, виводить меню перетворень і виконує вибрані пункти,</span>
+<span class="cm">/// поки користувач не вибере завершення. Після цього виводить кінцеву матрицю</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> runMenu()
+{
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;1 - show only the final matrix&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;2 - show the matrix after each transformation&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Your choice: &quot;</span>;
+    outputMode = inputNumber(<span class="nm">1</span>, <span class="nm">2</span>);
+
+    <span class="kw">do</span>
+    {
+        cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;1 - swap two rows&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;2 - swap two columns&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;3 - multiply a row by a constant&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;4 - multiply a column by a constant&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;5 - add another row multiplied by a constant to a row&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;6 - add another column multiplied by a constant to a column&quot;</span>
+             &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;0 - finish&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;Your choice: &quot;</span>;
+        choice = inputNumber(<span class="nm">0</span>, <span class="nm">6</span>);
+
+        <span class="kw">switch</span> (choice)
+        {
+            <span class="kw">case</span> <span class="nm">1</span> : swapRows(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">2</span> : swapColumns(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">3</span> : multiplyRow(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">4</span> : multiplyColumn(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">5</span> : addRow(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">6</span> : addColumn(); <span class="kw">break</span>;
+            <span class="kw">default</span> : <span class="kw">break</span>; <span class="cm">// пункт 0</span>
+        }
+
+        <span class="kw">if</span> (outputMode == <span class="nm">2</span> &amp;&amp; choice != <span class="nm">0</span>)
+        {
+            printMatrix();
+        }
+    } <span class="kw">while</span> (choice != <span class="nm">0</span>);
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Final matrix:&quot;</span> &lt;&lt; endl;
+    printMatrix();
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    createMatrix();
+    runMenu();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<h3>Завдання 1, варіант 4</h3>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 27 - Дошка 3 · 4, розміри введено з клавіатури</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 28 - Дошка 3 · 3 (перед цим введено некоректні значення abc, 9, 0 і 11)</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 29 - Псевдовипадкові розміри дошки</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-4.png"><img src="img/task1-run-4.png" alt="" width="750" loading="lazy"></a><figcaption>Рисунок 30 - Найбільша дошка 10 · 10</figcaption></figure>
+<h3>Завдання 2, варіант 4</h3>
+<figure class="shot"><a href="img/task2-run-1.png"><img src="img/task2-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 31 - Матриця 3 · 3 з клавіатури, виведення після кожного перетворення, усі шість пунктів меню</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-2.png"><img src="img/task2-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 32 - Псевдовипадкова матриця 3 · 4 з діапазону від -9 до 9, режим лише кінцевої матриці</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-3.png"><img src="img/task2-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 33 - Некоректне введення: літери, числа поза межами, однакові номери, нульова константа</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Кількість маршрутів я порахував ще одним способом, вручну. Нехай у маршруті d ходів по діагоналі.
+Тоді решта ходів вниз і вправо, а всі ходи можна переставляти. Для кожного d рахується кількість
+перестановок, і результати додаються.</p>
+<p class="tcap">Таблиця 3 - Кількість маршрутів, порахована вручну</p>
+<div class="table-scroll"><table>
+<tr><th>Дошка</th><th>d = 0</th><th>d = 1</th><th>d = 2</th><th>Сума</th><th>Програма</th></tr>
+<tr><td>2 · 2</td><td>2</td><td>1</td><td></td><td>3</td><td>3 (другий рядок, другий стовпець таблиці дошки 3 · 3)</td></tr>
+<tr><td>3 · 3</td><td>6</td><td>6</td><td>1</td><td>13</td><td>13</td></tr>
+<tr><td>3 · 4</td><td>10</td><td>12</td><td>3</td><td>25</td><td>25</td></tr>
+</table></div>
+<p>Для дошки 3 · 4 значення з формули теж збігається: 7 + 13 + 5 = 25. У запуску з випадковими розмірами
+вийшла дошка 1 · 4. Там король іде лише вправо, маршрут один, і програма вивела 1. На дошці 3 · 4
+найкоротший маршрут має 3 ходи: дві діагоналі і один хід вправо. У матриці програми стоять чотири
+одиниці, а діагональ обривається в останньому рядку.</p>
+<h3>Завдання 2, варіант 4</h3>
+<p>Перетворення першого запуску я виконав вручну, починаючи з матриці 1 2 3; 4 5 6; 7 8 10.</p>
+<p class="tcap">Таблиця 4 - Перетворення, виконані вручну</p>
+<div class="table-scroll"><table>
+<tr><th>Перетворення</th><th>Вручну</th><th>Програма</th></tr>
+<tr><td>переставити рядки 1 і 3</td><td>7 8 10; 4 5 6; 1 2 3</td><td>7.00 8.00 10.00; 4.00 5.00 6.00; 1.00 2.00 3.00</td></tr>
+<tr><td>переставити стовпці 1 і 2</td><td>8 7 10; 5 4 6; 2 1 3</td><td>8.00 7.00 10.00; 5.00 4.00 6.00; 2.00 1.00 3.00</td></tr>
+<tr><td>рядок 2 помножити на 2</td><td>8 7 10; 10 8 12; 2 1 3</td><td>8.00 7.00 10.00; 10.00 8.00 12.00; 2.00 1.00 3.00</td></tr>
+<tr><td>стовпець 3 помножити на 0.5</td><td>8 7 5; 10 8 6; 2 1 1.5</td><td>8.00 7.00 5.00; 10.00 8.00 6.00; 2.00 1.00 1.50</td></tr>
+<tr><td>до рядка 1 додати рядок 2, помножений на -1</td><td>-2 -1 -1; 10 8 6; 2 1 1.5</td><td>-2.00 -1.00 -1.00; 10.00 8.00 6.00; 2.00 1.00 1.50</td></tr>
+<tr><td>до стовпця 2 додати стовпець 3, помножений на 2</td><td>-2 -3 -1; 10 20 6; 2 4 1.5</td><td>-2.00 -3.00 -1.00; 10.00 20.00 6.00; 2.00 4.00 1.50</td></tr>
+</table></div>
+<p>Ще одна перевірка через визначник. Дві перестановки разом не змінюють знак, множники 2 і 0.5
+скорочуються, а додавання визначника не змінює. Отже, кінцева матриця повинна мати той самий
+визначник, що й вхідна:</p>
+<div class="formula">1 · (50 - 48) - 2 · (40 - 42) + 3 · (32 - 35) = -3</div>
+<div class="formula">-2 · (30 - 24) + 3 · (15 - 12) - 1 · (40 - 40) = -3</div>
+<p>Числа збіглися. У другому запуску рядки 1 і 2 помінялися місцями, а другий рядок помножився на 3:
+-8 8 4 4 стало -24 24 12 12. Програма вивела те саме. Третій запуск показує, що всі некоректні
+значення викликають повторне введення, а програма після них працює далі.</p>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>У першому завданні кількість маршрутів рахується сумою трьох сусідніх клітинок. Умову про матрицю нулів і
+одиниць довелося уточнити: усі клітинки лежать на якихось маршрутах, тому програма показує один
+найкоротший. Ручний підрахунок за кількістю діагональних ходів дав ті самі 3, 13 і 25.</p>
+<p>У другому завданні зроблено всі шість елементарних перетворень із меню, два способи створення
+матриці й два режими виведення. Ручні обчислення збіглися з виводом на кожному кроці, а визначник
+лишився -3.</p>
+</section>
+<p class="pager"><a href="../lab06/index.html">Попередня робота</a><a href="../lab08/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>
