@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №8. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html" class="active" aria-current="page">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html" class="active" aria-current="page">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №8</h1><p>Покажчики та посилання. Покажчики на функції</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 4. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умова задачі</a></li><li><a href="#analysis">Аналіз задачі</a></li><li><a href="#scheme">Блок-схема алгоритму</a></li><li><a href="#code">Текст програми</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Ознайомитися з особливостями посилальних типів даних.</li>
+<li>Опанувати технологію застосування посилальних типів даних.</li>
+<li>Навчитися розробляти алгоритми та програми із застосуванням посилальних типів даних.</li>
+</ul>
+</section>
+<section id="task"><h2>Умова задачі</h2>
+<p>Варіант 4, завдання підвищеної складності. У таблиці методички 24 варіанти, тому для номера 28 у
+списку групи маємо 28 - 24 = 4.</p>
+<p>Розробити програму, команди меню якої передбачають такі дії:</p>
+<ol>
+<li>Згенерувати дві розріджені матриці довільної вимірності, кількість нульових елементів яких
+більше за 60%. Збереження кожної матриці в оперативній пам'яті здійснити в рядковому форматі CRS
+у вигляді трьох одновимірних масивів: AN зберігає значення ненульових елементів у кількості NNZ,
+JA зберігає номери стовпців з ненульовими елементами в кількості NNZ, IA має по одному елементу на
+рядок матриці і кодує індекс ненульового елемента в AN, з якого починається даний рядок. Він може
+містити додатковий кінцевий елемент, для якого встановлено значення NNZ.</li>
+<li>Вивести матриці на екран по рядках та стовпцях.</li>
+<li>Вивести на екран одновимірні масиви, що зберігають розріджені матриці.</li>
+<li>Визначити добуток двох матриць за алгоритмом розріджених матриць.</li>
+<li>Визначити добуток двох матриць, застосовуючи стандартний алгоритм роботи з матрицями.</li>
+<li>Порівняти час виконання операцій і обсяг пам'яті при використанні цих двох алгоритмів.</li>
+</ol>
+<p>Вимоги методички: команди меню виконуються через покажчики на функції; пам'ять під масиви
+виділяється і звільняється динамічно; масиви передаються у функції через покажчики; функції
+повертають масиви через покажчики; доступ до елементів здійснюється через покажчики. Бібліотеку STL
+застосовувати не можна.</p>
+</section>
+<section id="analysis"><h2>Аналіз задачі</h2>
+<p>Щоб добуток існував, матриця A має розмір n · m, а матриця B розмір m · p. Числа n, m, p вводяться від
+3 до 200. Неправильне значення дає повідомлення і повторне введення. Умова вимагає понад 60% нулів, а
+теорія каже, що ненульових елементів у розрідженій матриці до 20%. Тому в кожній матриці рівно 20%
+ненульових елементів без дробової частини. Цифри від 1 до 9 записуються у випадкові вільні місця.</p>
+<p>Матриця лежить в одному блоці пам'яті рядок за рядком, тому елемент i, j читається як
+<code>*(matrix + i * columns + j)</code>. У масивах CRS номери рядків і стовпців починаються з 0, а масив IA
+має n + 1 елемент, останній дорівнює NNZ.</p>
+<p>Обидва алгоритми рахують ту саму формулу:</p>
+<div class="formula">c<sub>ij</sub> = ∑<sub>k=0</sub><sup>m-1</sup> a<sub>ik</sub> · b<sub>kj</sub></div>
+<p>Стандартний алгоритм виконує n · m · p множень, навіть якщо число дорівнює нулю. Алгоритм CRS бере в
+рядку A лише ненульові елементи. Для кожного такого елемента зі стовпця k він проходить лише ненульові
+елементи рядка k матриці B і додає добутки до c.</p>
+<p>Добуток двох розріджених матриць може бути вже не розрідженим, тому обидва алгоритми повертають його
+звичайною матрицею через покажчик. У першому запуску він має 11 ненульових елементів із 30.</p>
+<p>Одне множення надто швидке для <code>clock()</code>, тому функція <code>measureTimes</code> повторює його
+100 разів і ділить час на кількість повторів. Пам'ять рахується через <code>sizeof(int)</code>, помножений на
+кількість чисел:</p>
+<div class="formula">CRS: 2 · NNZ<sub>A</sub> + n + 1 + 2 · NNZ<sub>B</sub> + m + 1 + n · p</div>
+<div class="formula">стандартний алгоритм: n · m + m · p + n · p</div>
+<p>Меню працює через масив покажчиків на функції <code>commands</code>. Номер пункту вибирає покажчик, а
+команда викликається як <code>(*command)()</code>. Поки матриць немає, виконується лише перша команда.
+Порівняння потребує обох добутків. Матриці, більші за 12 рядків або стовпців, на екран не виводяться.
+Перед новою генерацією і наприкінці програми пам'ять звільняється через <code>delete[]</code>.</p>
+<p class="tcap">Таблиця 1 - Функції програми</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число із заданих меж</td></tr>
+<tr><td><code>createMatrix</code></td><td>виділяє пам'ять, заповнює нулями, повертає покажчик</td></tr>
+<tr><td><code>generateMatrix</code></td><td>створює матрицю із заданою кількістю ненульових елементів</td></tr>
+<tr><td><code>packMatrix</code></td><td>заповнює масиви AN, JA, IA</td></tr>
+<tr><td><code>freeMemory</code></td><td>звільняє пам'ять усіх масивів</td></tr>
+<tr><td><code>generateMatrices</code></td><td>команда 1: вводить розміри, створює матриці й масиви</td></tr>
+<tr><td><code>printMatrix</code></td><td>виводить матрицю</td></tr>
+<tr><td><code>printMatrices</code></td><td>команда 2: виводить матриці A і B</td></tr>
+<tr><td><code>printArray</code></td><td>виводить одновимірний масив</td></tr>
+<tr><td><code>printArrays</code></td><td>команда 3: виводить масиви обох матриць</td></tr>
+<tr><td><code>multiplySparse</code></td><td>множить матриці у форматі CRS</td></tr>
+<tr><td><code>multiplyStandard</code></td><td>множить матриці стандартним алгоритмом</td></tr>
+<tr><td><code>calculateSparseProduct</code></td><td>команда 4: обчислює і виводить добуток за CRS</td></tr>
+<tr><td><code>calculateStandardProduct</code></td><td>команда 5: обчислює і виводить стандартний добуток</td></tr>
+<tr><td><code>areMatricesEqual</code></td><td>перевіряє, чи однакові дві матриці</td></tr>
+<tr><td><code>measureTimes</code></td><td>вимірює час одного множення обома алгоритмами</td></tr>
+<tr><td><code>compareAlgorithms</code></td><td>команда 6: порівнює результати, час і пам'ять</td></tr>
+<tr><td><code>runMenu</code></td><td>виводить меню і виконує команди через покажчики</td></tr>
+<tr><td><code>main</code></td><td>викликає ці функції по черзі</td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025; Писсанецки С. Технология разреженных матриц;
+Deitel P., Deitel H. C++ How to Program.</p>
+</section>
+<section id="scheme"><h2>Блок-схема алгоритму</h2>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputNumber.svg"><img src="img/task1-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputNumber</code> (введення цілого числа із заданих меж)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-createMatrix.svg"><img src="img/task1-fc-createMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>createMatrix</code> (виділення пам'яті під матрицю і заповнення нулями)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-generateMatrix.svg"><img src="img/task1-fc-generateMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>generateMatrix</code> (генерація розрідженої матриці)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-packMatrix.svg"><img src="img/task1-fc-packMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>packMatrix</code> (заповнення масивів AN, JA, IA)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-freeMemory.svg"><img src="img/task1-fc-freeMemory.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>freeMemory</code> (звільнення пам'яті всіх масивів)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-generateMatrices.svg"><img src="img/task1-fc-generateMatrices.svg" alt="" loading="lazy"></a><figcaption>Рисунок 7 - Блок-схема функції <code>generateMatrices</code> (команда 1: генерація матриць A, B і їхніх масивів)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printMatrix.svg"><img src="img/task1-fc-printMatrix.svg" alt="" loading="lazy"></a><figcaption>Рисунок 8 - Блок-схема функції <code>printMatrix</code> (виведення матриці рядками і стовпцями)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printMatrices.svg"><img src="img/task1-fc-printMatrices.svg" alt="" loading="lazy"></a><figcaption>Рисунок 9 - Блок-схема функції <code>printMatrices</code> (команда 2: виведення матриць A і B)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printArray.svg"><img src="img/task1-fc-printArray.svg" alt="" loading="lazy"></a><figcaption>Рисунок 10 - Блок-схема функції <code>printArray</code> (виведення одновимірного масиву)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printArrays.svg"><img src="img/task1-fc-printArrays.svg" alt="" loading="lazy"></a><figcaption>Рисунок 11 - Блок-схема функції <code>printArrays</code> (команда 3: виведення масивів AN, JA, IA обох матриць)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-multiplySparse.svg"><img src="img/task1-fc-multiplySparse.svg" alt="" loading="lazy"></a><figcaption>Рисунок 12 - Блок-схема функції <code>multiplySparse</code> (множення за алгоритмом розріджених матриць)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-multiplyStandard.svg"><img src="img/task1-fc-multiplyStandard.svg" alt="" loading="lazy"></a><figcaption>Рисунок 13 - Блок-схема функції <code>multiplyStandard</code> (множення стандартним алгоритмом)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateSparseProduct.svg"><img src="img/task1-fc-calculateSparseProduct.svg" alt="" loading="lazy"></a><figcaption>Рисунок 14 - Блок-схема функції <code>calculateSparseProduct</code> (команда 4: добуток за алгоритмом розріджених матриць)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateStandardProduct.svg"><img src="img/task1-fc-calculateStandardProduct.svg" alt="" loading="lazy"></a><figcaption>Рисунок 15 - Блок-схема функції <code>calculateStandardProduct</code> (команда 5: добуток за стандартним алгоритмом)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-areMatricesEqual.svg"><img src="img/task1-fc-areMatricesEqual.svg" alt="" loading="lazy"></a><figcaption>Рисунок 16 - Блок-схема функції <code>areMatricesEqual</code> (перевірка, чи однакові дві матриці)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-measureTimes.svg"><img src="img/task1-fc-measureTimes.svg" alt="" loading="lazy"></a><figcaption>Рисунок 17 - Блок-схема функції <code>measureTimes</code> (вимірювання часу одного множення обома алгоритмами)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-compareAlgorithms.svg"><img src="img/task1-fc-compareAlgorithms.svg" alt="" loading="lazy"></a><figcaption>Рисунок 18 - Блок-схема функції <code>compareAlgorithms</code> (команда 6: порівняння результатів, часу і пам'яті)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-runMenu.svg"><img src="img/task1-fc-runMenu.svg" alt="" loading="lazy"></a><figcaption>Рисунок 19 - Блок-схема функції <code>runMenu</code> (меню команд через таблицю покажчиків на функції)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 20 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Текст програми</h2>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №8, варіант 4. Перемножити дві розріджені матриці у</span>
+<span class="cm">/// форматі CRS і стандартним алгоритмом, порівняти час і пам&#x27;ять.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cstdlib&gt;</span>
+<span class="pp">#include &lt;ctime&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MIN_SIZE = <span class="nm">3</span>;          <span class="cm">// найменший розмір матриці</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_SIZE = <span class="nm">200</span>;        <span class="cm">// найбільший розмір матриці</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_PRINT_SIZE = <span class="nm">12</span>;   <span class="cm">// найбільший розмір, який виводиться</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_VALUE = <span class="nm">9</span>;         <span class="cm">// найбільше значення елемента</span>
+<span class="kw">const</span> <span class="kw">int</span> NON_ZERO_PERCENT = <span class="nm">20</span>; <span class="cm">// частка ненульових елементів, відсотки</span>
+<span class="kw">const</span> <span class="kw">int</span> REPEAT_COUNT = <span class="nm">100</span>;    <span class="cm">// кількість повторів для вимірювання часу</span>
+<span class="kw">const</span> <span class="kw">int</span> COMMAND_COUNT = <span class="nm">6</span>;     <span class="cm">// кількість команд меню</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">int</span> rowCount = <span class="nm">0</span>;    <span class="cm">// кількість рядків A і добутку, n</span>
+<span class="kw">int</span> middleSize = <span class="nm">0</span>;  <span class="cm">// кількість стовпців A і рядків B, m</span>
+<span class="kw">int</span> columnCount = <span class="nm">0</span>; <span class="cm">// кількість стовпців B і добутку, p</span>
+
+<span class="kw">int</span>* matrixA = NULL; <span class="cm">// матриця A, n * m</span>
+<span class="kw">int</span>* matrixB = NULL; <span class="cm">// матриця B, m * p</span>
+
+<span class="kw">int</span> nonZeroA = <span class="nm">0</span>;       <span class="cm">// NNZ матриці A</span>
+<span class="kw">int</span>* valuesA = NULL;    <span class="cm">// масив AN матриці A</span>
+<span class="kw">int</span>* columnsA = NULL;   <span class="cm">// масив JA матриці A</span>
+<span class="kw">int</span>* rowStartsA = NULL; <span class="cm">// масив IA матриці A</span>
+
+<span class="kw">int</span> nonZeroB = <span class="nm">0</span>;       <span class="cm">// NNZ матриці B</span>
+<span class="kw">int</span>* valuesB = NULL;    <span class="cm">// масив AN матриці B</span>
+<span class="kw">int</span>* columnsB = NULL;   <span class="cm">// масив JA матриці B</span>
+<span class="kw">int</span>* rowStartsB = NULL; <span class="cm">// масив IA матриці B</span>
+
+<span class="kw">int</span>* sparseProduct = NULL;   <span class="cm">// добуток за алгоритмом розріджених матриць</span>
+<span class="kw">int</span>* standardProduct = NULL; <span class="cm">// добуток за стандартним алгоритмом</span>
+<span class="kw">float</span> sparseTime = <span class="nm">0</span>;        <span class="cm">// час одного множення за алгоритмом CRS, мс</span>
+<span class="kw">float</span> standardTime = <span class="nm">0</span>;      <span class="cm">// час одного стандартного множення, мс</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи й автора</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 8. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Generate two sparse matrices with more than 60% of zeros&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;and store them in CRS format: arrays AN, JA, IA. Find&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;their product by the sparse algorithm and by the standard&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;one. Compare the time and the memory.&quot;</span> &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число із заданих меж. Поки введено не число або число поза</span>
+<span class="cm">/// межами, введення повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;нижня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;верхня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>; <span class="cm">// введене число</span>
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виділяє пам&#x27;ять під матрицю і заповнює її нулями</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;rows&quot;&gt;кількість рядків&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;columns&quot;&gt;кількість стовпців&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;покажчик на матрицю&lt;/returns&gt;</span>
+<span class="kw">int</span>* createMatrix(<span class="kw">int</span> rows, <span class="kw">int</span> columns)
+{
+    <span class="kw">int</span>* matrix = <span class="kw">new</span> <span class="kw">int</span>[rows * columns]; <span class="cm">// елементи йдуть рядок за рядком</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;                             <span class="cm">// номер елемента</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rows * columns; i++)
+    {
+        *(matrix + i) = <span class="nm">0</span>;
+    }
+
+    <span class="kw">return</span> matrix;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Створює матрицю і записує у випадкові вільні місця задану кількість</span>
+<span class="cm">/// ненульових елементів</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;rows&quot;&gt;кількість рядків&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;columns&quot;&gt;кількість стовпців&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;nonZero&quot;&gt;кількість ненульових елементів&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;покажчик на матрицю&lt;/returns&gt;</span>
+<span class="kw">int</span>* generateMatrix(<span class="kw">int</span> rows, <span class="kw">int</span> columns, <span class="kw">int</span> nonZero)
+{
+    <span class="kw">int</span>* matrix = createMatrix(rows, columns);
+    <span class="kw">int</span> placed = <span class="nm">0</span>;   <span class="cm">// скільки елементів уже записано</span>
+    <span class="kw">int</span> position = <span class="nm">0</span>; <span class="cm">// випадковий номер елемента</span>
+
+    <span class="kw">while</span> (placed &lt; nonZero)
+    {
+        position = rand() % (rows * columns);
+        <span class="kw">if</span> (*(matrix + position) == <span class="nm">0</span>)
+        {
+            *(matrix + position) = rand() % MAX_VALUE + <span class="nm">1</span>;
+            placed++;
+        }
+    }
+
+    <span class="kw">return</span> matrix;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Заповнює масиви CRS. Масив IA отримує номер у AN, з якого починається кожен</span>
+<span class="cm">/// рядок, а останнім елементом NNZ</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;matrix&quot;&gt;матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;rows&quot;&gt;кількість рядків&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;columns&quot;&gt;кількість стовпців&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;values&quot;&gt;масив AN&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;columnNumbers&quot;&gt;масив JA&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;rowStarts&quot;&gt;масив IA&lt;/param&gt;</span>
+<span class="kw">void</span> packMatrix(<span class="kw">int</span>* matrix,
+                <span class="kw">int</span> rows,
+                <span class="kw">int</span> columns,
+                <span class="kw">int</span>* values,
+                <span class="kw">int</span>* columnNumbers,
+                <span class="kw">int</span>* rowStarts)
+{
+    <span class="kw">int</span> position = <span class="nm">0</span>; <span class="cm">// номер у масивах AN і JA</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;        <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>;        <span class="cm">// номер стовпця</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rows; i++)
+    {
+        *(rowStarts + i) = position;
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columns; j++)
+        {
+            <span class="kw">if</span> (*(matrix + i * columns + j) != <span class="nm">0</span>)
+            {
+                *(values + position) = *(matrix + i * columns + j);
+                *(columnNumbers + position) = j;
+                position++;
+            }
+        }
+    }
+    *(rowStarts + rows) = position;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Звільняє пам&#x27;ять усіх масивів. Покажчики на добутки стають порожніми, щоб</span>
+<span class="cm">/// було видно, що добутків ще немає</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> freeMemory()
+{
+    <span class="kw">delete</span>[] matrixA;
+    <span class="kw">delete</span>[] matrixB;
+    <span class="kw">delete</span>[] valuesA;
+    <span class="kw">delete</span>[] columnsA;
+    <span class="kw">delete</span>[] rowStartsA;
+    <span class="kw">delete</span>[] valuesB;
+    <span class="kw">delete</span>[] columnsB;
+    <span class="kw">delete</span>[] rowStartsB;
+    <span class="kw">delete</span>[] sparseProduct;
+    <span class="kw">delete</span>[] standardProduct;
+
+    sparseProduct = NULL;
+    standardProduct = NULL;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Команда 1. Вводить розміри, генерує матриці A і B та створює їхні масиви AN,</span>
+<span class="cm">/// JA, IA</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> generateMatrices()
+{
+    cout &lt;&lt; <span class="st">&quot;Sizes of the matrices: A is n x m, B is m x p.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Enter n (from &quot;</span> &lt;&lt; MIN_SIZE &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; MAX_SIZE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    rowCount = inputNumber(MIN_SIZE, MAX_SIZE);
+    cout &lt;&lt; <span class="st">&quot;Enter m (from &quot;</span> &lt;&lt; MIN_SIZE &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; MAX_SIZE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    middleSize = inputNumber(MIN_SIZE, MAX_SIZE);
+    cout &lt;&lt; <span class="st">&quot;Enter p (from &quot;</span> &lt;&lt; MIN_SIZE &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; MAX_SIZE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    columnCount = inputNumber(MIN_SIZE, MAX_SIZE);
+
+    freeMemory();
+
+    nonZeroA = rowCount * middleSize * NON_ZERO_PERCENT / <span class="nm">100</span>;
+    matrixA = generateMatrix(rowCount, middleSize, nonZeroA);
+    valuesA = <span class="kw">new</span> <span class="kw">int</span>[nonZeroA];
+    columnsA = <span class="kw">new</span> <span class="kw">int</span>[nonZeroA];
+    rowStartsA = <span class="kw">new</span> <span class="kw">int</span>[rowCount + <span class="nm">1</span>];
+    packMatrix(matrixA, rowCount, middleSize, valuesA, columnsA, rowStartsA);
+
+    nonZeroB = middleSize * columnCount * NON_ZERO_PERCENT / <span class="nm">100</span>;
+    matrixB = generateMatrix(middleSize, columnCount, nonZeroB);
+    valuesB = <span class="kw">new</span> <span class="kw">int</span>[nonZeroB];
+    columnsB = <span class="kw">new</span> <span class="kw">int</span>[nonZeroB];
+    rowStartsB = <span class="kw">new</span> <span class="kw">int</span>[middleSize + <span class="nm">1</span>];
+    packMatrix(matrixB, middleSize, columnCount, valuesB, columnsB, rowStartsB);
+
+    cout &lt;&lt; <span class="st">&quot;A: non-zero elements &quot;</span> &lt;&lt; nonZeroA &lt;&lt; <span class="st">&quot; of &quot;</span>
+         &lt;&lt; rowCount * middleSize &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;B: non-zero elements &quot;</span> &lt;&lt; nonZeroB &lt;&lt; <span class="st">&quot; of &quot;</span>
+         &lt;&lt; middleSize * columnCount &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить матрицю рядками і стовпцями, якщо вона невелика</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;matrix&quot;&gt;матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;rows&quot;&gt;кількість рядків&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;columns&quot;&gt;кількість стовпців&lt;/param&gt;</span>
+<span class="kw">void</span> printMatrix(<span class="kw">int</span>* matrix, <span class="kw">int</span> rows, <span class="kw">int</span> columns)
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця</span>
+
+    <span class="kw">if</span> (rows &gt; MAX_PRINT_SIZE || columns &gt; MAX_PRINT_SIZE)
+    {
+        cout &lt;&lt; <span class="st">&quot;The matrix is too big to print.&quot;</span> &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rows; i++)
+        {
+            <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columns; j++)
+            {
+                cout &lt;&lt; setw(<span class="nm">5</span>) &lt;&lt; *(matrix + i * columns + j);
+            }
+            cout &lt;&lt; endl;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Команда 2. Виводить матриці A і B</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printMatrices()
+{
+    cout &lt;&lt; <span class="st">&quot;Matrix A:&quot;</span> &lt;&lt; endl;
+    printMatrix(matrixA, rowCount, middleSize);
+    cout &lt;&lt; <span class="st">&quot;Matrix B:&quot;</span> &lt;&lt; endl;
+    printMatrix(matrixB, middleSize, columnCount);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить одновимірний масив в один рядок</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;array&quot;&gt;масив&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;count&quot;&gt;кількість елементів&lt;/param&gt;</span>
+<span class="kw">void</span> printArray(<span class="kw">int</span>* array, <span class="kw">int</span> count)
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер елемента</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; count; i++)
+    {
+        cout &lt;&lt; setw(<span class="nm">3</span>) &lt;&lt; *(array + i);
+    }
+    cout &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Команда 3. Виводить масиви AN, JA, IA обох матриць</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printArrays()
+{
+    cout &lt;&lt; <span class="st">&quot;Matrix A, NNZ = &quot;</span> &lt;&lt; nonZeroA &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;AN:&quot;</span>;
+    printArray(valuesA, nonZeroA);
+    cout &lt;&lt; <span class="st">&quot;JA:&quot;</span>;
+    printArray(columnsA, nonZeroA);
+    cout &lt;&lt; <span class="st">&quot;IA:&quot;</span>;
+    printArray(rowStartsA, rowCount + <span class="nm">1</span>);
+
+    cout &lt;&lt; <span class="st">&quot;Matrix B, NNZ = &quot;</span> &lt;&lt; nonZeroB &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;AN:&quot;</span>;
+    printArray(valuesB, nonZeroB);
+    cout &lt;&lt; <span class="st">&quot;JA:&quot;</span>;
+    printArray(columnsB, nonZeroB);
+    cout &lt;&lt; <span class="st">&quot;IA:&quot;</span>;
+    printArray(rowStartsB, middleSize + <span class="nm">1</span>);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Множить матриці у форматі CRS. Для кожного ненульового елемента рядка A</span>
+<span class="cm">/// береться лише рядок B з номером його стовпця</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;firstValues&quot;&gt;масив AN першої матриці&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;firstColumns&quot;&gt;масив JA першої матриці&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;firstStarts&quot;&gt;масив IA першої матриці&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;secondValues&quot;&gt;масив AN другої матриці&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;secondColumns&quot;&gt;масив JA другої матриці&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;secondStarts&quot;&gt;масив IA другої матриці&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;покажчик на матрицю добутку&lt;/returns&gt;</span>
+<span class="kw">int</span>* multiplySparse(<span class="kw">int</span>* firstValues,
+                    <span class="kw">int</span>* firstColumns,
+                    <span class="kw">int</span>* firstStarts,
+                    <span class="kw">int</span>* secondValues,
+                    <span class="kw">int</span>* secondColumns,
+                    <span class="kw">int</span>* secondStarts)
+{
+    <span class="kw">int</span>* product = createMatrix(rowCount, columnCount);
+    <span class="kw">int</span> i = <span class="nm">0</span>;      <span class="cm">// номер рядка першої матриці</span>
+    <span class="kw">int</span> k = <span class="nm">0</span>;      <span class="cm">// номер елемента в масивах першої матриці</span>
+    <span class="kw">int</span> l = <span class="nm">0</span>;      <span class="cm">// номер елемента в масивах другої матриці</span>
+    <span class="kw">int</span> row = <span class="nm">0</span>;    <span class="cm">// номер рядка другої матриці</span>
+    <span class="kw">int</span> column = <span class="nm">0</span>; <span class="cm">// номер стовпця другої матриці</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        <span class="kw">for</span> (k = *(firstStarts + i); k &lt; *(firstStarts + i + <span class="nm">1</span>); k++)
+        {
+            row = *(firstColumns + k);
+            <span class="kw">for</span> (l = *(secondStarts + row); l &lt; *(secondStarts + row + <span class="nm">1</span>); l++)
+            {
+                column = *(secondColumns + l);
+                *(product + i * columnCount + column) +=
+                    *(firstValues + k) * *(secondValues + l);
+            }
+        }
+    }
+
+    <span class="kw">return</span> product;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Множить матриці стандартним алгоритмом: перебирає всі елементи, навіть</span>
+<span class="cm">/// нульові</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;first&quot;&gt;перша матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;second&quot;&gt;друга матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;покажчик на матрицю добутку&lt;/returns&gt;</span>
+<span class="kw">int</span>* multiplyStandard(<span class="kw">int</span>* first, <span class="kw">int</span>* second)
+{
+    <span class="kw">int</span>* product = createMatrix(rowCount, columnCount);
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер рядка добутку</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер стовпця добутку</span>
+    <span class="kw">int</span> k = <span class="nm">0</span>; <span class="cm">// номер стовпця першої матриці</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; rowCount; i++)
+    {
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; columnCount; j++)
+        {
+            <span class="kw">for</span> (k = <span class="nm">0</span>; k &lt; middleSize; k++)
+            {
+                *(product + i * columnCount + j) +=
+                    *(first + i * middleSize + k)
+                    * *(second + k * columnCount + j);
+            }
+        }
+    }
+
+    <span class="kw">return</span> product;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Команда 4. Обчислює добуток за алгоритмом розріджених матриць і виводить</span>
+<span class="cm">/// його</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateSparseProduct()
+{
+    <span class="kw">delete</span>[] sparseProduct;
+    sparseProduct = multiplySparse(valuesA, columnsA, rowStartsA, valuesB,
+                                   columnsB, rowStartsB);
+
+    cout &lt;&lt; <span class="st">&quot;Product by the sparse algorithm:&quot;</span> &lt;&lt; endl;
+    printMatrix(sparseProduct, rowCount, columnCount);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Команда 5. Обчислює добуток за стандартним алгоритмом і виводить його</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateStandardProduct()
+{
+    <span class="kw">delete</span>[] standardProduct;
+    standardProduct = multiplyStandard(matrixA, matrixB);
+
+    cout &lt;&lt; <span class="st">&quot;Product by the standard algorithm:&quot;</span> &lt;&lt; endl;
+    printMatrix(standardProduct, rowCount, columnCount);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Перевіряє, чи однакові дві матриці</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;first&quot;&gt;перша матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;second&quot;&gt;друга матриця&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;size&quot;&gt;кількість елементів&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;true, якщо всі елементи однакові&lt;/returns&gt;</span>
+<span class="kw">bool</span> areMatricesEqual(<span class="kw">int</span>* first, <span class="kw">int</span>* second, <span class="kw">int</span> size)
+{
+    <span class="kw">bool</span> isEqual = <span class="kw">true</span>; <span class="cm">// чи збігаються елементи</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;           <span class="cm">// номер елемента</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; size; i++)
+    {
+        <span class="kw">if</span> (*(first + i) != *(second + i))
+        {
+            isEqual = <span class="kw">false</span>;
+        }
+    }
+
+    <span class="kw">return</span> isEqual;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вимірює час одного множення обома алгоритмами. Одне множення надто швидке</span>
+<span class="cm">/// для clock(), тому воно повторюється REPEAT_COUNT разів, а час ділиться на</span>
+<span class="cm">/// кількість повторів</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> measureTimes()
+{
+    clock_t startTime = <span class="nm">0</span>; <span class="cm">// момент початку</span>
+    <span class="kw">int</span>* product = NULL;   <span class="cm">// добуток</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;             <span class="cm">// номер повтору</span>
+
+    startTime = clock();
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; REPEAT_COUNT; i++)
+    {
+        product = multiplySparse(valuesA, columnsA, rowStartsA, valuesB,
+                                 columnsB, rowStartsB);
+        <span class="kw">delete</span>[] product;
+    }
+    sparseTime =
+        (<span class="kw">float</span>)(clock() - startTime) * <span class="nm">1000</span> / CLOCKS_PER_SEC / REPEAT_COUNT;
+
+    startTime = clock();
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; REPEAT_COUNT; i++)
+    {
+        product = multiplyStandard(matrixA, matrixB);
+        <span class="kw">delete</span>[] product;
+    }
+    standardTime =
+        (<span class="kw">float</span>)(clock() - startTime) * <span class="nm">1000</span> / CLOCKS_PER_SEC / REPEAT_COUNT;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Команда 6. Порівнює результати, час і пам&#x27;ять двох алгоритмів. Пам&#x27;ять</span>
+<span class="cm">/// рахується для матриць A, B і добутку, який в обох випадках зберігається</span>
+<span class="cm">/// звичайною матрицею</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> compareAlgorithms()
+{
+    <span class="kw">int</span> productCells = rowCount * columnCount; <span class="cm">// чисел у добутку</span>
+    <span class="kw">int</span> sparseCells = <span class="nm">0</span>;                       <span class="cm">// чисел в алгоритмі CRS</span>
+    <span class="kw">int</span> standardCells = <span class="nm">0</span>;                     <span class="cm">// чисел у стандартному</span>
+
+    <span class="kw">if</span> (sparseProduct == NULL || standardProduct == NULL)
+    {
+        cout &lt;&lt; <span class="st">&quot;Calculate both products first (items 4 and 5).&quot;</span> &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        <span class="kw">if</span> (areMatricesEqual(sparseProduct, standardProduct, productCells))
+        {
+            cout &lt;&lt; <span class="st">&quot;The two products are equal.&quot;</span> &lt;&lt; endl;
+        }
+        <span class="kw">else</span>
+        {
+            cout &lt;&lt; <span class="st">&quot;The two products differ.&quot;</span> &lt;&lt; endl;
+        }
+
+        sparseCells = <span class="nm">2</span> * nonZeroA + rowCount + <span class="nm">1</span> + <span class="nm">2</span> * nonZeroB + middleSize
+                      + <span class="nm">1</span> + productCells;
+        standardCells =
+            rowCount * middleSize + middleSize * columnCount + productCells;
+        measureTimes();
+
+        cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="nm">6</span>);
+        cout &lt;&lt; setw(<span class="nm">16</span>) &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; setw(<span class="nm">14</span>) &lt;&lt; <span class="st">&quot;sparse&quot;</span> &lt;&lt; setw(<span class="nm">14</span>)
+             &lt;&lt; <span class="st">&quot;standard&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; setw(<span class="nm">16</span>) &lt;&lt; <span class="st">&quot;time, ms&quot;</span> &lt;&lt; setw(<span class="nm">14</span>) &lt;&lt; sparseTime &lt;&lt; setw(<span class="nm">14</span>)
+             &lt;&lt; standardTime &lt;&lt; endl;
+        cout &lt;&lt; setw(<span class="nm">16</span>) &lt;&lt; <span class="st">&quot;memory, bytes&quot;</span> &lt;&lt; setw(<span class="nm">14</span>)
+             &lt;&lt; sparseCells * (<span class="kw">int</span>)<span class="kw">sizeof</span>(<span class="kw">int</span>) &lt;&lt; setw(<span class="nm">14</span>)
+             &lt;&lt; standardCells * (<span class="kw">int</span>)<span class="kw">sizeof</span>(<span class="kw">int</span>) &lt;&lt; endl;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить меню і виконує команди через таблицю покажчиків на функції, поки</span>
+<span class="cm">/// користувач не вибере вихід. Поки матриць немає, виконується лише перша</span>
+<span class="cm">/// команда</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> runMenu()
+{
+    <span class="kw">void</span> (*commands[COMMAND_COUNT])() = {generateMatrices,
+                                         printMatrices,
+                                         printArrays,
+                                         calculateSparseProduct,
+                                         calculateStandardProduct,
+                                         compareAlgorithms};
+    <span class="kw">void</span> (*command)() = NULL; <span class="cm">// вибрана команда</span>
+    <span class="kw">int</span> choice = <span class="nm">0</span>;           <span class="cm">// вибраний пункт меню</span>
+
+    srand(time(NULL));
+
+    <span class="kw">do</span>
+    {
+        cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;1 - generate two sparse matrices&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;2 - print the matrices&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;3 - print the arrays AN, JA, IA&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;4 - multiply by the sparse algorithm&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;5 - multiply by the standard algorithm&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;6 - compare the two algorithms&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;0 - exit&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;Your choice: &quot;</span>;
+        choice = inputNumber(<span class="nm">0</span>, COMMAND_COUNT);
+
+        <span class="kw">if</span> (choice != <span class="nm">0</span>)
+        {
+            <span class="kw">if</span> (choice &gt; <span class="nm">1</span> &amp;&amp; matrixA == NULL)
+            {
+                cout &lt;&lt; <span class="st">&quot;Generate the matrices first (item 1).&quot;</span> &lt;&lt; endl;
+            }
+            <span class="kw">else</span>
+            {
+                command = *(commands + choice - <span class="nm">1</span>);
+                (*command)();
+            }
+        }
+    } <span class="kw">while</span> (choice != <span class="nm">0</span>);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    runMenu();
+    freeMemory();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<p>Дані випадкові, тому числа в таблиці й перевірці стосуються саме цих запусків.</p>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 21 - Матриці 6 · 8 і 8 · 5: усі команди меню</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 22 - Некоректне введення і команди раніше, ніж створено матриці</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 23 - Великі матриці 60 · 70 і 70 · 50, потім повторна генерація</figcaption></figure>
+<p class="tcap">Таблиця 2 - Порівняння алгоритмів</p>
+<div class="table-scroll"><table>
+<tr><th>Розміри n, m, p</th><th>Час CRS, мс</th><th>Стандартний час, мс</th><th>Пам'ять CRS, байт</th><th>Пам'ять стандартна, байт</th></tr>
+<tr><td>6, 8, 5</td><td>0.000380</td><td>0.002170</td><td>320</td><td>472</td></tr>
+<tr><td>60, 70, 50</td><td>0.035360</td><td>0.561940</td><td>24848</td><td>42800</td></tr>
+</table></div>
+<p>На малих матрицях алгоритм CRS швидший приблизно в 6 разів, а на великих приблизно в 16 разів. Пам'яті він
+потребує менше в обох випадках, хоча масиви JA та IA теж займають місце.</p>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Перевірка в Excel</h3>
+<p>Матриці першого запуску я переніс у файл <a href="check.xlsx" download>check.xlsx</a>. Добуток там рахує
+функція <code>МУМНОЖ</code>, а поруч стоїть вивід програми і різниця. Сума модулів різниць дорівнює 0.</p>
+<figure class="shot"><a href="img/excel-check.png"><img src="img/excel-check.png" alt="" width="632" loading="lazy"></a><figcaption>Рисунок 24 - Порівняння добутків в Excel</figcaption></figure>
+<h3>Ручна перевірка</h3>
+<p class="tcap">Таблиця 3 - Елементи першого запуску, перевірені вручну</p>
+<div class="table-scroll"><table>
+<tr><th>Що перевіряється</th><th>Розрахунок</th><th>Програма</th></tr>
+<tr><td>IA матриці A</td><td>у рядках 2, 1, 2, 1, 3, 0 ненульових елементів, тому початки 0, 2, 3, 5, 6, 9, а кінець 9</td><td>0 2 3 5 6 9 9</td></tr>
+<tr><td>рядок 2 матриці A в масивах</td><td>елементи з номерами 3 і 4: значення 2 і 5, стовпці 3 і 7</td><td>AN: 2, 5; JA: 3, 7</td></tr>
+<tr><td>c<sub>03</sub></td><td>4 · 3 = 12</td><td>12</td></tr>
+<tr><td>c<sub>24</sub></td><td>5 · 8 = 40</td><td>40</td></tr>
+<tr><td>c<sub>41</sub></td><td>9 · 7 = 63</td><td>63</td></tr>
+<tr><td>пам'ять CRS, 6, 8, 5</td><td>(18 + 7 + 16 + 9 + 30) · 4 = 320</td><td>320</td></tr>
+<tr><td>пам'ять стандартна, 6, 8, 5</td><td>(48 + 40 + 30) · 4 = 472</td><td>472</td></tr>
+</table></div>
+<p>Рядки і стовпці в таблиці нумеруються з 0. Програма в обох запусках із порівнянням написала, що добутки
+однакові. У другому запуску команда 2 до створення матриць, команда 6 до обчислення добутків і некоректні значення дали повідомлення.
+У третьому після нової генерації команда 6 попросила обчислити добутки заново, бо старі добутки вже звільнено.</p>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Програма генерує дві матриці, зберігає їх у форматі CRS і рахує добуток двома алгоритмами. Усі дії меню
+запускаються через масив покажчиків на функції, а масиви створюються через <code>new</code> і передаються
+покажчиками.</p>
+<p>Excel дав той самий добуток. На матрицях 60, 70, 50 алгоритм CRS витратив 0.035360 мс проти 0.561940 мс і
+24848 байт проти 42800 байт. У трьох вкладених циклах
+<code>multiplySparse</code> одночасно працюють номери з масивів обох матриць.</p>
+</section>
+<p class="pager"><a href="../lab07/index.html">Попередня робота</a><a href="../lab09/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №10. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html" class="active" aria-current="page">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html">ЛР 9</a><a href="../lab10/index.html" class="active" aria-current="page">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №10</h1><p>Структури, масиви структур та об'єднання</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 3. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умова задачі</a></li><li><a href="#analysis">Аналіз задачі</a></li><li><a href="#scheme">Блок-схема алгоритму</a></li><li><a href="#code">Текст програми</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити тип даних "структура" і масиви структур.</li>
+<li>Опанувати передачу структур і масивів структур у функції та повернення їх із функцій.</li>
+<li>Навчитися виконувати пошук у масиві структур за ключами, заданими з клавіатури.</li>
+</ul>
+</section>
+<section id="task"><h2>Умова задачі</h2>
+<p>Варіант 3. У таблиці методички 25 варіантів, тому для номера 28 у списку групи маємо
+28 - 25 = 3.</p>
+<p>Створити масив структур. Кожна структура складається з таких елементів: факультет, курс, група,
+прізвища студентів, екзаменаційні оцінки. Реалізувати запити:</p>
+<ul>
+<li>визначити факультет і курс з максимальною кількістю відмінників;</li>
+<li>вивести список відмінників;</li>
+<li>знайти групу, де немає двієчників.</li>
+</ul>
+<p>Результати запитів вивести у вигляді таблиць.</p>
+<p>Вимоги методички до програми:</p>
+<ul>
+<li>програма має меню команд, які виконуються через виклики функцій;</li>
+<li>кожна функція робить окрему обмежену дію: створення масиву, виведення масиву, пошук і
+виведення результатів запитів;</li>
+<li>застосування покажчиків на масив структур і окремі структури схвалюється;</li>
+<li>масив створюється введенням з клавіатури або генерацією рядків і чисел;</li>
+<li>створений масив обов'язково виводиться таблицею, заголовок якої відповідає полям структури;</li>
+<li>пошук виконується за ключами, заданими з клавіатури;</li>
+<li>результати запитів виводяться таблицею, заголовок виводиться один раз;</li>
+<li>бібліотеку STL використовувати не можна, дозволені string.h, ctype.h, stdlib.h.</li>
+</ul>
+</section>
+<section id="analysis"><h2>Аналіз задачі</h2>
+<p>Один запис масиву описує одного студента. Структура <code>StudentRecord</code> має поля: факультет,
+курс, група, прізвище і масив із трьох екзаменаційних оцінок. Оцінки беруться за шкалою від 2 до 5.
+Відмінник має всі оцінки 5, двієчник має хоча б одну двійку. У масиві може бути до 30 записів,
+курс лежить від 1 до 4, текстове поле має до 15 символів. Програма виводить текст англійською,
+тому й дані англійські.</p>
+<p>Масив вводиться з клавіатури або генерується. Під час генерації факультет, закінчення назви групи і
+прізвище вибираються випадково. Назва групи складається з назви факультету й закінчення, а перша
+цифра закінчення збігається з курсом. Для кожного студента спершу вибирається випадкова найнижча
+оцінка, а потім усі оцінки беруться від неї до 5. Тому серед випадкових записів трапляються і
+відмінники, і студенти з двійками.</p>
+<p>У першому запиті максимум шукається по всьому масиву, тому ключ пошуку не вводиться. Другий запит
+має ключ факультет, третій запит має ключ курс. Назва факультету порівнюється точно, тому FIT і fit
+вважаються різними факультетами.</p>
+<p>Щоб рахувати дані для пари "факультет, курс" або для групи, функція <code>findFirst</code> знаходить
+перший запис цієї пари чи групи. Лічильник відмінників і ознака двійки лежать у допоміжних масивах
+на місці цього першого запису. Група визначається факультетом, курсом і назвою. Якщо кілька пар
+мають однакову найбільшу кількість відмінників, виводяться всі такі пари. У таблиці першого запиту
+в колонці групи стоїть слово all, бо там рахується весь курс.</p>
+<p>Функції <code>readRecord</code> і <code>generateRecord</code> повертають структуру,
+<code>countGrades</code> отримує структуру як параметр, <code>printJournal</code> і
+<code>printGroups</code> отримують покажчик на масив структур.</p>
+<p>Числа вводить функція <code>inputNumber</code>. Якщо введено не число або число поза межами,
+програма виводить повідомлення і просить ввести ще раз. Те саме відбувається, якщо текст довший за
+15 символів. На неіснуючий пункт меню або літеру програма відповідає No such menu item. Якщо масив
+порожній або нічого не знайдено, виводиться No records або No results.</p>
+<p class="tcap">Таблиця 1 - Функції програми</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число із заданих меж</td></tr>
+<tr><td><code>inputField</code></td><td>вводить текстове поле</td></tr>
+<tr><td><code>readRecord</code></td><td>вводить один запис з клавіатури</td></tr>
+<tr><td><code>generateRecord</code></td><td>створює випадковий запис</td></tr>
+<tr><td><code>printJournal</code></td><td>виводить масив записів таблицею</td></tr>
+<tr><td><code>createJournal</code></td><td>створює масив і виводить його</td></tr>
+<tr><td><code>countGrades</code></td><td>рахує задану оцінку в записі</td></tr>
+<tr><td><code>findFirst</code></td><td>шукає перший запис пари або групи</td></tr>
+<tr><td><code>printGroups</code></td><td>виводить факультет, курс і групу таблицею</td></tr>
+<tr><td><code>findBestCourses</code></td><td>запит 1: факультет і курс з найбільшою кількістю відмінників</td></tr>
+<tr><td><code>printExcellent</code></td><td>запит 2: список відмінників факультету</td></tr>
+<tr><td><code>findCleanGroups</code></td><td>запит 3: групи курсу без двієчників</td></tr>
+<tr><td><code>runMenu</code></td><td>показує меню і викликає вибрані функції</td></tr>
+<tr><td><code>main</code></td><td>викликає <code>printTitle</code> і <code>runMenu</code></td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025.</p>
+</section>
+<section id="scheme"><h2>Блок-схема алгоритму</h2>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputNumber.svg"><img src="img/task1-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputNumber</code> (введення цілого числа із заданих меж)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputField.svg"><img src="img/task1-fc-inputField.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>inputField</code> (введення текстового поля)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-readRecord.svg"><img src="img/task1-fc-readRecord.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>readRecord</code> (введення одного запису з клавіатури)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-generateRecord.svg"><img src="img/task1-fc-generateRecord.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>generateRecord</code> (створення випадкового запису)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printJournal.svg"><img src="img/task1-fc-printJournal.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>printJournal</code> (виведення масиву записів таблицею)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-createJournal.svg"><img src="img/task1-fc-createJournal.svg" alt="" loading="lazy"></a><figcaption>Рисунок 7 - Блок-схема функції <code>createJournal</code> (створення масиву записів)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-countGrades.svg"><img src="img/task1-fc-countGrades.svg" alt="" loading="lazy"></a><figcaption>Рисунок 8 - Блок-схема функції <code>countGrades</code> (підрахунок заданої оцінки в записі)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-findFirst.svg"><img src="img/task1-fc-findFirst.svg" alt="" loading="lazy"></a><figcaption>Рисунок 9 - Блок-схема функції <code>findFirst</code> (пошук першого запису тієї самої пари або групи)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printGroups.svg"><img src="img/task1-fc-printGroups.svg" alt="" loading="lazy"></a><figcaption>Рисунок 10 - Блок-схема функції <code>printGroups</code> (виведення факультету, курсу і групи записів таблицею)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-findBestCourses.svg"><img src="img/task1-fc-findBestCourses.svg" alt="" loading="lazy"></a><figcaption>Рисунок 11 - Блок-схема функції <code>findBestCourses</code> (запит 1: факультет і курс з найбільшою кількістю відмінників)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printExcellent.svg"><img src="img/task1-fc-printExcellent.svg" alt="" loading="lazy"></a><figcaption>Рисунок 12 - Блок-схема функції <code>printExcellent</code> (запит 2: відмінники заданого факультету)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-findCleanGroups.svg"><img src="img/task1-fc-findCleanGroups.svg" alt="" loading="lazy"></a><figcaption>Рисунок 13 - Блок-схема функції <code>findCleanGroups</code> (запит 3: групи заданого курсу без двієчників)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-runMenu.svg"><img src="img/task1-fc-runMenu.svg" alt="" loading="lazy"></a><figcaption>Рисунок 14 - Блок-схема функції <code>runMenu</code> (меню програми)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 15 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Текст програми</h2>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №10, варіант 3. Створити масив структур про студентів і</span>
+<span class="cm">/// виконати запити про відмінників та групи без двієчників.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cstdlib&gt;</span>
+<span class="pp">#include &lt;cstring&gt;</span>
+<span class="pp">#include &lt;ctime&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_RECORDS = <span class="nm">30</span>;  <span class="cm">// найбільша кількість записів</span>
+<span class="kw">const</span> <span class="kw">int</span> FIELD_SIZE = <span class="nm">16</span>;   <span class="cm">// розмір текстового поля разом із нулем</span>
+<span class="kw">const</span> <span class="kw">int</span> EXAM_COUNT = <span class="nm">3</span>;    <span class="cm">// кількість іспитів</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_COURSE = <span class="nm">4</span>;    <span class="cm">// найбільший курс</span>
+<span class="kw">const</span> <span class="kw">int</span> FAIL_GRADE = <span class="nm">2</span>;    <span class="cm">// двійка</span>
+<span class="kw">const</span> <span class="kw">int</span> TOP_GRADE = <span class="nm">5</span>;     <span class="cm">// п&#x27;ятірка</span>
+<span class="kw">const</span> <span class="kw">int</span> FACULTY_COUNT = <span class="nm">3</span>; <span class="cm">// кількість факультетів для генерації</span>
+<span class="kw">const</span> <span class="kw">int</span> SUFFIX_COUNT = <span class="nm">4</span>;  <span class="cm">// кількість закінчень назви групи</span>
+<span class="kw">const</span> <span class="kw">int</span> SURNAME_COUNT = <span class="nm">8</span>; <span class="cm">// кількість прізвищ для генерації</span>
+
+<span class="cm">// факультети, закінчення назв груп і прізвища для генерації</span>
+<span class="kw">const</span> <span class="kw">char</span> FACULTIES[FACULTY_COUNT][FIELD_SIZE] = {<span class="st">&quot;FIT&quot;</span>, <span class="st">&quot;LAW&quot;</span>, <span class="st">&quot;ECO&quot;</span>};
+<span class="kw">const</span> <span class="kw">char</span> SUFFIXES[SUFFIX_COUNT][FIELD_SIZE] = {<span class="st">&quot;-11&quot;</span>, <span class="st">&quot;-12&quot;</span>, <span class="st">&quot;-21&quot;</span>, <span class="st">&quot;-22&quot;</span>};
+<span class="kw">const</span> <span class="kw">char</span> SURNAMES[SURNAME_COUNT][FIELD_SIZE] = {
+    <span class="st">&quot;Melnyk&quot;</span>,  <span class="st">&quot;Bondar&quot;</span>,  <span class="st">&quot;Tkachuk&quot;</span>, <span class="st">&quot;Savchuk&quot;</span>,
+    <span class="st">&quot;Rudenko&quot;</span>, <span class="st">&quot;Lysenko&quot;</span>, <span class="st">&quot;Moroz&quot;</span>,   <span class="st">&quot;Klymenko&quot;</span>};
+
+<span class="cm">// Структури</span>
+<span class="kw">struct</span> StudentRecord <span class="cm">// запис про одного студента</span>
+{
+    <span class="kw">char</span> faculty[FIELD_SIZE];
+    <span class="kw">int</span> course;
+    <span class="kw">char</span> group[FIELD_SIZE];
+    <span class="kw">char</span> surname[FIELD_SIZE];
+    <span class="kw">int</span> grades[EXAM_COUNT];
+};
+
+<span class="cm">// Глобальні змінні</span>
+StudentRecord journal[MAX_RECORDS] = {}; <span class="cm">// масив записів про студентів</span>
+<span class="kw">int</span> recordCount = <span class="nm">0</span>;                     <span class="cm">// кількість записів у масиві</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи й автора</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 10. Variant 3.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Array of structures: faculty, course, group, surname,&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;exam grades. Find the faculty and course with the most&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;excellent students, print the list of excellent students,&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;find the groups without failing students.&quot;</span> &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число із заданих меж і забирає кінець рядка, щоб після неї</span>
+<span class="cm">/// працювало cin.getline</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;нижня межа числа&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;верхня межа числа&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>; <span class="cm">// введене число</span>
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter a number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+    cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>);
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить текстове поле довжиною до 15 символів</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;field&quot;&gt;масив для введеного тексту&lt;/param&gt;</span>
+<span class="kw">void</span> inputField(<span class="kw">char</span> field[])
+{
+    cin.getline(field, FIELD_SIZE);
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити задовгий рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter at most 15 characters: &quot;</span>;
+        cin.getline(field, FIELD_SIZE);
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить з клавіатури один запис</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;number&quot;&gt;номер запису для підказки&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;заповнена структура&lt;/returns&gt;</span>
+StudentRecord readRecord(<span class="kw">int</span> number)
+{
+    StudentRecord record = {}; <span class="cm">// новий запис</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;                 <span class="cm">// номер іспиту</span>
+
+    cout &lt;&lt; <span class="st">&quot;Record &quot;</span> &lt;&lt; number &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Enter faculty: &quot;</span>;
+    inputField(record.faculty);
+    cout &lt;&lt; <span class="st">&quot;Enter course (from 1 to &quot;</span> &lt;&lt; MAX_COURSE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    record.course = inputNumber(<span class="nm">1</span>, MAX_COURSE);
+    cout &lt;&lt; <span class="st">&quot;Enter group: &quot;</span>;
+    inputField(record.group);
+    cout &lt;&lt; <span class="st">&quot;Enter surname: &quot;</span>;
+    inputField(record.surname);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; EXAM_COUNT; i++)
+    {
+        cout &lt;&lt; <span class="st">&quot;Enter grade &quot;</span> &lt;&lt; i + <span class="nm">1</span> &lt;&lt; <span class="st">&quot; (from 2 to 5): &quot;</span>;
+        record.grades[i] = inputNumber(FAIL_GRADE, TOP_GRADE);
+    }
+
+    <span class="kw">return</span> record;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Створює випадковий запис. Найнижча оцінка студента теж випадкова, тому серед</span>
+<span class="cm">/// записів є і відмінники, і студенти з двійками</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;заповнена структура&lt;/returns&gt;</span>
+StudentRecord generateRecord()
+{
+    StudentRecord record = {};                 <span class="cm">// новий запис</span>
+    <span class="kw">int</span> facultyIndex = rand() % FACULTY_COUNT; <span class="cm">// номер факультету</span>
+    <span class="kw">int</span> suffixIndex = rand() % SUFFIX_COUNT;   <span class="cm">// номер закінчення групи</span>
+    <span class="cm">// найнижча оцінка студента</span>
+    <span class="kw">int</span> lowestGrade = FAIL_GRADE + rand() % (TOP_GRADE - FAIL_GRADE + <span class="nm">1</span>);
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер іспиту</span>
+
+    strcpy(record.faculty, FACULTIES[facultyIndex]);
+    record.course = suffixIndex / <span class="nm">2</span> + <span class="nm">1</span>;
+    strcpy(record.group, FACULTIES[facultyIndex]);
+    strcat(record.group, SUFFIXES[suffixIndex]);
+    strcpy(record.surname, SURNAMES[rand() % SURNAME_COUNT]);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; EXAM_COUNT; i++)
+    {
+        record.grades[i] = lowestGrade + rand() % (TOP_GRADE - lowestGrade + <span class="nm">1</span>);
+    }
+
+    <span class="kw">return</span> record;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить масив записів таблицею</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;list&quot;&gt;покажчик на масив записів&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;size&quot;&gt;кількість записів&lt;/param&gt;</span>
+<span class="kw">void</span> printJournal(StudentRecord* list, <span class="kw">int</span> size)
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер запису</span>
+    <span class="kw">int</span> j = <span class="nm">0</span>; <span class="cm">// номер іспиту</span>
+
+    <span class="kw">if</span> (size == <span class="nm">0</span>)
+    {
+        cout &lt;&lt; <span class="st">&quot;No records.&quot;</span> &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        cout &lt;&lt; setw(<span class="nm">3</span>) &lt;&lt; <span class="st">&quot;No&quot;</span> &lt;&lt; setw(<span class="nm">9</span>) &lt;&lt; <span class="st">&quot;Faculty&quot;</span> &lt;&lt; setw(<span class="nm">8</span>) &lt;&lt; <span class="st">&quot;Course&quot;</span>
+             &lt;&lt; setw(<span class="nm">17</span>) &lt;&lt; <span class="st">&quot;Group&quot;</span> &lt;&lt; setw(<span class="nm">17</span>) &lt;&lt; <span class="st">&quot;Surname&quot;</span> &lt;&lt; <span class="st">&quot;  Grades&quot;</span>
+             &lt;&lt; endl;
+
+        <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; size; i++)
+        {
+            cout &lt;&lt; setw(<span class="nm">3</span>) &lt;&lt; i + <span class="nm">1</span> &lt;&lt; setw(<span class="nm">9</span>) &lt;&lt; list[i].faculty &lt;&lt; setw(<span class="nm">8</span>)
+                 &lt;&lt; list[i].course &lt;&lt; setw(<span class="nm">17</span>) &lt;&lt; list[i].group &lt;&lt; setw(<span class="nm">17</span>)
+                 &lt;&lt; list[i].surname &lt;&lt; <span class="st">&quot; &quot;</span>;
+            <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; EXAM_COUNT; j++)
+            {
+                cout &lt;&lt; setw(<span class="nm">2</span>) &lt;&lt; list[i].grades[j];
+            }
+            cout &lt;&lt; endl;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Створює масив: вводить кількість записів, заповнює масив і виводить його</span>
+<span class="cm">/// таблицею</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;isRandom&quot;&gt;true, якщо записи генеруються&lt;/param&gt;</span>
+<span class="kw">void</span> createJournal(<span class="kw">bool</span> isRandom)
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер запису</span>
+
+    cout &lt;&lt; <span class="st">&quot;Enter number of records (from 1 to &quot;</span> &lt;&lt; MAX_RECORDS &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    recordCount = inputNumber(<span class="nm">1</span>, MAX_RECORDS);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; recordCount; i++)
+    {
+        <span class="kw">if</span> (isRandom)
+        {
+            journal[i] = generateRecord();
+        }
+        <span class="kw">else</span>
+        {
+            journal[i] = readRecord(i + <span class="nm">1</span>);
+        }
+    }
+
+    printJournal(journal, recordCount);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Рахує, скільки разів задана оцінка є в записі</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;record&quot;&gt;запис&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;grade&quot;&gt;оцінка&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;кількість таких оцінок&lt;/returns&gt;</span>
+<span class="kw">int</span> countGrades(StudentRecord record, <span class="kw">int</span> grade)
+{
+    <span class="kw">int</span> count = <span class="nm">0</span>; <span class="cm">// кількість оцінок</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;     <span class="cm">// номер іспиту</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; EXAM_COUNT; i++)
+    {
+        <span class="kw">if</span> (record.grades[i] == grade)
+        {
+            count++;
+        }
+    }
+
+    <span class="kw">return</span> count;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Знаходить перший запис масиву з тим самим факультетом і курсом, що в</span>
+<span class="cm">/// заданого запису, а якщо isWholeCourse = false, то й з тією самою групою</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;index&quot;&gt;номер запису&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;isWholeCourse&quot;&gt;чи не враховувати групу&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;номер першого такого запису&lt;/returns&gt;</span>
+<span class="kw">int</span> findFirst(<span class="kw">int</span> index, <span class="kw">bool</span> isWholeCourse)
+{
+    <span class="kw">int</span> first = <span class="nm">0</span>;        <span class="cm">// номер запису, що перевіряється</span>
+    <span class="kw">bool</span> isFound = <span class="kw">false</span>; <span class="cm">// чи знайдено запис</span>
+
+    <span class="kw">while</span> (!isFound)
+    {
+        <span class="kw">if</span> (strcmp(journal[first].faculty, journal[index].faculty) == <span class="nm">0</span>
+            &amp;&amp; journal[first].course == journal[index].course
+            &amp;&amp; (isWholeCourse
+                || strcmp(journal[first].group, journal[index].group) == <span class="nm">0</span>))
+        {
+            isFound = <span class="kw">true</span>;
+        }
+        <span class="kw">else</span>
+        {
+            first++;
+        }
+    }
+
+    <span class="kw">return</span> first;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить таблицею факультет, курс і групу кожного запису масиву</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;list&quot;&gt;покажчик на масив записів&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;size&quot;&gt;кількість записів&lt;/param&gt;</span>
+<span class="kw">void</span> printGroups(StudentRecord* list, <span class="kw">int</span> size)
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>; <span class="cm">// номер запису</span>
+
+    <span class="kw">if</span> (size == <span class="nm">0</span>)
+    {
+        cout &lt;&lt; <span class="st">&quot;No results.&quot;</span> &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        cout &lt;&lt; setw(<span class="nm">9</span>) &lt;&lt; <span class="st">&quot;Faculty&quot;</span> &lt;&lt; setw(<span class="nm">8</span>) &lt;&lt; <span class="st">&quot;Course&quot;</span> &lt;&lt; setw(<span class="nm">17</span>)
+             &lt;&lt; <span class="st">&quot;Group&quot;</span> &lt;&lt; endl;
+
+        <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; size; i++)
+        {
+            cout &lt;&lt; setw(<span class="nm">9</span>) &lt;&lt; list[i].faculty &lt;&lt; setw(<span class="nm">8</span>) &lt;&lt; list[i].course
+                 &lt;&lt; setw(<span class="nm">17</span>) &lt;&lt; list[i].group &lt;&lt; endl;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Запит 1. Рахує відмінників кожної пари &quot;факультет, курс&quot; (лічильник лежить у</span>
+<span class="cm">/// першому записі пари) і відбирає пари з найбільшою кількістю</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> findBestCourses()
+{
+    StudentRecord results[MAX_RECORDS]; <span class="cm">// перші записи знайдених пар</span>
+    <span class="kw">int</span> counts[MAX_RECORDS] = {};       <span class="cm">// лічильники відмінників</span>
+    <span class="kw">int</span> maxCount = <span class="nm">0</span>;                   <span class="cm">// найбільша кількість</span>
+    <span class="kw">int</span> first = <span class="nm">0</span>;                      <span class="cm">// перший запис пари</span>
+    <span class="kw">int</span> size = <span class="nm">0</span>;                       <span class="cm">// кількість знайдених пар</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;                          <span class="cm">// номер запису</span>
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; recordCount; i++)
+    {
+        <span class="kw">if</span> (countGrades(journal[i], TOP_GRADE) == EXAM_COUNT)
+        {
+            first = findFirst(i, <span class="kw">true</span>);
+            counts[first]++;
+            <span class="kw">if</span> (counts[first] &gt; maxCount)
+            {
+                maxCount = counts[first];
+            }
+        }
+    }
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; recordCount; i++)
+    {
+        <span class="kw">if</span> (maxCount &gt; <span class="nm">0</span> &amp;&amp; counts[i] == maxCount)
+        {
+            results[size] = journal[i];
+            strcpy(results[size].group, <span class="st">&quot;all&quot;</span>);
+            size++;
+        }
+    }
+
+    cout &lt;&lt; <span class="st">&quot;Maximum number of excellent students: &quot;</span> &lt;&lt; maxCount &lt;&lt; endl;
+    printGroups(results, size);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Запит 2. Відбирає відмінників заданого факультету в окремий масив і виводить</span>
+<span class="cm">/// його таблицею</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printExcellent()
+{
+    StudentRecord excellent[MAX_RECORDS]; <span class="cm">// знайдені відмінники</span>
+    <span class="kw">char</span> faculty[FIELD_SIZE] = <span class="st">&quot;&quot;</span>;        <span class="cm">// ключ пошуку</span>
+    <span class="kw">int</span> size = <span class="nm">0</span>;                         <span class="cm">// кількість знайдених</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;                            <span class="cm">// номер запису</span>
+
+    cout &lt;&lt; <span class="st">&quot;Enter faculty: &quot;</span>;
+    inputField(faculty);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; recordCount; i++)
+    {
+        <span class="kw">if</span> (strcmp(journal[i].faculty, faculty) == <span class="nm">0</span>
+            &amp;&amp; countGrades(journal[i], TOP_GRADE) == EXAM_COUNT)
+        {
+            excellent[size] = journal[i];
+            size++;
+        }
+    }
+
+    printJournal(excellent, size);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Запит 3. Позначає групи, де є двійка (ознака лежить у першому записі групи),</span>
+<span class="cm">/// і відбирає решту груп заданого курсу</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> findCleanGroups()
+{
+    StudentRecord results[MAX_RECORDS]; <span class="cm">// перші записи знайдених груп</span>
+    <span class="kw">bool</span> hasFail[MAX_RECORDS] = {};     <span class="cm">// чи є двійка в групі</span>
+    <span class="kw">int</span> course = <span class="nm">0</span>;                     <span class="cm">// ключ пошуку</span>
+    <span class="kw">int</span> size = <span class="nm">0</span>;                       <span class="cm">// кількість знайдених груп</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;                          <span class="cm">// номер запису</span>
+
+    cout &lt;&lt; <span class="st">&quot;Enter course (from 1 to &quot;</span> &lt;&lt; MAX_COURSE &lt;&lt; <span class="st">&quot;): &quot;</span>;
+    course = inputNumber(<span class="nm">1</span>, MAX_COURSE);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; recordCount; i++)
+    {
+        <span class="kw">if</span> (countGrades(journal[i], FAIL_GRADE) &gt; <span class="nm">0</span>)
+        {
+            hasFail[findFirst(i, <span class="kw">false</span>)] = <span class="kw">true</span>;
+        }
+    }
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; recordCount; i++)
+    {
+        <span class="kw">if</span> (journal[i].course == course &amp;&amp; findFirst(i, <span class="kw">false</span>) == i
+            &amp;&amp; !hasFail[i])
+        {
+            results[size] = journal[i];
+            size++;
+        }
+    }
+
+    printGroups(results, size);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Показує меню і викликає вибрані дії, поки не вибрано вихід</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> runMenu()
+{
+    <span class="kw">int</span> choice = -<span class="nm">1</span>; <span class="cm">// вибраний пункт меню</span>
+
+    srand(time(NULL));
+    <span class="kw">while</span> (choice != <span class="nm">0</span>)
+    {
+        cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;1. Enter array from keyboard&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;2. Generate array&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;3. Print array&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;4. Faculty and course with most excellent students&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;5. Excellent students of a faculty&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;6. Groups of a course without fail grades&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;0. Exit&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;Choose menu item: &quot;</span>;
+
+        cin &gt;&gt; choice;
+        <span class="kw">if</span> (cin.fail())
+        {
+            cin.clear();
+            choice = -<span class="nm">1</span>;
+        }
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>);
+
+        <span class="kw">switch</span> (choice)
+        {
+            <span class="kw">case</span> <span class="nm">1</span> : createJournal(<span class="kw">false</span>); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">2</span> : createJournal(<span class="kw">true</span>); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">3</span> : printJournal(journal, recordCount); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">4</span> : findBestCourses(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">5</span> : printExcellent(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">6</span> : findCleanGroups(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">0</span> : <span class="kw">break</span>;
+            <span class="kw">default</span> : cout &lt;&lt; <span class="st">&quot;No such menu item.&quot;</span> &lt;&lt; endl;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    runMenu();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<p>Перший запуск містить контрольний приклад із шести записів і всі три запити. Другий показує
+порожній масив і некоректне введення. У третьому масив згенеровано.</p>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="587" loading="lazy"></a><figcaption>Рисунок 16 - Контрольний приклад: шість записів з клавіатури, запити 1, 2 і 3</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="587" loading="lazy"></a><figcaption>Рисунок 17 - Некоректне введення: порожній масив, літери, числа поза межами, задовге поле</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="587" loading="lazy"></a><figcaption>Рисунок 18 - Генерація масиву із 16 записів і запити</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Контрольний приклад</h3>
+<p>Дані взято з першого запуску. Результат кожного запиту я спершу порахував вручну за таблицею
+записів, а потім порівняв із виводом програми.</p>
+<p class="tcap">Таблиця 2 - Контрольний приклад із шести записів</p>
+<div class="table-scroll"><table>
+<tr><th>Запит</th><th>Ручний підрахунок</th><th>Результат програми</th></tr>
+<tr><td>Найбільша кількість відмінників</td><td>FIT, курс 1: Melnyk, Bondar, тобто 2; LAW, курс 2:
+Savchuk, Rudenko, тобто 2</td><td>2, пари FIT 1 і LAW 2</td></tr>
+<tr><td>Відмінники факультету FIT</td><td>Melnyk, Bondar</td><td>Melnyk, Bondar</td></tr>
+<tr><td>Відмінники факультету ECO</td><td>таких записів немає</td><td>No records.</td></tr>
+<tr><td>Групи курсу 1 без двієчників</td><td>FIT-11, бо у FIT-12 Tkachuk має двійку</td><td>FIT-11</td></tr>
+<tr><td>Групи курсу 2 без двієчників</td><td>LAW-21, бо у LAW-22 Moroz має двійку</td><td>LAW-21</td></tr>
+<tr><td>Групи курсу 3 без двієчників</td><td>записів курсу 3 немає</td><td>No results.</td></tr>
+</table></div>
+<h3>Згенерований масив</h3>
+<p>Для 16 випадкових записів із третього запуску я теж порахував результат вручну.</p>
+<p class="tcap">Таблиця 3 - Ручна перевірка згенерованого масиву</p>
+<div class="table-scroll"><table>
+<tr><th>Запит</th><th>Ручний підрахунок</th><th>Результат програми</th></tr>
+<tr><td>Найбільша кількість відмінників</td><td>ECO, курс 2: записи 5, 8, 12, тобто 3; FIT, курс 2:
+записи 2, 3, тобто 2; ECO, курс 1: запис 4; LAW, курс 1: запис 11</td><td>3, пара ECO 2</td></tr>
+<tr><td>Відмінники факультету FIT</td><td>записи 2 і 3: Klymenko, Tkachuk</td><td>Klymenko, Tkachuk</td></tr>
+<tr><td>Групи курсу 1 без двієчників</td><td>ECO-12, ECO-11, FIT-12; у LAW-12 запис 9 має двійку</td>
+<td>ECO-12, ECO-11, FIT-12</td></tr>
+</table></div>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Написано програму з меню, яка створює масив структур про студентів з клавіатури або генерацією,
+виводить його таблицею і виконує три запити. У першому запиті пари "факультет, курс"
+заздалегідь не відомі, тому лічильник кожної пари стоїть на місці її першого запису.
+Контрольний приклад і згенерований масив дали ті самі результати, що й ручний підрахунок, у тому
+числі коли дві пари мають однаковий максимум.</p>
+</section>
+<p class="pager"><a href="../lab09/index.html">Попередня робота</a><a href="../lab11/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторна робота №9. Основи програмування</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+<a class="site" href="../index.html">Основи програмування</a>
+<nav class="wide" aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html" class="active" aria-current="page">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav>
+<details class="narrow"><summary>Меню</summary>
+<nav aria-label="Сторінки"><a href="../index.html">Головна</a><a href="../lab01/index.html">ЛР 1</a><a href="../lab02/index.html">ЛР 2</a><a href="../lab03/index.html">ЛР 3</a><a href="../lab04/index.html">ЛР 4</a><a href="../lab05/index.html">ЛР 5</a><a href="../lab06/index.html">ЛР 6</a><a href="../lab07/index.html">ЛР 7</a><a href="../lab08/index.html">ЛР 8</a><a href="../lab09/index.html" class="active" aria-current="page">ЛР 9</a><a href="../lab10/index.html">ЛР 10</a><a href="../lab11/index.html">ЛР 11</a></nav></details>
+</header>
+<div class="banner"><h1>Лабораторна робота №9</h1><p>Обробка рядків</p></div>
+<main class="content" id="content">
+<p class="info">Варіант 4. Виконав Чумак Кирил, група ІПЗ-11(3). Викладач Ковалюк Тетяна Володимирівна.</p>
+<nav class="toc" aria-label="Зміст"><ol><li><a href="#goal">Мета роботи</a></li><li><a href="#task">Умови задач</a></li><li><a href="#analysis">Аналіз задач</a></li><li><a href="#scheme">Блок-схеми алгоритмів</a></li><li><a href="#code">Тексти програм</a></li><li><a href="#results">Результати виконання</a></li><li><a href="#check">Аналіз достовірності результатів</a></li><li><a href="#conclusion">Висновки</a></li></ol></nav>
+<section id="goal"><h2>Мета роботи</h2>
+<ul>
+<li>Вивчити подання рядків у вигляді масивів символів і функції обробки рядків.</li>
+<li>Опанувати введення рядків із перевіркою та роботу з текстом як масивом рядків.</li>
+<li>Навчитися розробляти алгоритми та програми обробки рядків без бібліотеки STL.</li>
+</ul>
+</section>
+<section id="task"><h2>Умови задач</h2>
+<p>Варіант 4. У таблиці методички 24 варіанти, тому для номера 28 у списку групи маємо
+28 - 24 = 4. Робота має два завдання. Заборонено використовувати бібліотеку STL, методи класу
+<code>string</code>, ітератори й контейнери. Дозволено функції заголовних файлів
+<code>string.h</code>, <code>ctype.h</code>, <code>stdlib.h</code>.</p>
+<h3>Завдання 1, варіант 4</h3>
+<p>Увести з клавіатури рядок алфавітних, цифрових і символів знаків арифметичних дій. Передбачити
+меню для виконання таких дій:</p>
+<ul>
+<li>з рядка видалити всі алфавітні символи, залишивши усі цифрові та знакові '+', '-', '*', '/'
+символи;</li>
+<li>перевести цифрові символи у числові типи та вивести числа на екран. Числа можуть бути
+n-значними, якщо декілька цифрових символів йдуть поспіль;</li>
+<li>над отриманими числами виконати арифметичні дії відповідно до операцій, заданих символами '+',
+'-', '*', '/' в порядку їх розташування в рядку. У випадку, якщо кількість отриманих чисел менша за
+кількість арифметичних операцій, додавати та віднімати число 0, множити та ділити на 1.</li>
+</ul>
+<p>Вивести на екран усі перетворення рядка, результат у вигляді операндів та арифметичних операцій
+та результат арифметичного виразу. Контрольний тест: уведений рядок
+"asd123*45asas -rt56+hujk/qwe", результат 123*45-56+0/1=5479.</p>
+<h3>Завдання 2, варіант 4</h3>
+<p>Увести текст з n рядків з малих латинських літер. Необхідно стиснути текст, замінивши
+послідовності символів тексту одною великою латинською буквою. Для стиснення тексту ввести з
+клавіатури шифр у вигляді &lt;велика латинська буква&gt;&lt;послідовність малих латинських
+літер&gt;. Різним замінюваним послідовностям символів можуть відповідати однакові великі латинські
+букви. Якщо в тексті зустрічаються великі латинські літери, то перед стисненням тексту перевести їх
+у нижній регістр. Необхідно стиснути текст так, щоб його довжина була мінімальна.</p>
+</section>
+<section id="analysis"><h2>Аналіз задач</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Для розв'язання задачі потрібно ввести один рядок довжиною до 80 символів. Програма копіює з нього
+цифри й знаки + - * / у другий рядок. Усі інші символи зникають, зокрема пропуски. Пункти меню 2 і 3
+спершу роблять таке саме очищення, тому їх можна вибирати в будь-якому порядку. Цифри, між якими
+стояли літери, після очищення йдуть поспіль і дають одне число.</p>
+<p>Число читається функцією <code>atof</code> з позиції його першої цифри. Після цього позиція
+переходить на символ за останньою цифрою.</p>
+<p>Дії виконуються зліва направо, без пріоритету. Якщо після знака немає числа, для + і - береться 0,
+а для * і / береться 1. За цим самим правилом обробляються два знаки поспіль і рядок, який
+починається зі знака. У такому рядку першим числом вважається відсутнє, тому перед мінусом стоїть 0,
+а перед діленням 1.</p>
+<p>Ділення дійсне, тому результат може бути дробовим. Для чисел використано <code>double</code>, бо
+<code>float</code> зберігає близько 7 значущих цифр, а добуток може мати більше. Якщо дільник
+дорівнює 0, програма виводить вираз і повідомлення про помилку без результату. Якщо результат
+дорівнює нулю, у нього прибирається знак мінус, щоб не вивести -0.</p>
+<p>Задовгий рядок вводиться повторно. Якщо в меню введено літери або число поза межами, програма просить
+ввести номер ще раз. Якщо в рядку немає цифр і знаків, пункт 3 повідомляє, що обчислювати нічого.</p>
+<p class="tcap">Таблиця 1 - Функції програми завдання 1</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputText</code></td><td>вводить рядок із перевіркою довжини</td></tr>
+<tr><td><code>removeLetters</code></td><td>лишає цифри й знаки дій, виводить обидва рядки</td></tr>
+<tr><td><code>readNumber</code></td><td>перетворює цифри з поточної позиції на число</td></tr>
+<tr><td><code>printNumbers</code></td><td>виділяє всі числа й виводить їх</td></tr>
+<tr><td><code>readOperand</code></td><td>читає число або підставляє 0 чи 1 замість відсутнього</td></tr>
+<tr><td><code>applySign</code></td><td>виконує одну дію над результатом</td></tr>
+<tr><td><code>calculateExpression</code></td><td>виконує всі дії, виводить вираз і результат</td></tr>
+<tr><td><code>runMenu</code></td><td>виводить меню й виконує вибрані пункти</td></tr>
+<tr><td><code>main</code></td><td>викликає функції по черзі</td></tr>
+</table></div>
+<h3>Завдання 2, варіант 4</h3>
+<p>Текст складається з 1-10 рядків до 80 символів. Рядок має містити лише латинські літери, тому
+порожній рядок, цифра чи пропуск дають повідомлення і повторне введення. Шифр має 1-10 рядків виду
+<code>Aab</code>: велика літера, а за нею хоча б одна мала. Однакова велика літера в різних рядках
+шифру дозволена умовою. Великі літери тексту переводяться в малі функцією <code>tolower</code>.</p>
+<p>Заміна послідовностей зліва направо не завжди дає найменшу довжину. Якщо шифр складається з
+<code>Aab</code> і <code>Bbcd</code>, то рядок abcd після такої заміни стає Acd, а найкоротший запис
+aB. Тому для кожного рядка програма заповнює масив B, де B<sub>i</sub> є найменшою довжиною запису
+перших i символів:</p>
+<div class="formula">B<sub>0</sub> = 0, B<sub>i</sub> = min(B<sub>i-1</sub> + 1,
+B<sub>i-L</sub> + 1)</div>
+<p>Тут L є довжиною послідовності шифру, яка закінчується в позиції i. Перший доданок означає, що
+символ лишається без заміни. Перевіряються всі рядки шифру, а порівняння з текстом робить функція
+<code>strncmp</code>. Масив B у коді називається <code>best</code>.</p>
+<p>Поруч заповнюється масив <code>usedCipher</code>, де для кожної позиції записано номер вибраного
+рядка шифру або -1. За ним стиснутий рядок відновлюється від кінця до початку. Кожен рядок тексту
+стискається окремо, тому довжина всього тексту є сумою найменших довжин рядків. За однакової довжини
+лишається перший знайдений варіант. Шифр з однією малою літерою довжину не зменшує, тому така літера
+в тексті не замінюється.</p>
+<p class="tcap">Таблиця 2 - Функції програми завдання 2</p>
+<div class="table-scroll"><table>
+<tr><th>Функція</th><th>Що робить</th></tr>
+<tr><td><code>printTitle</code></td><td>виводить назву роботи, автора й умову завдання</td></tr>
+<tr><td><code>inputNumber</code></td><td>вводить ціле число в заданих межах</td></tr>
+<tr><td><code>inputLine</code></td><td>вводить один рядок із перевіркою довжини</td></tr>
+<tr><td><code>isLatinLine</code></td><td>перевіряє, що рядок складається з латинських літер</td></tr>
+<tr><td><code>isCipherCorrect</code></td><td>перевіряє вигляд рядка шифру</td></tr>
+<tr><td><code>inputText</code></td><td>вводить текст, переводить його в нижній регістр і виводить</td></tr>
+<tr><td><code>inputCipher</code></td><td>вводить рядки шифру</td></tr>
+<tr><td><code>findBestLengths</code></td><td>заповнює масиви <code>best</code> і <code>usedCipher</code></td></tr>
+<tr><td><code>restoreLine</code></td><td>відновлює стиснутий рядок</td></tr>
+<tr><td><code>compressText</code></td><td>стискає всі рядки, виводить текст і довжини</td></tr>
+<tr><td><code>main</code></td><td>викликає функції по черзі</td></tr>
+</table></div>
+<p>Джерела: Ковалюк Т.В. Алгоритмізація та програмування, 2024; Ковалюк Т.В., Петрівський В.Я.
+Гарний стиль програмування мовами C, C++, C#, 2025; Кормен Т. та ін. Вступ до алгоритмів.</p>
+</section>
+<section id="scheme"><h2>Блок-схеми алгоритмів</h2>
+<h3>Завдання 1, варіант 4</h3>
+<figure class="fc"><a href="img/task1-fc-printTitle.svg"><img src="img/task1-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 1 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-inputText.svg"><img src="img/task1-fc-inputText.svg" alt="" loading="lazy"></a><figcaption>Рисунок 2 - Блок-схема функції <code>inputText</code> (введення рядка з перевіркою довжини)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-removeLetters.svg"><img src="img/task1-fc-removeLetters.svg" alt="" loading="lazy"></a><figcaption>Рисунок 3 - Блок-схема функції <code>removeLetters</code> (видалення з рядка всього, крім цифр і знаків дій)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-readNumber.svg"><img src="img/task1-fc-readNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 4 - Блок-схема функції <code>readNumber</code> (перетворення цифр із поточної позиції на число)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-printNumbers.svg"><img src="img/task1-fc-printNumbers.svg" alt="" loading="lazy"></a><figcaption>Рисунок 5 - Блок-схема функції <code>printNumbers</code> (виділення чисел із рядка та їх виведення)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-readOperand.svg"><img src="img/task1-fc-readOperand.svg" alt="" loading="lazy"></a><figcaption>Рисунок 6 - Блок-схема функції <code>readOperand</code> (читання операнда або заміна відсутнього числа)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-applySign.svg"><img src="img/task1-fc-applySign.svg" alt="" loading="lazy"></a><figcaption>Рисунок 7 - Блок-схема функції <code>applySign</code> (виконання однієї дії над результатом)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-calculateExpression.svg"><img src="img/task1-fc-calculateExpression.svg" alt="" loading="lazy"></a><figcaption>Рисунок 8 - Блок-схема функції <code>calculateExpression</code> (обчислення виразу зліва направо)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-runMenu.svg"><img src="img/task1-fc-runMenu.svg" alt="" loading="lazy"></a><figcaption>Рисунок 9 - Блок-схема функції <code>runMenu</code> (меню дій над рядком)</figcaption></figure>
+<figure class="fc"><a href="img/task1-fc-main.svg"><img src="img/task1-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 10 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+<h3>Завдання 2, варіант 4</h3>
+<figure class="fc"><a href="img/task2-fc-printTitle.svg"><img src="img/task2-fc-printTitle.svg" alt="" loading="lazy"></a><figcaption>Рисунок 11 - Блок-схема функції <code>printTitle</code> (виведення назви роботи, автора й умови завдання)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputNumber.svg"><img src="img/task2-fc-inputNumber.svg" alt="" loading="lazy"></a><figcaption>Рисунок 12 - Блок-схема функції <code>inputNumber</code> (введення цілого числа в заданих межах)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputLine.svg"><img src="img/task2-fc-inputLine.svg" alt="" loading="lazy"></a><figcaption>Рисунок 13 - Блок-схема функції <code>inputLine</code> (введення одного рядка з перевіркою довжини)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-isLatinLine.svg"><img src="img/task2-fc-isLatinLine.svg" alt="" loading="lazy"></a><figcaption>Рисунок 14 - Блок-схема функції <code>isLatinLine</code> (перевірка, що рядок складається з латинських літер)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-isCipherCorrect.svg"><img src="img/task2-fc-isCipherCorrect.svg" alt="" loading="lazy"></a><figcaption>Рисунок 15 - Блок-схема функції <code>isCipherCorrect</code> (перевірка рядка шифру)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputText.svg"><img src="img/task2-fc-inputText.svg" alt="" loading="lazy"></a><figcaption>Рисунок 16 - Блок-схема функції <code>inputText</code> (введення тексту й переведення в нижній регістр)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-inputCipher.svg"><img src="img/task2-fc-inputCipher.svg" alt="" loading="lazy"></a><figcaption>Рисунок 17 - Блок-схема функції <code>inputCipher</code> (введення рядків шифру)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-findBestLengths.svg"><img src="img/task2-fc-findBestLengths.svg" alt="" loading="lazy"></a><figcaption>Рисунок 18 - Блок-схема функції <code>findBestLengths</code> (пошук найменших довжин Bᵢ для одного рядка)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-restoreLine.svg"><img src="img/task2-fc-restoreLine.svg" alt="" loading="lazy"></a><figcaption>Рисунок 19 - Блок-схема функції <code>restoreLine</code> (відновлення стиснутого рядка від кінця до початку)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-compressText.svg"><img src="img/task2-fc-compressText.svg" alt="" loading="lazy"></a><figcaption>Рисунок 20 - Блок-схема функції <code>compressText</code> (стиснення тексту й виведення довжин)</figcaption></figure>
+<figure class="fc"><a href="img/task2-fc-main.svg"><img src="img/task2-fc-main.svg" alt="" loading="lazy"></a><figcaption>Рисунок 21 - Блок-схема функції <code>main</code> (головна функція)</figcaption></figure>
+</section>
+<section id="code"><h2>Тексти програм</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p class="file">Файл <a href="task1.cpp" download>task1.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №9, завдання 1, варіант 4. Видалити з рядка літери,</span>
+<span class="cm">/// перетворити цифри в числа і виконати арифметичні дії в порядку знаків.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task1.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cctype&gt;</span>
+<span class="pp">#include &lt;cstdlib&gt;</span>
+<span class="pp">#include &lt;cstring&gt;</span>
+<span class="pp">#include &lt;iomanip&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_LENGTH = <span class="nm">81</span>; <span class="cm">// розмір рядка разом із символом кінця</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">char</span> text[MAX_LENGTH] = <span class="st">&quot;&quot;</span>;      <span class="cm">// введений рядок</span>
+<span class="kw">char</span> cleanText[MAX_LENGTH] = <span class="st">&quot;&quot;</span>; <span class="cm">// рядок лише з цифр і знаків дій</span>
+<span class="kw">int</span> position = <span class="nm">0</span>;                <span class="cm">// поточна позиція в cleanText</span>
+<span class="kw">double</span> total = <span class="nm">0</span>;                <span class="cm">// результат; double, бо у float 7 цифр</span>
+<span class="kw">bool</span> isDivisionByZero = <span class="kw">false</span>;   <span class="cm">// чи було ділення на нуль</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи й автора</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 9. Task 1. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter a string of letters, digits and signs + - * /.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Remove the letters, convert the digits to numbers and&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;perform the operations from left to right. If a number is&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;missing, use 0 for + and -, and 1 for * and /.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить рядок. Якщо рядок задовгий, введення повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputText()
+{
+    cout &lt;&lt; <span class="st">&quot;Enter string (up to 80 characters): &quot;</span>;
+    cin.getline(text, MAX_LENGTH);
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити залишок рядка</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter string of up to 80 characters: &quot;</span>;
+        cin.getline(text, MAX_LENGTH);
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Копіює в cleanText лише цифри й знаки дій, а потім виводить обидва рядки</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> removeLetters()
+{
+    <span class="kw">int</span> length = strlen(text);
+    <span class="kw">int</span> cleanLength = <span class="nm">0</span>;
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+    <span class="kw">char</span> symbol = <span class="st">&#x27; &#x27;</span>;
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; length; i++)
+    {
+        symbol = text[i];
+        <span class="kw">if</span> (isdigit((<span class="kw">unsigned</span> <span class="kw">char</span>)symbol) || symbol == <span class="st">&#x27;+&#x27;</span> || symbol == <span class="st">&#x27;-&#x27;</span>
+            || symbol == <span class="st">&#x27;*&#x27;</span> || symbol == <span class="st">&#x27;/&#x27;</span>)
+        {
+            cleanText[cleanLength] = symbol;
+            cleanLength++;
+        }
+    }
+    cleanText[cleanLength] = <span class="st">&#x27;\0&#x27;</span>;
+
+    cout &lt;&lt; <span class="st">&quot;Source string: &quot;</span> &lt;&lt; text &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Without letters: &quot;</span> &lt;&lt; cleanText &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Перетворює цифри з поточної позиції на число і переходить на перший символ</span>
+<span class="cm">/// після них</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;прочитане число&lt;/returns&gt;</span>
+<span class="kw">double</span> readNumber()
+{
+    <span class="kw">double</span> number = atof(&amp;cleanText[position]);
+
+    <span class="kw">while</span> (isdigit(cleanText[position]))
+    {
+        position++;
+    }
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Чистить рядок, виділяє з нього всі числа й виводить їх</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printNumbers()
+{
+    <span class="kw">int</span> numberCount = <span class="nm">0</span>;
+
+    removeLetters();
+    position = <span class="nm">0</span>;
+
+    cout &lt;&lt; <span class="st">&quot;Numbers:&quot;</span>;
+    <span class="kw">while</span> (cleanText[position] != <span class="st">&#x27;\0&#x27;</span>)
+    {
+        <span class="kw">if</span> (isdigit(cleanText[position]))
+        {
+            cout &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; readNumber();
+            numberCount++;
+        }
+        <span class="kw">else</span>
+        {
+            position++;
+        }
+    }
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Count of numbers: &quot;</span> &lt;&lt; numberCount &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Читає операнд. Якщо в поточній позиції немає числа, операнд дорівнює 0 для +</span>
+<span class="cm">/// і - та 1 для * і /</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;sign&quot;&gt;знак дії, для якої потрібен операнд&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;операнд&lt;/returns&gt;</span>
+<span class="kw">double</span> readOperand(<span class="kw">char</span> sign)
+{
+    <span class="kw">double</span> operand = <span class="nm">0</span>;
+
+    <span class="kw">if</span> (isdigit(cleanText[position]))
+    {
+        operand = readNumber();
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (sign == <span class="st">&#x27;*&#x27;</span> || sign == <span class="st">&#x27;/&#x27;</span>)
+    {
+        operand = <span class="nm">1</span>;
+    }
+    <span class="kw">return</span> operand;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виконує одну дію над результатом. Ділення на нуль не виконується, а лише</span>
+<span class="cm">/// запам&#x27;ятовується</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;sign&quot;&gt;знак дії&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;operand&quot;&gt;другий операнд дії&lt;/param&gt;</span>
+<span class="kw">void</span> applySign(<span class="kw">char</span> sign, <span class="kw">double</span> operand)
+{
+    <span class="kw">if</span> (sign == <span class="st">&#x27;+&#x27;</span>)
+    {
+        total = total + operand;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (sign == <span class="st">&#x27;-&#x27;</span>)
+    {
+        total = total - operand;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (sign == <span class="st">&#x27;*&#x27;</span>)
+    {
+        total = total * operand;
+    }
+    <span class="kw">else</span> <span class="kw">if</span> (operand == <span class="nm">0</span>)
+    {
+        isDivisionByZero = <span class="kw">true</span>;
+    }
+    <span class="kw">else</span>
+    {
+        total = total / operand;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Чистить рядок, виконує дії зліва направо і виводить вираз разом із</span>
+<span class="cm">/// результатом</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> calculateExpression()
+{
+    <span class="kw">double</span> operand = <span class="nm">0</span>;
+    <span class="kw">char</span> sign = <span class="st">&#x27; &#x27;</span>;
+
+    removeLetters();
+    position = <span class="nm">0</span>;
+    isDivisionByZero = <span class="kw">false</span>;
+
+    <span class="kw">if</span> (cleanText[<span class="nm">0</span>] == <span class="st">&#x27;\0&#x27;</span>)
+    {
+        cout &lt;&lt; <span class="st">&quot;Nothing to calculate: no digits or signs.&quot;</span> &lt;&lt; endl;
+    }
+    <span class="kw">else</span>
+    {
+        total = readOperand(cleanText[<span class="nm">0</span>]);
+        cout &lt;&lt; <span class="st">&quot;Expression: &quot;</span> &lt;&lt; total;
+
+        <span class="kw">while</span> (cleanText[position] != <span class="st">&#x27;\0&#x27;</span>)
+        {
+            sign = cleanText[position];
+            position++;
+            operand = readOperand(sign);
+            cout &lt;&lt; sign &lt;&lt; operand;
+            applySign(sign, operand);
+        }
+
+        <span class="kw">if</span> (total == <span class="nm">0</span>)
+        {
+            total = <span class="nm">0</span>; <span class="cm">// прибрати знак мінус у нуля, щоб не вивести -0</span>
+        }
+
+        <span class="kw">if</span> (isDivisionByZero)
+        {
+            cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Error! Division by zero.&quot;</span> &lt;&lt; endl;
+        }
+        <span class="kw">else</span>
+        {
+            cout &lt;&lt; <span class="st">&quot;=&quot;</span> &lt;&lt; total &lt;&lt; endl;
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить меню і виконує вибрані пункти до вибору виходу</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> runMenu()
+{
+    <span class="kw">int</span> choice = <span class="nm">0</span>;
+
+    cout &lt;&lt; setprecision(<span class="nm">15</span>); <span class="cm">// щоб довгі числа виводились усіма цифрами</span>
+
+    <span class="kw">do</span>
+    {
+        cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Menu:&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;1 - remove letters&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;2 - convert digits to numbers&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;3 - calculate expression&quot;</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="st">&quot;0 - exit&quot;</span> &lt;&lt; endl;
+
+        cout &lt;&lt; <span class="st">&quot;Enter your choice (from 0 to 3): &quot;</span>;
+        cin &gt;&gt; choice;
+        <span class="kw">while</span> (cin.fail() || choice &lt; <span class="nm">0</span> || choice &gt; <span class="nm">3</span>)
+        {
+            cin.clear();            <span class="cm">// скинути помилку введення</span>
+            cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+            cout &lt;&lt; <span class="st">&quot;Error! Enter choice from 0 to 3: &quot;</span>;
+            cin &gt;&gt; choice;
+        }
+
+        <span class="kw">switch</span> (choice)
+        {
+            <span class="kw">case</span> <span class="nm">1</span> : removeLetters(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">2</span> : printNumbers(); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nm">3</span> : calculateExpression(); <span class="kw">break</span>;
+            <span class="kw">default</span> : cout &lt;&lt; <span class="st">&quot;End of work.&quot;</span> &lt;&lt; endl; <span class="kw">break</span>;
+        }
+    } <span class="kw">while</span> (choice != <span class="nm">0</span>);
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputText();
+    runMenu();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+<h3>Завдання 2, варіант 4</h3>
+<p class="file">Файл <a href="task2.cpp" download>task2.cpp</a></p>
+<pre><code><span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Лабораторна робота №9, завдання 2, варіант 4. Стиснути текст за шифром так,</span>
+<span class="cm">/// щоб довжина стиснутого тексту була найменшою.</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;remarks&gt;</span>
+<span class="cm">/// Ім&#x27;я файлу: task2.cpp</span>
+<span class="cm">/// Автор: Чумак Кирил, гр. ІПЗ-11(3)</span>
+<span class="cm">/// Номер версії модуля: version 1</span>
+<span class="cm">/// &lt;/remarks&gt;</span>
+
+<span class="pp">#include &lt;cctype&gt;</span>
+<span class="pp">#include &lt;cstring&gt;</span>
+<span class="pp">#include &lt;iostream&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="cm">// Константи</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_LINES = <span class="nm">10</span>;   <span class="cm">// найбільша кількість рядків тексту</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_CIPHERS = <span class="nm">10</span>; <span class="cm">// найбільша кількість рядків шифру</span>
+<span class="kw">const</span> <span class="kw">int</span> MAX_LENGTH = <span class="nm">81</span>;  <span class="cm">// розмір рядка разом із символом кінця</span>
+
+<span class="cm">// Глобальні змінні</span>
+<span class="kw">char</span> text[MAX_LINES][MAX_LENGTH] = {<span class="st">&quot;&quot;</span>};       <span class="cm">// текст малими літерами</span>
+<span class="kw">char</span> cipher[MAX_CIPHERS][MAX_LENGTH] = {<span class="st">&quot;&quot;</span>};   <span class="cm">// рядки шифру</span>
+<span class="kw">char</span> compressed[MAX_LINES][MAX_LENGTH] = {<span class="st">&quot;&quot;</span>}; <span class="cm">// стиснутий текст</span>
+<span class="kw">int</span> best[MAX_LENGTH] = {<span class="nm">0</span>};       <span class="cm">// найменша довжина перших i символів</span>
+<span class="kw">int</span> usedCipher[MAX_LENGTH] = {<span class="nm">0</span>}; <span class="cm">// номер шифру в позиції i або -1</span>
+<span class="kw">int</span> lineCount = <span class="nm">0</span>;                <span class="cm">// кількість рядків тексту</span>
+<span class="kw">int</span> cipherCount = <span class="nm">0</span>;              <span class="cm">// кількість рядків шифру</span>
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Виводить назву роботи й автора</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> printTitle()
+{
+    cout &lt;&lt; <span class="st">&quot;Lab work 9. Task 2. Variant 4.&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Author: Kyryl Chumak, group IPZ-11(3)&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+
+    cout &lt;&lt; <span class="st">&quot;Enter a text of n lines and a cipher: lines like Aab,&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;where a capital letter stands for a sequence of small&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;letters. Replace the sequences with the capital letters&quot;</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;so that the text is as short as possible.&quot;</span> &lt;&lt; endl &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить ціле число в заданих межах і пропускає кінець рядка. Підказку</span>
+<span class="cm">/// виводить той, хто її викликає</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;minValue&quot;&gt;нижня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;param name=&quot;maxValue&quot;&gt;верхня межа&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;введене число&lt;/returns&gt;</span>
+<span class="kw">int</span> inputNumber(<span class="kw">int</span> minValue, <span class="kw">int</span> maxValue)
+{
+    <span class="kw">int</span> number = <span class="nm">0</span>;
+
+    cin &gt;&gt; number;
+    <span class="kw">while</span> (cin.fail() || number &lt; minValue || number &gt; maxValue)
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити неправильний рядок</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter number from &quot;</span> &lt;&lt; minValue &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; maxValue
+             &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        cin &gt;&gt; number;
+    }
+    cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// кінець рядка не потрапить у cin.getline</span>
+
+    <span class="kw">return</span> number;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить один рядок. Якщо він задовгий, введення повторюється</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;line&quot;&gt;рядок, у який записується введення&lt;/param&gt;</span>
+<span class="kw">void</span> inputLine(<span class="kw">char</span> line[])
+{
+    cin.getline(line, MAX_LENGTH);
+    <span class="kw">while</span> (cin.fail())
+    {
+        cin.clear();            <span class="cm">// скинути помилку введення</span>
+        cin.ignore(<span class="nm">1000</span>, <span class="st">&#x27;\n&#x27;</span>); <span class="cm">// і пропустити залишок рядка</span>
+        cout &lt;&lt; <span class="st">&quot;Error! Enter up to 80 characters: &quot;</span>;
+        cin.getline(line, MAX_LENGTH);
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Перевіряє, що рядок не порожній і містить лише латинські літери</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;line&quot;&gt;рядок, який перевіряється&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;true, якщо рядок правильний&lt;/returns&gt;</span>
+<span class="kw">bool</span> isLatinLine(<span class="kw">char</span> line[])
+{
+    <span class="kw">bool</span> isCorrect = <span class="kw">true</span>;
+    <span class="kw">int</span> length = strlen(line);
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+
+    <span class="kw">if</span> (length == <span class="nm">0</span>)
+    {
+        isCorrect = <span class="kw">false</span>;
+    }
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; length; i++)
+    {
+        <span class="kw">if</span> (!isalpha((<span class="kw">unsigned</span> <span class="kw">char</span>)line[i]))
+        {
+            isCorrect = <span class="kw">false</span>;
+        }
+    }
+    <span class="kw">return</span> isCorrect;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Перевіряє рядок шифру: велика літера, а за нею хоча б одна мала</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;line&quot;&gt;рядок, який перевіряється&lt;/param&gt;</span>
+<span class="cm">/// &lt;returns&gt;true, якщо рядок правильний&lt;/returns&gt;</span>
+<span class="kw">bool</span> isCipherCorrect(<span class="kw">char</span> line[])
+{
+    <span class="kw">bool</span> isCorrect = <span class="kw">true</span>;
+    <span class="kw">int</span> length = strlen(line);
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+
+    <span class="kw">if</span> (length &lt; <span class="nm">2</span> || !isupper((<span class="kw">unsigned</span> <span class="kw">char</span>)line[<span class="nm">0</span>]))
+    {
+        isCorrect = <span class="kw">false</span>;
+    }
+
+    <span class="kw">for</span> (i = <span class="nm">1</span>; i &lt; length; i++)
+    {
+        <span class="kw">if</span> (!islower((<span class="kw">unsigned</span> <span class="kw">char</span>)line[i]))
+        {
+            isCorrect = <span class="kw">false</span>;
+        }
+    }
+    <span class="kw">return</span> isCorrect;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить текст, переводить його в нижній регістр і виводить</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputText()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+    <span class="kw">int</span> j = <span class="nm">0</span>;
+
+    cout &lt;&lt; <span class="st">&quot;Enter number of lines (from 1 to 10): &quot;</span>;
+    lineCount = inputNumber(<span class="nm">1</span>, MAX_LINES);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; lineCount; i++)
+    {
+        cout &lt;&lt; <span class="st">&quot;Enter line &quot;</span> &lt;&lt; i + <span class="nm">1</span> &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        inputLine(text[i]);
+        <span class="kw">while</span> (!isLatinLine(text[i]))
+        {
+            cout &lt;&lt; <span class="st">&quot;Error! Use only Latin letters: &quot;</span>;
+            inputLine(text[i]);
+        }
+
+        <span class="kw">for</span> (j = <span class="nm">0</span>; text[i][j] != <span class="st">&#x27;\0&#x27;</span>; j++)
+        {
+            text[i][j] = tolower(text[i][j]);
+        }
+    }
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Text in lower case:&quot;</span> &lt;&lt; endl;
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; lineCount; i++)
+    {
+        cout &lt;&lt; text[i] &lt;&lt; endl;
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Вводить рядки шифру виду Aab</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> inputCipher()
+{
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Enter number of cipher lines (from 1 to 10): &quot;</span>;
+    cipherCount = inputNumber(<span class="nm">1</span>, MAX_CIPHERS);
+
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; cipherCount; i++)
+    {
+        cout &lt;&lt; <span class="st">&quot;Enter cipher &quot;</span> &lt;&lt; i + <span class="nm">1</span> &lt;&lt; <span class="st">&quot;: &quot;</span>;
+        inputLine(cipher[i]);
+        <span class="kw">while</span> (!isCipherCorrect(cipher[i]))
+        {
+            cout &lt;&lt; <span class="st">&quot;Error! Use a capital letter and small letters: &quot;</span>;
+            inputLine(cipher[i]);
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Заповнює масив best для одного рядка і запам&#x27;ятовує в usedCipher, який шифр</span>
+<span class="cm">/// дав найменшу довжину</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;row&quot;&gt;номер рядка тексту&lt;/param&gt;</span>
+<span class="kw">void</span> findBestLengths(<span class="kw">int</span> row)
+{
+    <span class="kw">int</span> length = strlen(text[row]);
+    <span class="kw">int</span> size = <span class="nm">0</span>;  <span class="cm">// довжина послідовності шифру</span>
+    <span class="kw">int</span> start = <span class="nm">0</span>; <span class="cm">// початок цієї послідовності в тексті</span>
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+    <span class="kw">int</span> j = <span class="nm">0</span>;
+
+    best[<span class="nm">0</span>] = <span class="nm">0</span>;
+    <span class="kw">for</span> (i = <span class="nm">1</span>; i &lt;= length; i++)
+    {
+        best[i] = best[i - <span class="nm">1</span>] + <span class="nm">1</span>; <span class="cm">// символ лишається без заміни</span>
+        usedCipher[i] = -<span class="nm">1</span>;
+
+        <span class="kw">for</span> (j = <span class="nm">0</span>; j &lt; cipherCount; j++)
+        {
+            size = strlen(cipher[j]) - <span class="nm">1</span>;
+            start = i - size;
+
+            <span class="kw">if</span> (start &gt;= <span class="nm">0</span> &amp;&amp; best[start] + <span class="nm">1</span> &lt; best[i])
+            {
+                <span class="kw">if</span> (strncmp(&amp;text[row][start], &amp;cipher[j][<span class="nm">1</span>], size) == <span class="nm">0</span>)
+                {
+                    best[i] = best[start] + <span class="nm">1</span>;
+                    usedCipher[i] = j;
+                }
+            }
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Відновлює стиснутий рядок за масивом usedCipher, проходячи текст від кінця</span>
+<span class="cm">/// до початку</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;param name=&quot;row&quot;&gt;номер рядка тексту&lt;/param&gt;</span>
+<span class="kw">void</span> restoreLine(<span class="kw">int</span> row)
+{
+    <span class="kw">int</span> i = strlen(text[row]); <span class="cm">// позиція в тексті</span>
+    <span class="kw">int</span> place = best[i];       <span class="cm">// позиція в стиснутому рядку</span>
+    <span class="kw">int</span> cipherIndex = <span class="nm">0</span>;
+
+    compressed[row][place] = <span class="st">&#x27;\0&#x27;</span>;
+    <span class="kw">while</span> (i &gt; <span class="nm">0</span>)
+    {
+        place--;
+        cipherIndex = usedCipher[i];
+
+        <span class="kw">if</span> (cipherIndex == -<span class="nm">1</span>)
+        {
+            compressed[row][place] = text[row][i - <span class="nm">1</span>];
+            i--;
+        }
+        <span class="kw">else</span>
+        {
+            compressed[row][place] = cipher[cipherIndex][<span class="nm">0</span>];
+            i = i - (strlen(cipher[cipherIndex]) - <span class="nm">1</span>);
+        }
+    }
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Стискає кожен рядок окремо, виводить стиснутий текст і довжини тексту до</span>
+<span class="cm">/// стиснення та після нього</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="kw">void</span> compressText()
+{
+    <span class="kw">int</span> lengthBefore = <span class="nm">0</span>;
+    <span class="kw">int</span> lengthAfter = <span class="nm">0</span>;
+    <span class="kw">int</span> i = <span class="nm">0</span>;
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Compressed text:&quot;</span> &lt;&lt; endl;
+    <span class="kw">for</span> (i = <span class="nm">0</span>; i &lt; lineCount; i++)
+    {
+        findBestLengths(i);
+        restoreLine(i);
+        cout &lt;&lt; compressed[i] &lt;&lt; endl;
+
+        lengthBefore = lengthBefore + strlen(text[i]);
+        lengthAfter = lengthAfter + strlen(compressed[i]);
+    }
+
+    cout &lt;&lt; endl &lt;&lt; <span class="st">&quot;Length before compression: &quot;</span> &lt;&lt; lengthBefore &lt;&lt; endl;
+    cout &lt;&lt; <span class="st">&quot;Length after compression: &quot;</span> &lt;&lt; lengthAfter &lt;&lt; endl;
+}
+
+<span class="cm">/// &lt;summary&gt;</span>
+<span class="cm">/// Головна функція програми</span>
+<span class="cm">/// &lt;/summary&gt;</span>
+<span class="cm">/// &lt;returns&gt;0 після завершення роботи&lt;/returns&gt;</span>
+<span class="kw">int</span> main()
+{
+    printTitle();
+    inputText();
+    inputCipher();
+    compressText();
+    <span class="kw">return</span> <span class="nm">0</span>;
+}
+</code></pre>
+</section>
+<section id="results"><h2>Результати виконання</h2>
+<h3>Завдання 1, варіант 4</h3>
+<figure class="shot"><a href="img/task1-run-1.png"><img src="img/task1-run-1.png" alt="" width="606" loading="lazy"></a><figcaption>Рисунок 22 - Контрольний тест методички, усі пункти меню</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-2.png"><img src="img/task1-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 23 - Рядок починається зі знака, два знаки поспіль, дробовий результат</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-3.png"><img src="img/task1-run-3.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 24 - Ділення на нуль, рядок починається з мінуса, некоректний вибір у меню</figcaption></figure>
+<figure class="shot"><a href="img/task1-run-4.png"><img src="img/task1-run-4.png" alt="" width="931" loading="lazy"></a><figcaption>Рисунок 25 - Задовгий рядок і рядок без цифр та знаків</figcaption></figure>
+<h3>Завдання 2, варіант 4</h3>
+<figure class="shot"><a href="img/task2-run-1.png"><img src="img/task2-run-1.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 26 - Текст із двох рядків, у ньому є великі літери, дві послідовності мають букву A</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-2.png"><img src="img/task2-run-2.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 27 - Рядки, де заміна зліва направо дала б довший результат</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-3.png"><img src="img/task2-run-3.png" alt="" width="931" loading="lazy"></a><figcaption>Рисунок 28 - Некоректні дані: кількість, рядки тексту, задовгий рядок, рядки шифру</figcaption></figure>
+<figure class="shot"><a href="img/task2-run-4.png"><img src="img/task2-run-4.png" alt="" width="569" loading="lazy"></a><figcaption>Рисунок 29 - Жодна послідовність шифру не трапляється або не скорочує рядок</figcaption></figure>
+</section>
+<section id="check"><h2>Аналіз достовірності результатів</h2>
+<h3>Завдання 1, варіант 4</h3>
+<p>Контрольний тест методички я порахував вручну. Після очищення лишається рядок 123*45-56+/. Два
+останні знаки не мають чисел, тому отримуємо 123*45-56+0/1:</p>
+<div class="formula">123 · 45 = 5535, 5535 - 56 = 5479, 5479 + 0 = 5479, 5479 / 1 = 5479</div>
+<p>Другий рядок із таблиці рахується так само: 1 / 8 = 0.125, 0.125 + 2 = 2.125, 2.125 + 0 = 2.125,
+2.125 · 3 = 6.375.</p>
+<p class="tcap">Таблиця 3 - Контрольні тести завдання 1</p>
+<div class="table-scroll"><table>
+<tr><th>Введений рядок</th><th>Очікуваний результат</th><th>Результат програми</th></tr>
+<tr><td><code>asd123*45asas -rt56+hujk/qwe</code></td><td>123*45-56+0/1=5479</td>
+<td><code>123*45-56+0/1=5479</code></td></tr>
+<tr><td><code>/8+a2+*3</code></td><td>1/8+2+0*3=6.375</td><td><code>1/8+2+0*3=6.375</code></td></tr>
+<tr><td><code>-12/0+3</code></td><td>вираз 0-12/0+3 і помилка</td>
+<td><code>0-12/0+3</code>, <code>Error! Division by zero.</code></td></tr>
+<tr><td><code>only letters</code></td><td>порожній рядок, чисел 0, нічого обчислювати</td>
+<td><code>Count of numbers: 0</code>,
+<code>Nothing to calculate: no digits or signs.</code></td></tr>
+</table></div>
+<h3>Завдання 2, варіант 4</h3>
+<p>Для рядка abcd і шифру <code>Aab</code>, <code>Bbcd</code> я заповнив масив вручну.</p>
+<p class="tcap">Таблиця 4 - Ручне заповнення масиву B для рядка abcd</p>
+<div class="table-scroll"><table>
+<tr><th>i</th><th>Перші i символів</th><th>Розрахунок</th><th>B<sub>i</sub></th></tr>
+<tr><td>1</td><td>a</td><td>B<sub>0</sub> + 1</td><td>1</td></tr>
+<tr><td>2</td><td>ab</td><td>шифр Aab: B<sub>0</sub> + 1</td><td>1</td></tr>
+<tr><td>3</td><td>abc</td><td>B<sub>2</sub> + 1</td><td>2</td></tr>
+<tr><td>4</td><td>abcd</td><td>шифр Bbcd: B<sub>1</sub> + 1</td><td>2</td></tr>
+</table></div>
+<p>Останнє значення дорівнює 2, а від кінця рядка читається запис aB. Програма вивела той самий
+рядок. Рядок abcabcd після заміни зліва направо дав би AcAcd довжиною 5, а програма знайшла AcaB
+довжиною 4.</p>
+<p class="tcap">Таблиця 5 - Контрольні тести завдання 2</p>
+<div class="table-scroll"><table>
+<tr><th>Текст</th><th>Шифр</th><th>Очікувано, порахунок вручну</th><th>Результат програми</th>
+<th>Довжини</th></tr>
+<tr><td>bananabandana</td><td rowspan="2">Aana, Bband, Aabra, Ccad</td>
+<td>b + ana + n + a + band + ana</td><td><code>bAnaBA</code></td><td rowspan="2">24 і 9</td></tr>
+<tr><td>abracadabra</td><td>abra + cad + abra</td><td><code>ACA</code></td></tr>
+<tr><td>abcd</td><td rowspan="2">Aab, Bbcd</td><td>a + bcd</td><td><code>aB</code></td>
+<td rowspan="2">11 і 6</td></tr>
+<tr><td>abcabcd</td><td>ab + c + a + bcd</td><td><code>AcaB</code></td></tr>
+<tr><td>mississippi</td><td>Xiss, Yssi</td><td>m + iss + iss + i + p + p + i</td>
+<td><code>mXXippi</code></td><td>11 і 7</td></tr>
+<tr><td>programming</td><td>Zxyz, Pg</td><td>заміни не скорочують рядок</td>
+<td><code>programming</code></td><td>11 і 11</td></tr>
+</table></div>
+<p>Некоректні дані показано на рисунках у попередньому розділі: літери замість числа, число поза
+межами, задовгий рядок, порожній рядок, цифра в тексті, рядки шифру без великої літери, без малих
+літер і з великою літерою в кінці. Після кожної такої помилки програма просить ввести дані ще раз.</p>
+</section>
+<section id="conclusion"><h2>Висновки</h2>
+<p>Написано дві програми обробки рядків на масивах символів. Перша видаляє з рядка літери, виділяє
+числа й виконує дії зліва направо. Контрольний тест методички дав рівно 123*45-56+0/1=5479, і ручний
+розрахунок дав те саме. Складніше було вирішити, що вважати відсутнім числом, коли рядок
+починається зі знака або два знаки стоять поруч.</p>
+<p>Друга програма стискає текст за шифром. На прикладі abcd видно, що заміна зліва направо дає довший
+запис, тому довелося рахувати найменшу довжину для кожного початку рядка і запам'ятовувати вибраний
+шифр. У тестах довжина зменшилась з 24 до 9, а якщо заміна не скорочує рядок, текст лишається без
+змін. Стиснення виконується лише всередині одного рядка, послідовність на межі двох рядків не
+замінюється.</p>
+</section>
+<p class="pager"><a href="../lab08/index.html">Попередня робота</a><a href="../lab10/index.html">Наступна робота</a></p>
+</main>
+</body>
+</html>
